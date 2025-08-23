@@ -13,6 +13,11 @@ Pkg.activate(@__DIR__)
 println("Checking dependencies...")
 Pkg.instantiate()
 
+# Activate GLMakie backend (required for PointController)
+println("Activating GLMakie backend...")
+using GLMakie
+GLMakie.activate!()
+
 # Load and run the application
 println("Loading Point Controller...")
 using PointController

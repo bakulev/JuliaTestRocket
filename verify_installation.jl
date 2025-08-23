@@ -80,7 +80,7 @@ end
 println("\n6. Testing basic functionality...")
 try
     # Test MovementState creation
-    state = PointController.MovementState(0.1)
+    state = PointController.MovementState(movement_speed = 0.1)
     println("   ✓ MovementState creation works")
     
     # Test key handling
@@ -131,6 +131,8 @@ println("\n=== Installation Verification Complete ===")
 println("✓ All checks passed!")
 println("\nTo run the application:")
 println("  julia run_app.jl")
+println("\nTo run manually with backend activation:")
+println("  julia --project=. -e \"using GLMakie; GLMakie.activate!(); using PointController; run_point_controller()\"")
 println("\nTo run tests:")
 println("  julia --project=. test/runtests.jl")
 println("\nFor help:")

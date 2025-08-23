@@ -59,8 +59,8 @@ Includes performance optimizations and error handling.
 Returns the figure, axis, point observable, and coordinate text observable.
 """
 function create_visualization()
-    # Initialize GLMakie backend with performance optimizations
-    GLMakie.activate!()
+    # Note: GLMakie backend should be activated by the user before calling this function
+    # Call GLMakie.activate!() in your script before using PointController functions
     
     # Create figure with optimized configuration for performance
     fig = Figure(

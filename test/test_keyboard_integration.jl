@@ -9,6 +9,7 @@ using GLMakie
     
     @testset "GLMakie Event Setup" begin
         # Test that we can create a figure and set up keyboard events
+        # Note: GLMakie should be activated by the test runner
         GLMakie.activate!()
         fig = Figure()
         state = MovementState()

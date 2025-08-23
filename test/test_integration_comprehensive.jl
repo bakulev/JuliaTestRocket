@@ -10,11 +10,12 @@ using GLMakie
     
     @testset "Complete Keyboard-to-Movement Flow" begin
         # Test the complete flow from keyboard input to position update
+        # Note: GLMakie should be activated by the test runner
         GLMakie.activate!()
         
         # Initialize all components
         fig, ax, point_position, coordinate_text = create_visualization()
-        movement_state = MovementState(1.0)
+        movement_state = MovementState(movement_speed = 1.0)
         
         # Set up keyboard events
         setup_keyboard_events!(fig, movement_state, point_position)
@@ -55,7 +56,7 @@ using GLMakie
     end
     
     @testset "Simultaneous Key Press Combinations for Diagonal Movement" begin
-        movement_state = MovementState(2.0)
+        movement_state = MovementState(movement_speed = 2.0)
         point_position = create_point_position()
         
         # Test all diagonal combinations
@@ -135,9 +136,10 @@ using GLMakie
     end
     
     @testset "Coordinate Display Accuracy During Movement" begin
+        # Note: GLMakie should be activated by the test runner
         GLMakie.activate!()
         fig, ax, point_position, coordinate_text = create_visualization()
-        movement_state = MovementState(0.5)  # Slower speed for precision testing
+        movement_state = MovementState(movement_speed = 0.5)  # Slower speed for precision testing
         
         # Test coordinate display accuracy with various movements
         test_movements = [
@@ -197,7 +199,7 @@ using GLMakie
     end
     
     @testset "Complex Multi-Key Scenarios" begin
-        movement_state = MovementState(1.0)
+        movement_state = MovementState(movement_speed = 1.0)
         point_position = create_point_position()
         
         # Test rapid key press/release sequences
@@ -243,7 +245,7 @@ using GLMakie
     end
     
     @testset "Opposite Key Cancellation Integration" begin
-        movement_state = MovementState(1.0)
+        movement_state = MovementState(movement_speed = 1.0)
         point_position = create_point_position()
         
         # Test that opposite keys cancel movement
@@ -283,7 +285,7 @@ using GLMakie
     end
     
     @testset "Timing and Continuous Movement Integration" begin
-        movement_state = MovementState(1.0)
+        movement_state = MovementState(movement_speed = 1.0)
         point_position = create_point_position()
         
         # Test timing system integration
@@ -315,7 +317,7 @@ using GLMakie
     end
     
     @testset "Error Handling and Edge Cases" begin
-        movement_state = MovementState(1.0)
+        movement_state = MovementState(movement_speed = 1.0)
         point_position = create_point_position()
         
         # Test invalid key handling
@@ -352,7 +354,7 @@ using GLMakie
     end
     
     @testset "Quit Functionality Integration" begin
-        movement_state = MovementState(1.0)
+        movement_state = MovementState(movement_speed = 1.0)
         
         # Test initial quit state
         @test !movement_state.should_quit
@@ -362,7 +364,7 @@ using GLMakie
         @test movement_state.should_quit
         
         # Test that quit doesn't interfere with movement keys
-        movement_state2 = MovementState(1.0)
+        movement_state2 = MovementState(movement_speed = 1.0)
         handle_key_press("w", movement_state2)
         handle_key_press("q", movement_state2)
         @test "w" in get_pressed_keys(movement_state2)

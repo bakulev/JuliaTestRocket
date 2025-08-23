@@ -85,7 +85,7 @@ using GLMakie
     end
     
     @testset "State-Based Position Updates" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         position = create_point_position()
         
         # Test no movement when no keys pressed
@@ -126,7 +126,7 @@ using GLMakie
     @testset "Movement Speed Variations" begin
         # Test different movement speeds
         for speed in [0.5, 1.0, 2.0, 5.0]
-            state = MovementState(speed)
+            state = MovementState(movement_speed = speed)
             position = create_point_position()
             
             add_key!(state, "w")
@@ -149,7 +149,7 @@ using GLMakie
     end
     
     @testset "Edge Cases and Precision" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         position = create_point_position()
         
         # Test very small movements

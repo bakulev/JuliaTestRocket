@@ -49,17 +49,49 @@ An interactive Julia application that displays a controllable point using GLMaki
 
 ## Usage
 
+### Backend Activation
+
+PointController follows modern Makie.jl patterns where users control backend activation. 
+**You must activate GLMakie before using PointController functions:**
+
+```julia
+using GLMakie
+GLMakie.activate!()  # Required before using PointController
+```
+
+**Backend Configuration Options:**
+```julia
+# Basic activation
+GLMakie.activate!()
+
+# With custom window settings
+GLMakie.activate!(
+    title = "My Point Controller",
+    vsync = true,
+    framerate = 60.0,
+    fxaa = true
+)
+
+# For HiDPI displays
+GLMakie.activate!(scalefactor = 2.0)
+```
+
 ### Quick Start
 
 **From Julia REPL**:
 ```julia
+# First, activate the GLMakie backend
+using GLMakie
+GLMakie.activate!()
+
+# Then use PointController
 using PointController
 run_point_controller()
 ```
 
 **From command line**:
 ```bash
-julia --project=. -e "using PointController; run_point_controller()"
+julia --project=. -e "using GLMakie; GLMakie.activate!(); using PointController; run_point_controller()"
 ```
 
 **Using the provided script**:

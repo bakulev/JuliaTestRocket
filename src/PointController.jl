@@ -16,8 +16,32 @@ performance optimizations.
 ## Usage
 
 ```julia
+# First, activate the GLMakie backend
+using GLMakie
+GLMakie.activate!()
+
+# Then use PointController
 using PointController
 run_point_controller()  # Start the interactive application
+```
+
+## Backend Activation
+
+PointController requires GLMakie to be activated before use. This follows modern Makie.jl 
+patterns where users control backend activation:
+
+```julia
+using GLMakie
+GLMakie.activate!()  # Must be called before using PointController functions
+```
+
+You can also customize the GLMakie backend with options:
+```julia
+GLMakie.activate!(
+    title = "My Point Controller",
+    vsync = true,
+    framerate = 60.0
+)
 ```
 
 ## Architecture
@@ -36,8 +60,19 @@ module PointController
 
 using GLMakie
 
-# Export public API - only functions and types that users should directly use
+# Export public API - functions and types that users and tests need
 export run_point_controller, MovementState, KEY_MAPPINGS
+# Export movement state functions
+export add_key!, remove_key!, calculate_movement_vector, reset_movement_state!, request_quit!
+export clear_all_keys_safely!, update_movement_timing!
+# Export input handler functions  
+export handle_key_press, handle_key_release, is_movement_key, get_pressed_keys, setup_keyboard_events!
+# Export visualization functions
+export create_visualization, create_point_position, update_point_position!, get_current_position
+export apply_movement_to_position!, update_position_from_state!, setup_visualization_window
+export update_coordinate_display!
+# Export timer functions
+export start_movement_timer!, stop_movement_timer!
 
 # Include component modules
 # Each module handles a specific aspect of the application
@@ -50,7 +85,23 @@ include("visualization.jl")     # GLMakie visualization setup and rendering
 
 Main entry point for the Point Controller application.
 Creates an interactive window with a controllable point using WASD keys.
-Includes comprehensive error handling and robustness features.
+
+## Prerequisites
+
+GLMakie backend must be activated before calling this function:
+```julia
+using GLMakie
+GLMakie.activate!()
+using PointController
+run_point_controller()
+```
+
+## Features
+
+- Interactive point control with WASD keys
+- Real-time coordinate display
+- Comprehensive error handling and robustness
+- Modern GLMakie integration following best practices
 """
 function run_point_controller()
     println("Starting Point Controller...")
@@ -126,23 +177,32 @@ end
 """
     initialize_glmakie_safely()
 
-Safely initialize GLMakie with comprehensive error handling.
-Returns true if successful, false otherwise.
+Check if GLMakie backend is properly activated and available.
+Returns true if GLMakie is ready to use, false otherwise.
+
+Note: Users must call GLMakie.activate!() before using PointController functions.
 """
 function initialize_glmakie_safely()
     try
-        # Check if GLMakie can be activated
-        GLMakie.activate!()
+        # Check if GLMakie backend is available and activated
+        # This will fail if GLMakie.activate!() hasn't been called by the user
         
-        # Test basic GLMakie functionality
+        # Test basic GLMakie functionality to ensure backend is working
         test_fig = Figure(size = (100, 100))
         # Note: Figures don't need explicit closing in GLMakie
         
-        println("GLMakie initialized successfully.")
+        println("GLMakie backend is ready and functional.")
         return true
         
     catch e
-        if contains(string(e), "OpenGL") || contains(string(e), "GL")
+        if contains(string(e), "backend") || contains(string(e), "activate")
+            println("ERROR: GLMakie backend not activated.")
+            println("Please call GLMakie.activate!() before using PointController:")
+            println("  using GLMakie")
+            println("  GLMakie.activate!()")
+            println("  using PointController")
+            println("  run_point_controller()")
+        elseif contains(string(e), "OpenGL") || contains(string(e), "GL")
             println("ERROR: OpenGL initialization failed.")
             println("This usually indicates:")
             println("  - Outdated graphics drivers")
@@ -157,9 +217,10 @@ function initialize_glmakie_safely()
             println("  - Wayland compatibility issues")
             println("Please ensure you have a working display system.")
         else
-            println("ERROR: GLMakie initialization failed with unexpected error:")
+            println("ERROR: GLMakie backend check failed:")
             println("  $(string(e))")
-            println("Please check your GLMakie installation and system compatibility.")
+            println("Make sure to activate GLMakie before using PointController:")
+            println("  GLMakie.activate!()")
         end
         return false
     end
@@ -288,5 +349,20 @@ function cleanup_application_safely(movement_state)
         # Continue cleanup despite errors
     end
 end
+
+# Optional automatic backend activation
+# Uncomment the following function to automatically activate GLMakie when the module loads
+# This is provided as a convenience option but goes against modern Makie patterns
+# where users should explicitly control backend activation
+
+# function __init__()
+#     try
+#         GLMakie.activate!()
+#         @info "GLMakie backend automatically activated by PointController"
+#     catch e
+#         @warn "Failed to automatically activate GLMakie backend: $e"
+#         @info "Please manually activate GLMakie: GLMakie.activate!()"
+#     end
+# end
 
 end # module PointController

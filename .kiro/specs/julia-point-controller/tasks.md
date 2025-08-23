@@ -11,8 +11,8 @@ This implementation plan brings the Julia Point Controller project up to current
   - Update keywords to include more relevant terms for discoverability
   - _Requirements: Modern Julia compatibility, Package discoverability_
 
-- [ ] 2. Fix backend activation pattern for modern Makie usage
-  - Actually p
+- [x] 2. Fix backend activation pattern for modern Makie usage
+  - Actually porperly understand how to implement the following points according to best practices and state of the art recommendations of Julie and Makie
   - Remove GLMakie.activate!() calls from visualization functions
   - Remove activation from initialize_glmakie_safely() function
   - Add proper backend activation documentation for users
