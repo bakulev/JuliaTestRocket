@@ -18,18 +18,7 @@ using PointController
     # Include visualization tests
     include("test_visualization.jl")
     
-    @testset "Input Handler Tests" begin
-        @test isdefined(PointController, :handle_key_press)
-        @test isdefined(PointController, :handle_key_release)
-        @test isdefined(PointController, :calculate_movement_vector)
-        
-        state = MovementState()
-        @test handle_key_press("w", state) === nothing
-        @test handle_key_release("w", state) === nothing
-        
-        result = calculate_movement_vector(state)
-        @test result isa Tuple{Float64, Float64}
-        @test result == (0.0, 0.0)
-    end
+    # Include comprehensive input handler tests
+    include("test_input.jl")
     
 end
