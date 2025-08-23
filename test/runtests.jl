@@ -21,4 +21,10 @@ using PointController
     # Include comprehensive input handler tests
     include("test_input.jl")
     
+    # Include keyboard integration tests
+    include("test_keyboard_integration.jl")
+    
+    # Include comprehensive integration tests
+    include("test_integration_comprehensive.jl")
+    
 end
