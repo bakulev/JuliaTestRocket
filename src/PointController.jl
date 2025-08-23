@@ -6,7 +6,8 @@ using GLMakie
 export run_point_controller, MovementState, KEY_MAPPINGS, 
        handle_key_press, handle_key_release, calculate_movement_vector,
        reset_movement_state!, add_key!, remove_key!,
-       create_point_position, update_point_position!, get_current_position
+       create_point_position, update_point_position!, get_current_position,
+       create_visualization, setup_visualization_window, update_coordinate_display!
 
 # Include component modules
 include("movement_state.jl")

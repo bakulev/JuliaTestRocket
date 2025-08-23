@@ -15,6 +15,9 @@ using PointController
     # Include comprehensive movement state tests
     include("test_movement_state.jl")
     
+    # Include visualization tests
+    include("test_visualization.jl")
+    
     @testset "Input Handler Tests" begin
         @test isdefined(PointController, :handle_key_press)
         @test isdefined(PointController, :handle_key_release)
