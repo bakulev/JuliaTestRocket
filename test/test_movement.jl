@@ -2,7 +2,7 @@
 
 @testset "MovementState Creation" begin
     # Basic test to verify the module loads
-    @test PointController.MovementState(1.0) isa PointController.MovementState
+    @test PointController.MovementState(movement_speed = 1.0) isa PointController.MovementState
 end
 
 @testset "Key Mappings" begin

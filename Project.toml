@@ -1,13 +1,13 @@
 name = "PointController"
-uuid = "12345678-1234-5678-9abc-123456789abc"
+uuid = "eae52b99-c8d7-4aa0-bde8-6d33da01be07"
 authors = ["User <user@example.com>"]
 version = "0.1.0"
 description = "Interactive Julia application for controlling a point using WASD keys with GLMakie visualization"
 license = "MIT"
+keywords = ["visualization", "interactive", "graphics", "makie", "gui"]
 
 [deps]
 GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 GLMakie = "0.10"

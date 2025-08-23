@@ -5,7 +5,7 @@ using GLMakie
 @testset "Task 5: Movement Calculation and Position Update Tests" begin
     
     @testset "Movement Vector Calculation from Keys" begin
-        state = MovementState(2.0)
+        state = MovementState(movement_speed = 2.0)
         
         # Test single key movements
         add_key!(state, "w")
@@ -29,7 +29,7 @@ using GLMakie
     end
     
     @testset "Diagonal Movement Handling" begin
-        state = MovementState(2.0)
+        state = MovementState(movement_speed = 2.0)
         
         # Test diagonal movements (normalized)
         add_key!(state, "w")

@@ -36,18 +36,8 @@ module PointController
 
 using GLMakie
 
-# Export main functions and types for public API
-export run_point_controller, MovementState, KEY_MAPPINGS,
-    handle_key_press, handle_key_release, calculate_movement_vector,
-    reset_movement_state!, add_key!, remove_key!, request_quit!, clear_all_keys_safely!,
-    create_point_position, update_point_position!, get_current_position,
-    apply_movement_to_position!, update_position_from_state!,
-    create_visualization, setup_visualization_window, update_coordinate_display!,
-    setup_keyboard_events!, is_movement_key, get_pressed_keys,
-    start_movement_timer!, stop_movement_timer!, update_movement_timing!,
-    initialize_glmakie_safely, create_visualization_safely, setup_visualization_window_safely,
-    setup_keyboard_events_safely!, setup_window_focus_handling!, handle_application_error,
-    cleanup_application_safely
+# Export public API - only functions and types that users should directly use
+export run_point_controller, MovementState, KEY_MAPPINGS
 
 # Include component modules
 # Each module handles a specific aspect of the application
@@ -81,7 +71,7 @@ function run_point_controller()
 
         # Create movement state
         println("Setting up movement state...")
-        movement_state = MovementState(0.1)  # Movement speed of 0.1 units per frame
+        movement_state = MovementState(movement_speed = 0.1)  # Movement speed of 0.1 units per frame
 
         # Set up GLMakie window with proper configuration and error handling
         println("Setting up window...")

@@ -17,7 +17,7 @@ using GLMakie
     end
     
     @testset "Invalid Key Input Handling" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         
         # Test handling of empty key strings
         original_keys = copy(state.keys_pressed)
@@ -46,7 +46,7 @@ using GLMakie
     end
     
     @testset "Movement State Robustness" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         
         # Test clear_all_keys_safely! function
         add_key!(state, "w")
@@ -64,7 +64,7 @@ using GLMakie
     end
     
     @testset "Timer Error Handling" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         
         # Test that stop_movement_timer! is safe to call multiple times
         @test_nowarn stop_movement_timer!(state)
@@ -86,7 +86,7 @@ using GLMakie
     end
     
     @testset "Application Cleanup" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         
         # Test cleanup function doesn't throw errors
         @test_nowarn cleanup_application_safely(state)
@@ -118,7 +118,7 @@ using GLMakie
         @test hasmethod(setup_visualization_window_safely, (Figure,))
         
         # Test that movement calculations are bounded for performance
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         add_key!(state, "w")
         add_key!(state, "d")  # Diagonal movement
         
@@ -135,7 +135,7 @@ using GLMakie
         @test hasmethod(setup_keyboard_events_safely!, (Figure, MovementState, Observable{Point2f}))
         
         # Test movement state validation
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         
         # Test that movement speed is properly bounded
         @test state.movement_speed > 0.0

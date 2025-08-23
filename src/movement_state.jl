@@ -42,18 +42,27 @@ using GLMakie
 
 Mutable struct to track the current movement state of the point.
 Includes key press tracking, movement speed, timing information, and quit flag.
+
+# Fields
+- `keys_pressed::Set{String}`: Set of currently pressed keys
+- `movement_speed::Float64`: Movement speed in units per frame (default: 1.0)
+- `last_update_time::Float64`: Timestamp of last position update
+- `is_moving::Bool`: Whether the point is currently moving
+- `update_timer::Union{Timer, Nothing}`: Timer for continuous movement updates
+- `should_quit::Bool`: Flag to request application exit
+
+# Constructor
+```julia
+MovementState(; movement_speed = 1.0)
+```
 """
-mutable struct MovementState
-    keys_pressed::Set{String}
-    movement_speed::Float64
-    last_update_time::Float64
-    is_moving::Bool
-    update_timer::Union{Timer, Nothing}
-    should_quit::Bool
-    
-    function MovementState(speed::Float64 = 1.0)
-        new(Set{String}(), speed, 0.0, false, nothing, false)
-    end
+Base.@kwdef mutable struct MovementState
+    keys_pressed::Set{String} = Set{String}()
+    movement_speed::Float64 = 1.0
+    last_update_time::Float64 = 0.0
+    is_moving::Bool = false
+    update_timer::Union{Timer, Nothing} = nothing
+    should_quit::Bool = false
 end
 
 """
@@ -102,7 +111,18 @@ function remove_key!(state::MovementState, key::String)
     return state
 end
 
-# Key mappings for WASD controls
+"""
+    KEY_MAPPINGS
+
+Constant dictionary mapping WASD keys to their corresponding movement vectors.
+Each vector represents the direction of movement as (x, y) coordinates.
+
+# Mappings
+- `"w"`: Up movement (0.0, 1.0)
+- `"s"`: Down movement (0.0, -1.0)  
+- `"a"`: Left movement (-1.0, 0.0)
+- `"d"`: Right movement (1.0, 0.0)
+"""
 const KEY_MAPPINGS = Dict{String, Tuple{Float64, Float64}}(
     "w" => (0.0, 1.0),   # Up
     "s" => (0.0, -1.0),  # Down

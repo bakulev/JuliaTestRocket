@@ -13,7 +13,7 @@ using GLMakie
         @test state.is_moving == false
         
         # Test constructor with custom speed
-        state_custom = MovementState(2.5)
+        state_custom = MovementState(movement_speed = 2.5)
         @test state_custom.movement_speed == 2.5
         @test isempty(state_custom.keys_pressed)
         @test state_custom.is_moving == false
@@ -43,7 +43,7 @@ using GLMakie
     end
     
     @testset "Reset Movement State" begin
-        state = MovementState(3.0)
+        state = MovementState(movement_speed = 3.0)
         add_key!(state, "w")
         add_key!(state, "a")
         state.last_update_time = 100.0
@@ -100,7 +100,7 @@ end
 
 @testset "Movement Vector Calculation Tests" begin
     @testset "Single Key Movement" begin
-        state = MovementState(2.0)
+        state = MovementState(movement_speed = 2.0)
         
         # Test individual key movements
         add_key!(state, "w")
@@ -124,7 +124,7 @@ end
     end
     
     @testset "Diagonal Movement" begin
-        state = MovementState(2.0)
+        state = MovementState(movement_speed = 2.0)
         
         # Test diagonal movement (normalized)
         add_key!(state, "w")
@@ -143,7 +143,7 @@ end
     end
     
     @testset "Opposite Key Cancellation" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         
         # Test that opposite keys cancel out
         add_key!(state, "w")
@@ -159,7 +159,7 @@ end
     end
     
     @testset "No Keys Pressed" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         movement = calculate_movement_vector(state)
         @test movement == (0.0, 0.0)
     end
@@ -186,7 +186,7 @@ end
     end
     
     @testset "Update Position from Movement State" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         position = create_point_position()
         
         # Test no movement when no keys pressed
@@ -217,7 +217,7 @@ end
 
 @testset "Integration Tests" begin
     @testset "Movement State with Key Mappings" begin
-        state = MovementState(2.0)
+        state = MovementState(movement_speed = 2.0)
         
         # Test that all valid keys can be added
         for key in keys(KEY_MAPPINGS)
@@ -238,7 +238,7 @@ end
     end
     
     @testset "Complete Movement Flow" begin
-        state = MovementState(1.5)
+        state = MovementState(movement_speed = 1.5)
         position = create_point_position()
         
         # Test complete flow: key press -> movement calculation -> position update
@@ -265,7 +265,7 @@ end
     @testset "Movement Speed Variations" begin
         # Test different movement speeds
         for speed in [0.5, 1.0, 2.0, 5.0]
-            state = MovementState(speed)
+            state = MovementState(movement_speed = speed)
             position = create_point_position()
             
             add_key!(state, "w")

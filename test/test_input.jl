@@ -67,7 +67,7 @@ using PointController
     end
     
     @testset "Movement Vector Calculation" begin
-        state = MovementState(2.0)  # Set movement speed to 2.0
+        state = MovementState(movement_speed = 2.0)  # Set movement speed to 2.0
         
         # Test no movement
         dx, dy = calculate_movement_vector(state)

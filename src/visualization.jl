@@ -123,13 +123,8 @@ function create_visualization()
     ax.xminorgridvisible = false  # Disable minor grid for performance
     ax.yminorgridvisible = false  # Disable minor grid for performance
     
-    # Performance optimization: set rendering preferences
-    try
-        # Enable render on demand for better performance
-        fig.scene.render_on_demand[] = true
-    catch e
-        println("WARNING: Could not enable render on demand: $(string(e))")
-    end
+    # Performance optimization: Modern GLMakie handles rendering efficiently by default
+    # Note: render_on_demand is no longer available in newer GLMakie versions
     
     return fig, ax, point_position, coordinate_text
 end

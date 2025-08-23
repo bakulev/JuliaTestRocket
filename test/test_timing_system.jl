@@ -6,7 +6,7 @@ using GLMakie
 
     @testset "Movement Timer Management" begin
         # Test timer creation and cleanup
-        state = MovementState(2.0)
+        state = MovementState(movement_speed = 2.0)
         position = create_point_position()
 
         # Initially no timer should be running
@@ -22,7 +22,7 @@ using GLMakie
     end
 
     @testset "Timing Integration with Key Events" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         position = create_point_position()
 
         # Test timing updates on key press/release
@@ -39,7 +39,7 @@ using GLMakie
     end
 
     @testset "Continuous Movement Behavior" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         position = create_point_position()
 
         # Test that movement state is properly managed
@@ -58,7 +58,7 @@ using GLMakie
     end
 
     @testset "Multiple Key Timing" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         position = create_point_position()
 
         # Press multiple keys
@@ -79,7 +79,7 @@ using GLMakie
     end
 
     @testset "Timer Cleanup on Reset" begin
-        state = MovementState(1.0)
+        state = MovementState(movement_speed = 1.0)
         position = create_point_position()
 
         # Start timer and add keys
@@ -95,7 +95,7 @@ using GLMakie
     end
 
     @testset "Position Updates with Timing" begin
-        state = MovementState(2.0)  # Higher speed for visible movement
+        state = MovementState(movement_speed = 2.0)  # Higher speed for visible movement
         position = create_point_position()
 
         # Get initial position
