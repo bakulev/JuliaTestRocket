@@ -1,5 +1,44 @@
+"""
 # Input Handler Module
-# This module manages keyboard event processing and key state tracking
+
+This module provides comprehensive keyboard event processing and input validation
+for the Point Controller application. It handles the translation of raw keyboard
+events into application-specific actions with robust error handling.
+
+## Key Features
+
+- **Event Processing**: Handles GLMakie keyboard press and release events
+- **Input Validation**: Validates and filters keyboard input for security
+- **Error Recovery**: Graceful handling of invalid or unexpected input
+- **State Integration**: Seamless integration with movement state management
+- **Performance Optimization**: Efficient event processing with minimal overhead
+
+## Supported Input
+
+- **WASD Keys**: Primary movement controls (W=up, A=left, S=down, D=right)
+- **Q Key**: Application quit command
+- **Invalid Keys**: Gracefully ignored without error messages
+- **Simultaneous Keys**: Multiple key presses for diagonal movement
+
+## Event Flow
+
+1. GLMakie generates keyboard events (press/release)
+2. Input handler validates and processes the events
+3. Valid movement keys update the movement state
+4. Movement state triggers position updates via timer system
+5. Invalid keys are silently ignored for user experience
+
+## Usage
+
+```julia
+# Set up keyboard event handling
+setup_keyboard_events!(figure, movement_state, point_position)
+
+# Manual event processing (for testing)
+handle_key_press("w", state)    # Process 'w' key press
+handle_key_release("w", state)  # Process 'w' key release
+```
+"""
 
 using GLMakie
 

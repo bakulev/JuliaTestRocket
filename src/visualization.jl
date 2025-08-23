@@ -1,5 +1,53 @@
+"""
 # Visualization Module
-# This module handles GLMakie visualization setup and rendering
+
+This module provides comprehensive GLMakie-based visualization for the Point Controller
+application. It handles all aspects of rendering, window management, and visual updates
+with performance optimizations and error handling.
+
+## Key Features
+
+- **GLMakie Integration**: Full GLMakie backend setup and configuration
+- **Real-time Rendering**: Efficient point and coordinate display updates
+- **Performance Optimization**: Render-on-demand and optimized drawing operations
+- **Visual Design**: Clean, professional interface with proper scaling and layout
+- **Error Handling**: Robust error recovery for graphics and rendering issues
+
+## Visual Components
+
+- **Interactive Point**: Red circular point that responds to keyboard input
+- **Coordinate Display**: Real-time position text in top-left corner
+- **Reference Grid**: Visual grid system for precise positioning
+- **Axis System**: Labeled X and Y axes with proper scaling (-10 to +10 range)
+- **Window Management**: Proper window sizing, positioning, and focus handling
+
+## Performance Features
+
+- **Render on Demand**: Only redraws when necessary to save resources
+- **Optimized Markers**: Efficient point rendering without unnecessary overdraw
+- **Minimal Grid**: Simplified grid system for better performance
+- **Frame Rate Control**: Controlled update frequency for smooth animation
+
+## Usage
+
+```julia
+# Create complete visualization
+fig, ax, position, text = create_visualization()
+
+# Set up window display
+setup_visualization_window(fig)
+
+# Manual coordinate update (if needed)
+update_coordinate_display!(position)
+```
+
+## Technical Details
+
+- Uses GLMakie's Observable system for reactive updates
+- Implements DataAspect for proper coordinate scaling
+- Optimized for 60 FPS smooth movement
+- Supports window resizing and focus changes
+"""
 
 using GLMakie
 

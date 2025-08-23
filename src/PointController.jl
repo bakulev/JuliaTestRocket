@@ -1,8 +1,42 @@
+"""
+# PointController.jl
+
+An interactive Julia application for controlling a point using WASD keyboard inputs
+with real-time GLMakie visualization. This module provides a complete implementation
+of an event-driven point controller with smooth movement, error handling, and
+performance optimizations.
+
+## Main Components
+
+- **Movement State Management**: Tracks key presses and point position
+- **Input Handling**: Processes keyboard events with validation
+- **Visualization**: GLMakie-based rendering with real-time updates
+- **Error Handling**: Comprehensive error recovery and user feedback
+
+## Usage
+
+```julia
+using PointController
+run_point_controller()  # Start the interactive application
+```
+
+## Architecture
+
+The application follows a modular, event-driven architecture:
+1. GLMakie provides the windowing and rendering system
+2. Observable patterns handle real-time coordinate updates
+3. Timer-based movement ensures smooth animation
+4. Comprehensive error handling provides robustness
+
+## Author: Point Controller Development Team
+## Version: 0.1.0
+## License: MIT
+"""
 module PointController
 
 using GLMakie
 
-# Export main functions and types
+# Export main functions and types for public API
 export run_point_controller, MovementState, KEY_MAPPINGS,
     handle_key_press, handle_key_release, calculate_movement_vector,
     reset_movement_state!, add_key!, remove_key!, request_quit!, clear_all_keys_safely!,
@@ -16,9 +50,10 @@ export run_point_controller, MovementState, KEY_MAPPINGS,
     cleanup_application_safely
 
 # Include component modules
-include("movement_state.jl")
-include("input_handler.jl")
-include("visualization.jl")
+# Each module handles a specific aspect of the application
+include("movement_state.jl")    # Point position and movement state management
+include("input_handler.jl")     # Keyboard event processing and validation  
+include("visualization.jl")     # GLMakie visualization setup and rendering
 
 """
     run_point_controller()

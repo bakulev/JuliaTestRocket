@@ -1,5 +1,39 @@
-# Movement State Management
-# This module handles the state of point movement and key tracking
+"""
+# Movement State Management Module
+
+This module provides comprehensive state management for point movement and keyboard
+input tracking. It handles the core logic for translating keyboard inputs into
+smooth point movement with proper timing and error handling.
+
+## Key Features
+
+- **State Tracking**: Maintains current key presses and movement status
+- **Movement Calculation**: Converts key combinations to movement vectors
+- **Timer Management**: Provides smooth continuous movement with proper timing
+- **Error Handling**: Robust error recovery for all state operations
+- **Performance Optimization**: Efficient state updates and movement calculations
+
+## Core Components
+
+- `MovementState`: Main state container for all movement-related data
+- Key mapping system for WASD controls with diagonal movement support
+- Timer-based continuous movement system with frame-rate independence
+- Position management using GLMakie's Observable system
+
+## Usage
+
+```julia
+# Create movement state
+state = MovementState(0.1)  # 0.1 units per frame movement speed
+
+# Track key presses
+add_key!(state, "w")        # Start moving up
+remove_key!(state, "w")     # Stop moving up
+
+# Calculate movement
+vector = calculate_movement_vector(state)  # Get current movement direction
+```
+"""
 
 using GLMakie
 
