@@ -172,46 +172,77 @@ end
 """
     start_movement_timer!(state::MovementState, position::Observable{Point2f}, update_interval::Float64 = 1/60)
 
-Start a timer-based update loop for smooth continuous movement.
+Start a timer-based update loop for smooth continuous movement with error handling.
 Creates a timer that updates the point position at regular intervals while keys are pressed.
+Includes performance optimizations and robust error handling.
 """
 function start_movement_timer!(state::MovementState, position::Observable{Point2f}, update_interval::Float64 = 1/60)
-    # Stop existing timer if running
-    stop_movement_timer!(state)
-    
-    # Create new timer for continuous updates
-    state.update_timer = Timer(update_interval; interval=update_interval) do timer
-        current_time = time()
+    try
+        # Stop existing timer if running
+        stop_movement_timer!(state)
         
-        # Update position if keys are pressed
-        if state.is_moving && !isempty(state.keys_pressed)
-            # Calculate time-based movement for smooth animation
-            dt = current_time - state.last_update_time
-            if state.last_update_time > 0.0 && dt > 0.0
-                # Scale movement by time delta for consistent speed
-                movement_vector = calculate_movement_vector(state)
-                scaled_movement = (movement_vector[1] * dt * 60, movement_vector[2] * dt * 60)
-                apply_movement_to_position!(position, scaled_movement)
+        # Validate update interval for performance
+        if update_interval <= 0.0 || update_interval > 1.0
+            println("WARNING: Invalid update interval $update_interval, using default 1/60")
+            update_interval = 1/60
+        end
+        
+        # Create new timer for continuous updates with error handling
+        state.update_timer = Timer(update_interval; interval=update_interval) do timer
+            try
+                current_time = time()
+                
+                # Update position if keys are pressed
+                if state.is_moving && !isempty(state.keys_pressed)
+                    # Calculate time-based movement for smooth animation
+                    dt = current_time - state.last_update_time
+                    if state.last_update_time > 0.0 && dt > 0.0 && dt < 1.0  # Sanity check on dt
+                        # Scale movement by time delta for consistent speed
+                        movement_vector = calculate_movement_vector(state)
+                        # Performance optimization: limit movement scaling
+                        scale_factor = min(dt * 60, 5.0)  # Cap scaling to prevent jumps
+                        scaled_movement = (movement_vector[1] * scale_factor, movement_vector[2] * scale_factor)
+                        apply_movement_to_position!(position, scaled_movement)
+                    end
+                end
+                
+                state.last_update_time = current_time
+                
+            catch timer_error
+                println("WARNING: Error in movement timer: $(string(timer_error))")
+                # Stop timer on error to prevent continuous errors
+                stop_movement_timer!(state)
             end
         end
         
-        state.last_update_time = current_time
+        return state
+        
+    catch e
+        println("ERROR: Failed to start movement timer: $(string(e))")
+        # Ensure timer is cleared on error
+        state.update_timer = nothing
+        return state
     end
-    
-    return state
 end
 
 """
     stop_movement_timer!(state::MovementState)
 
-Stop the movement timer and clean up resources.
+Stop the movement timer and clean up resources with error handling.
 """
 function stop_movement_timer!(state::MovementState)
-    if state.update_timer !== nothing
-        close(state.update_timer)
+    try
+        if state.update_timer !== nothing
+            close(state.update_timer)
+            state.update_timer = nothing
+        end
+        return state
+    catch e
+        println("WARNING: Error stopping movement timer: $(string(e))")
+        # Force clear timer reference even if close fails
         state.update_timer = nothing
+        return state
     end
-    return state
 end
 
 """
@@ -223,4 +254,26 @@ Should be called when keys are pressed or released.
 function update_movement_timing!(state::MovementState)
     state.last_update_time = time()
     return state
+end
+
+"""
+    clear_all_keys_safely!(state::MovementState)
+
+Safely clear all pressed keys and stop movement.
+Used for robustness when window loses focus or on errors.
+"""
+function clear_all_keys_safely!(state::MovementState)
+    try
+        empty!(state.keys_pressed)
+        state.is_moving = false
+        stop_movement_timer!(state)
+        println("All key states cleared safely.")
+        return state
+    catch e
+        println("WARNING: Error clearing key states: $(string(e))")
+        # Force reset even if there's an error
+        state.keys_pressed = Set{String}()
+        state.is_moving = false
+        return state
+    end
 end
