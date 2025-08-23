@@ -224,4 +224,45 @@ using PointController
         @test dx == 0.0
         @test dy == -1.0  # Should move in opposite direction
     end
+    
+    @testset "Quit Functionality" begin
+        state = MovementState()
+        
+        # Test initial quit state
+        @test state.should_quit == false
+        
+        # Test quit key press
+        handle_key_press("q", state)
+        @test state.should_quit == true
+        
+        # Test case insensitive quit
+        state2 = MovementState()
+        handle_key_press("Q", state2)
+        @test state2.should_quit == true
+        
+        # Test that quit key doesn't affect movement keys
+        state3 = MovementState()
+        handle_key_press("w", state3)
+        @test "w" in state3.keys_pressed
+        @test state3.is_moving == true
+        @test state3.should_quit == false
+        
+        handle_key_press("q", state3)
+        @test "w" in state3.keys_pressed  # Movement key should still be there
+        @test state3.is_moving == true    # Should still be moving
+        @test state3.should_quit == true  # But quit should be requested
+        
+        # Test request_quit! function directly
+        state4 = MovementState()
+        @test state4.should_quit == false
+        request_quit!(state4)
+        @test state4.should_quit == true
+        
+        # Test reset clears quit flag
+        state5 = MovementState()
+        request_quit!(state5)
+        @test state5.should_quit == true
+        reset_movement_state!(state5)
+        @test state5.should_quit == false
+    end
 end

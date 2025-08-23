@@ -30,7 +30,7 @@ run_point_controller()
 ```
 
 ```bash
-julia --project=. demo_visualization.jl
+julia run_app.jl
 ```
 
 ## Controls

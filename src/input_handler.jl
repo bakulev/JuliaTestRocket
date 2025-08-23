@@ -8,11 +8,19 @@ using GLMakie
 
 Process a key press event and update the movement state.
 Adds the key to the pressed keys set if it's a valid WASD key.
+Handles quit request if 'q' key is pressed.
 """
 function handle_key_press(key::String, state::MovementState)
     key_lower = lowercase(key)
     
-    # Only process WASD keys
+    # Handle quit key
+    if key_lower == "q"
+        println("Quit requested by user (q key pressed)")
+        request_quit!(state)
+        return state
+    end
+    
+    # Only process WASD keys for movement
     if key_lower in keys(KEY_MAPPINGS)
         add_key!(state, key_lower)
         update_movement_timing!(state)

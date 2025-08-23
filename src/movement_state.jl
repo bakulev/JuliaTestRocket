@@ -7,7 +7,7 @@ using GLMakie
     MovementState
 
 Mutable struct to track the current movement state of the point.
-Includes key press tracking, movement speed, and timing information.
+Includes key press tracking, movement speed, timing information, and quit flag.
 """
 mutable struct MovementState
     keys_pressed::Set{String}
@@ -15,9 +15,10 @@ mutable struct MovementState
     last_update_time::Float64
     is_moving::Bool
     update_timer::Union{Timer, Nothing}
+    should_quit::Bool
     
     function MovementState(speed::Float64 = 1.0)
-        new(Set{String}(), speed, 0.0, false, nothing)
+        new(Set{String}(), speed, 0.0, false, nothing, false)
     end
 end
 
@@ -30,7 +31,18 @@ function reset_movement_state!(state::MovementState)
     empty!(state.keys_pressed)
     state.is_moving = false
     state.last_update_time = 0.0
+    state.should_quit = false
     stop_movement_timer!(state)
+    return state
+end
+
+"""
+    request_quit!(state::MovementState)
+
+Set the quit flag to request application exit.
+"""
+function request_quit!(state::MovementState)
+    state.should_quit = true
     return state
 end
 

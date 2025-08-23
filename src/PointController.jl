@@ -5,7 +5,7 @@ using GLMakie
 # Export main functions and types
 export run_point_controller, MovementState, KEY_MAPPINGS,
     handle_key_press, handle_key_release, calculate_movement_vector,
-    reset_movement_state!, add_key!, remove_key!,
+    reset_movement_state!, add_key!, remove_key!, request_quit!,
     create_point_position, update_point_position!, get_current_position,
     apply_movement_to_position!, update_position_from_state!,
     create_visualization, setup_visualization_window, update_coordinate_display!,
@@ -45,7 +45,7 @@ function run_point_controller()
 
         # Start the application loop
         println("Point Controller is ready!")
-        println("Use WASD keys to move the point. Close the window to exit.")
+        println("Use WASD keys to move the point. Press 'q' to quit or close the window to exit.")
 
         # Keep the application running and responsive
         # GLMakie handles the event loop internally, so we just need to keep the process alive
@@ -60,10 +60,17 @@ function run_point_controller()
             end
         end
 
-        # Wait for the window to be closed
+        # Wait for the window to be closed or quit requested
         # This keeps the Julia process alive while the GLMakie window is open
-        while events(fig).window_open[]
+        while events(fig).window_open[] && !movement_state.should_quit
             sleep(0.1)  # Small sleep to prevent busy waiting
+        end
+        
+        # Handle quit request
+        if movement_state.should_quit
+            println("Exiting application...")
+            # Close the window if quit was requested via 'q' key
+            GLMakie.closeall()
         end
 
     catch e
