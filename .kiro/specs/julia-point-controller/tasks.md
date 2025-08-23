@@ -27,7 +27,7 @@
   - Write unit tests for key event processing logic
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 5. Develop movement calculation and update logic
+- [x] 5. Develop movement calculation and update logic
   - Implement function to calculate movement vector from currently pressed keys
   - Create position update logic that applies movement vector to current coordinates
   - Handle diagonal movement when multiple keys are pressed simultaneously

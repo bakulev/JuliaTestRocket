@@ -39,40 +39,7 @@ function handle_key_release(key::String, state::MovementState)
     return state
 end
 
-"""
-    calculate_movement_vector(state::MovementState)
 
-Calculate the movement vector based on currently pressed keys.
-Returns a tuple (dx, dy) representing the movement direction.
-Handles diagonal movement when multiple keys are pressed simultaneously.
-"""
-function calculate_movement_vector(state::MovementState)
-    dx = 0.0
-    dy = 0.0
-    
-    # Sum up movement vectors for all currently pressed keys
-    for key in state.keys_pressed
-        if haskey(KEY_MAPPINGS, key)
-            movement = KEY_MAPPINGS[key]
-            dx += movement[1]
-            dy += movement[2]
-        end
-    end
-    
-    # Normalize diagonal movement to maintain consistent speed
-    if dx != 0.0 && dy != 0.0
-        # Apply normalization factor for diagonal movement
-        norm_factor = 1.0 / sqrt(2.0)
-        dx *= norm_factor
-        dy *= norm_factor
-    end
-    
-    # Apply movement speed
-    dx *= state.movement_speed
-    dy *= state.movement_speed
-    
-    return (dx, dy)
-end
 
 """
     setup_keyboard_events!(fig::Figure, state::MovementState)

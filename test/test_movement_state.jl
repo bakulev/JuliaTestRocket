@@ -98,6 +98,123 @@ end
     @test final_pos[1] ≈ -2.5 && final_pos[2] ≈ 7.8
 end
 
+@testset "Movement Vector Calculation Tests" begin
+    @testset "Single Key Movement" begin
+        state = MovementState(2.0)
+        
+        # Test individual key movements
+        add_key!(state, "w")
+        movement = calculate_movement_vector(state)
+        @test movement == (0.0, 2.0)  # Up with speed 2.0
+        
+        reset_movement_state!(state)
+        add_key!(state, "s")
+        movement = calculate_movement_vector(state)
+        @test movement == (0.0, -2.0)  # Down with speed 2.0
+        
+        reset_movement_state!(state)
+        add_key!(state, "a")
+        movement = calculate_movement_vector(state)
+        @test movement == (-2.0, 0.0)  # Left with speed 2.0
+        
+        reset_movement_state!(state)
+        add_key!(state, "d")
+        movement = calculate_movement_vector(state)
+        @test movement == (2.0, 0.0)  # Right with speed 2.0
+    end
+    
+    @testset "Diagonal Movement" begin
+        state = MovementState(2.0)
+        
+        # Test diagonal movement (normalized)
+        add_key!(state, "w")
+        add_key!(state, "d")
+        movement = calculate_movement_vector(state)
+        expected_component = 2.0 / sqrt(2.0)  # Normalized diagonal
+        @test movement[1] ≈ expected_component atol=1e-10
+        @test movement[2] ≈ expected_component atol=1e-10
+        
+        reset_movement_state!(state)
+        add_key!(state, "s")
+        add_key!(state, "a")
+        movement = calculate_movement_vector(state)
+        @test movement[1] ≈ -expected_component atol=1e-10
+        @test movement[2] ≈ -expected_component atol=1e-10
+    end
+    
+    @testset "Opposite Key Cancellation" begin
+        state = MovementState(1.0)
+        
+        # Test that opposite keys cancel out
+        add_key!(state, "w")
+        add_key!(state, "s")
+        movement = calculate_movement_vector(state)
+        @test movement == (0.0, 0.0)
+        
+        reset_movement_state!(state)
+        add_key!(state, "a")
+        add_key!(state, "d")
+        movement = calculate_movement_vector(state)
+        @test movement == (0.0, 0.0)
+    end
+    
+    @testset "No Keys Pressed" begin
+        state = MovementState(1.0)
+        movement = calculate_movement_vector(state)
+        @test movement == (0.0, 0.0)
+    end
+end
+
+@testset "Position Update Logic Tests" begin
+    @testset "Apply Movement Vector" begin
+        position = create_point_position()
+        
+        # Test applying movement vector
+        apply_movement_to_position!(position, (3.0, -2.0))
+        pos = get_current_position(position)
+        @test pos == (3.0, -2.0)
+        
+        # Test cumulative movement
+        apply_movement_to_position!(position, (1.0, 4.0))
+        pos = get_current_position(position)
+        @test pos == (4.0, 2.0)
+        
+        # Test negative movement
+        apply_movement_to_position!(position, (-2.0, -1.0))
+        pos = get_current_position(position)
+        @test pos == (2.0, 1.0)
+    end
+    
+    @testset "Update Position from Movement State" begin
+        state = MovementState(1.0)
+        position = create_point_position()
+        
+        # Test no movement when no keys pressed
+        update_position_from_state!(position, state)
+        pos = get_current_position(position)
+        @test pos == (0.0, 0.0)
+        
+        # Test movement with single key
+        add_key!(state, "w")
+        update_position_from_state!(position, state)
+        pos = get_current_position(position)
+        @test pos == (0.0, 1.0)
+        
+        # Test additional movement
+        update_position_from_state!(position, state)
+        pos = get_current_position(position)
+        @test pos == (0.0, 2.0)
+        
+        # Test diagonal movement
+        add_key!(state, "d")
+        update_position_from_state!(position, state)
+        pos = get_current_position(position)
+        expected_component = 1.0 / sqrt(2.0)
+        @test pos[1] ≈ expected_component atol=1e-6
+        @test pos[2] ≈ 2.0 + expected_component atol=1e-6
+    end
+end
+
 @testset "Integration Tests" begin
     @testset "Movement State with Key Mappings" begin
         state = MovementState(2.0)
@@ -120,23 +237,41 @@ end
         @test state.is_moving == false
     end
     
-    @testset "Point Position with Movement State" begin
+    @testset "Complete Movement Flow" begin
         state = MovementState(1.5)
         position = create_point_position()
         
-        # Simulate adding a key and updating position
+        # Test complete flow: key press -> movement calculation -> position update
         add_key!(state, "w")
         @test state.is_moving == true
         
-        # Update position based on movement
-        current_pos = get_current_position(position)
-        movement = KEY_MAPPINGS["w"]
-        new_x = current_pos[1] + movement[1] * state.movement_speed
-        new_y = current_pos[2] + movement[2] * state.movement_speed
+        # Calculate and apply movement
+        movement = calculate_movement_vector(state)
+        @test movement == (0.0, 1.5)
         
-        update_point_position!(position, new_x, new_y)
-        updated_pos = get_current_position(position)
+        apply_movement_to_position!(position, movement)
+        pos = get_current_position(position)
+        @test pos == (0.0, 1.5)
         
-        @test updated_pos == (0.0, 1.5)  # Moved up by speed amount
+        # Test using the integrated function
+        add_key!(state, "d")
+        update_position_from_state!(position, state)
+        pos = get_current_position(position)
+        expected_component = 1.5 / sqrt(2.0)
+        @test pos[1] ≈ expected_component atol=1e-6
+        @test pos[2] ≈ 1.5 + expected_component atol=1e-6
+    end
+    
+    @testset "Movement Speed Variations" begin
+        # Test different movement speeds
+        for speed in [0.5, 1.0, 2.0, 5.0]
+            state = MovementState(speed)
+            position = create_point_position()
+            
+            add_key!(state, "w")
+            update_position_from_state!(position, state)
+            pos = get_current_position(position)
+            @test pos == (0.0, speed)
+        end
     end
 end

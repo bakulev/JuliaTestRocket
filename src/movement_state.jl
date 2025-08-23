@@ -91,3 +91,66 @@ function get_current_position(position::Observable{Point2f})
     pos = position[]
     return (pos[1], pos[2])
 end
+
+"""
+    apply_movement_to_position!(position::Observable{Point2f}, movement_vector::Tuple{Float64, Float64})
+
+Apply a movement vector to the current position and update the observable.
+Takes the current position and adds the movement vector components.
+"""
+function apply_movement_to_position!(position::Observable{Point2f}, movement_vector::Tuple{Float64, Float64})
+    current_pos = get_current_position(position)
+    new_x = current_pos[1] + movement_vector[1]
+    new_y = current_pos[2] + movement_vector[2]
+    update_point_position!(position, new_x, new_y)
+    return position
+end
+
+"""
+    calculate_movement_vector(state::MovementState)
+
+Calculate the movement vector based on currently pressed keys.
+Returns a tuple (dx, dy) representing the movement direction.
+Handles diagonal movement when multiple keys are pressed simultaneously.
+"""
+function calculate_movement_vector(state::MovementState)
+    dx = 0.0
+    dy = 0.0
+    
+    # Sum up movement vectors for all currently pressed keys
+    for key in state.keys_pressed
+        if haskey(KEY_MAPPINGS, key)
+            movement = KEY_MAPPINGS[key]
+            dx += movement[1]
+            dy += movement[2]
+        end
+    end
+    
+    # Normalize diagonal movement to maintain consistent speed
+    if dx != 0.0 && dy != 0.0
+        # Apply normalization factor for diagonal movement
+        norm_factor = 1.0 / sqrt(2.0)
+        dx *= norm_factor
+        dy *= norm_factor
+    end
+    
+    # Apply movement speed
+    dx *= state.movement_speed
+    dy *= state.movement_speed
+    
+    return (dx, dy)
+end
+
+"""
+    update_position_from_state!(position::Observable{Point2f}, state::MovementState)
+
+Update the point position based on the current movement state.
+Calculates movement vector from pressed keys and applies it to the position.
+"""
+function update_position_from_state!(position::Observable{Point2f}, state::MovementState)
+    if state.is_moving
+        movement_vector = calculate_movement_vector(state)
+        apply_movement_to_position!(position, movement_vector)
+    end
+    return position
+end
