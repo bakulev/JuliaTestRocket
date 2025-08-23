@@ -51,7 +51,6 @@ update_coordinate_display!(position)
 
 using GLMakie
 using Logging
-using Logging
 
 """
     create_visualization()
@@ -106,7 +105,7 @@ function create_visualization()
             y_rounded = round(pos[2], digits=2)
             return "Position: ($x_rounded, $y_rounded)"
         catch e
-            @warn "Error updating coordinate text" exception=string(e) context="coordinate_display"
+            @warn "Error updating coordinate text" exception = string(e) context = "coordinate_display"
             return "Position: (Error, Error)"
         end
     end
@@ -150,11 +149,11 @@ function setup_visualization_window(fig::Figure)
             # Ignore if not supported
         end
 
-        @info "Visualization window set up successfully with performance optimizations"
+        @debug "Visualization window set up successfully with performance optimizations"
         return fig
 
     catch e
-        @error "Failed to set up visualization window" exception=string(e) context="window_setup"
+        @error "Failed to set up visualization window" exception = string(e) context = "window_setup"
         rethrow(e)
     end
 end
