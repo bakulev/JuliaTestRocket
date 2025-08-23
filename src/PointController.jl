@@ -4,7 +4,9 @@ using GLMakie
 
 # Export main functions and types
 export run_point_controller, MovementState, KEY_MAPPINGS, 
-       handle_key_press, handle_key_release, calculate_movement_vector
+       handle_key_press, handle_key_release, calculate_movement_vector,
+       reset_movement_state!, add_key!, remove_key!,
+       create_point_position, update_point_position!, get_current_position
 
 # Include component modules
 include("movement_state.jl")

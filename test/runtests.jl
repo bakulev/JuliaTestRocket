@@ -12,23 +12,8 @@ using PointController
         @test isdefined(PointController, :run_point_controller)
     end
     
-    @testset "MovementState Tests" begin
-        @test isdefined(PointController, :MovementState)
-        state = MovementState(2.0)
-        @test state isa MovementState
-        @test state.movement_speed == 2.0
-        @test isempty(state.keys_pressed)
-    end
-    
-    @testset "Key Mappings Tests" begin
-        @test isdefined(PointController, :KEY_MAPPINGS)
-        @test haskey(KEY_MAPPINGS, "w")
-        @test haskey(KEY_MAPPINGS, "a") 
-        @test haskey(KEY_MAPPINGS, "s")
-        @test haskey(KEY_MAPPINGS, "d")
-        @test KEY_MAPPINGS["w"] == (0.0, 1.0)
-        @test KEY_MAPPINGS["s"] == (0.0, -1.0)
-    end
+    # Include comprehensive movement state tests
+    include("test_movement_state.jl")
     
     @testset "Input Handler Tests" begin
         @test isdefined(PointController, :handle_key_press)

@@ -6,7 +6,7 @@
   - Create test/ directory with basic test structure
   - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-- [ ] 2. Implement core data structures and state management
+- [x] 2. Implement core data structures and state management
   - Create MovementState struct to track key presses and movement speed
   - Implement key mapping dictionary for WASD controls
   - Create observable point position using GLMakie's Observable type
