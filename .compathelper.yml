@@ -1,0 +1,64 @@
+# CompatHelper configuration for PointController.jl
+# This file configures automatic dependency update policies
+
+# Update policies by dependency type
+update_policies:
+  # Core dependencies - conservative updates
+  GLMakie:
+    # Only update patch versions automatically
+    # Require manual approval for minor/major updates
+    auto_update: "patch"
+    review_required: ["minor", "major"]
+    
+  # Julia version - very conservative
+  julia:
+    # Only suggest updates, never auto-update
+    auto_update: false
+    review_required: ["patch", "minor", "major"]
+
+# Global settings
+settings:
+  # Create PRs for dependency updates
+  create_pull_requests: true
+  
+  # Require CI to pass before merging
+  require_ci_pass: true
+  
+  # Update frequency
+  schedule:
+    patch: "weekly"    # Check for patch updates weekly
+    minor: "monthly"   # Check for minor updates monthly
+    major: "quarterly" # Check for major updates quarterly
+  
+  # PR settings
+  pr_settings:
+    # Auto-merge patch updates if CI passes
+    auto_merge_patch: true
+    auto_merge_minor: false
+    auto_merge_major: false
+    
+    # PR title format
+    title_format: "CompatHelper: bump {package} from {old_version} to {new_version}"
+    
+    # Include changelog in PR description
+    include_changelog: true
+    
+    # Assign reviewers for non-patch updates
+    reviewers: []
+    
+    # Labels to add to PRs
+    labels: ["dependencies", "automated"]
+
+# Exclusions - packages to never update automatically
+exclude_packages: []
+
+# Include pre-release versions for testing
+include_prerelease: false
+
+# Notification settings
+notifications:
+  # Notify on failed updates
+  on_failure: true
+  
+  # Notify on successful major updates
+  on_major_update: true

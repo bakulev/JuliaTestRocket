@@ -8,22 +8,25 @@ PointController/
 ├── Manifest.toml                         # Dependency lock file (auto-generated)
 ├── README.md                             # Main documentation
 ├── LICENSE                               # MIT license
+├── BACKEND_ACTIVATION.md                 # GLMakie backend activation guide
 ├── run_app.jl                           # Application launcher script
-├── run_tests.jl                         # Test runner script
 ├── verify_installation.jl               # Installation verification
+├── .kiro/                               # Kiro IDE configuration
+│   ├── specs/julia-point-controller/   # Feature specifications
+│   └── steering/                        # AI assistant guidance documents
 ├── src/                                 # Source code (main package)
 │   ├── PointController.jl               # Main module and entry point
 │   ├── movement_state.jl                # Movement state management
 │   ├── input_handler.jl                 # Keyboard event processing
 │   └── visualization.jl                 # GLMakie rendering and display
 └── test/                                # Test suite
-    ├── Project.toml                     # Test-specific dependencies
     ├── runtests.jl                      # Main test runner
     ├── test_movement_state.jl           # Movement state tests
     ├── test_input.jl                    # Input handling tests
     ├── test_visualization.jl            # Visualization tests
     ├── test_keyboard_integration.jl     # Integration tests
-    └── test_integration_comprehensive.jl # End-to-end tests
+    ├── test_integration_comprehensive.jl # End-to-end tests
+    └── test_task5_movement.jl           # Task-specific movement tests
 ```
 
 ## Module Architecture
@@ -81,13 +84,13 @@ export create_visualization, update_point_position!
 ## Configuration Files
 
 - **Project.toml**: Package metadata, dependencies, compatibility constraints
-- **test/Project.toml**: Test-specific dependencies (Test.jl, GLMakie.jl)
 - **Manifest.toml**: Exact dependency versions (auto-generated, version controlled)
+- **BACKEND_ACTIVATION.md**: Comprehensive guide for GLMakie backend activation patterns
 
 ## Development Workflow
 
 1. **Source changes**: Edit files in `src/` directory
-2. **Testing**: Run tests from `test/` directory using `run_tests.jl`
+2. **Testing**: Run tests using `julia --project=. test/runtests.jl`
 3. **Integration**: Use `run_app.jl` for full application testing
 4. **Verification**: Run `verify_installation.jl` to check setup
 
@@ -98,3 +101,4 @@ export create_visualization, update_point_position!
 - **Error handling**: Every module includes comprehensive error recovery
 - **Documentation**: All public functions have docstrings with examples
 - **Testing**: Each module has corresponding test file with comprehensive coverage
+- **Backend activation**: Always document GLMakie.activate!() requirement for users
