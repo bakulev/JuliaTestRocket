@@ -34,7 +34,7 @@
   - Write unit tests for movement calculations and position updates
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
 
-- [ ] 6. Integrate continuous movement with timing system
+- [x] 6. Integrate continuous movement with timing system
   - Set up timer-based update loop for smooth continuous movement
   - Connect keyboard state to movement updates with proper timing
   - Ensure point stops immediately when keys are released

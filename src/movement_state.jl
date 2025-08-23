@@ -14,9 +14,10 @@ mutable struct MovementState
     movement_speed::Float64
     last_update_time::Float64
     is_moving::Bool
+    update_timer::Union{Timer, Nothing}
     
     function MovementState(speed::Float64 = 1.0)
-        new(Set{String}(), speed, 0.0, false)
+        new(Set{String}(), speed, 0.0, false, nothing)
     end
 end
 
@@ -29,6 +30,7 @@ function reset_movement_state!(state::MovementState)
     empty!(state.keys_pressed)
     state.is_moving = false
     state.last_update_time = 0.0
+    stop_movement_timer!(state)
     return state
 end
 
@@ -153,4 +155,60 @@ function update_position_from_state!(position::Observable{Point2f}, state::Movem
         apply_movement_to_position!(position, movement_vector)
     end
     return position
+end
+
+"""
+    start_movement_timer!(state::MovementState, position::Observable{Point2f}, update_interval::Float64 = 1/60)
+
+Start a timer-based update loop for smooth continuous movement.
+Creates a timer that updates the point position at regular intervals while keys are pressed.
+"""
+function start_movement_timer!(state::MovementState, position::Observable{Point2f}, update_interval::Float64 = 1/60)
+    # Stop existing timer if running
+    stop_movement_timer!(state)
+    
+    # Create new timer for continuous updates
+    state.update_timer = Timer(update_interval; interval=update_interval) do timer
+        current_time = time()
+        
+        # Update position if keys are pressed
+        if state.is_moving && !isempty(state.keys_pressed)
+            # Calculate time-based movement for smooth animation
+            dt = current_time - state.last_update_time
+            if state.last_update_time > 0.0 && dt > 0.0
+                # Scale movement by time delta for consistent speed
+                movement_vector = calculate_movement_vector(state)
+                scaled_movement = (movement_vector[1] * dt * 60, movement_vector[2] * dt * 60)
+                apply_movement_to_position!(position, scaled_movement)
+            end
+        end
+        
+        state.last_update_time = current_time
+    end
+    
+    return state
+end
+
+"""
+    stop_movement_timer!(state::MovementState)
+
+Stop the movement timer and clean up resources.
+"""
+function stop_movement_timer!(state::MovementState)
+    if state.update_timer !== nothing
+        close(state.update_timer)
+        state.update_timer = nothing
+    end
+    return state
+end
+
+"""
+    update_movement_timing!(state::MovementState)
+
+Update timing information when movement state changes.
+Should be called when keys are pressed or released.
+"""
+function update_movement_timing!(state::MovementState)
+    state.last_update_time = time()
+    return state
 end

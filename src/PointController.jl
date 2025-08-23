@@ -9,7 +9,8 @@ export run_point_controller, MovementState, KEY_MAPPINGS,
        create_point_position, update_point_position!, get_current_position,
        apply_movement_to_position!, update_position_from_state!,
        create_visualization, setup_visualization_window, update_coordinate_display!,
-       setup_keyboard_events!, is_movement_key, get_pressed_keys
+       setup_keyboard_events!, is_movement_key, get_pressed_keys,
+       start_movement_timer!, stop_movement_timer!, update_movement_timing!
 
 # Include component modules
 include("movement_state.jl")

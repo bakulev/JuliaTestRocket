@@ -29,6 +29,10 @@ using PointController
 run_point_controller()
 ```
 
+```bash
+julia --project=. demo_visualization.jl
+```
+
 ## Controls
 
 - **W**: Move point up (positive Y direction)
@@ -61,6 +65,10 @@ To run tests:
 ```julia
 using Pkg
 Pkg.test()
+```
+From command line:
+```bash
+julia --project=. test/runtests.jl
 ```
 
 ## Requirements

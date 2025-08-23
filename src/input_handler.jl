@@ -15,6 +15,7 @@ function handle_key_press(key::String, state::MovementState)
     # Only process WASD keys
     if key_lower in keys(KEY_MAPPINGS)
         add_key!(state, key_lower)
+        update_movement_timing!(state)
         println("Key pressed: $key_lower")  # Debug output
     end
     
@@ -33,6 +34,7 @@ function handle_key_release(key::String, state::MovementState)
     # Only process WASD keys
     if key_lower in keys(KEY_MAPPINGS)
         remove_key!(state, key_lower)
+        update_movement_timing!(state)
         println("Key released: $key_lower")  # Debug output
     end
     
@@ -42,13 +44,40 @@ end
 
 
 """
+    setup_keyboard_events!(fig::Figure, state::MovementState, position::Observable{Point2f})
+
+Set up GLMakie keyboard event listeners for the given figure with timing integration.
+Connects key press and release events to the movement state handlers and manages the movement timer.
+"""
+function setup_keyboard_events!(fig::Figure, state::MovementState, position::Observable{Point2f})
+    # Set up key press event listener
+    on(events(fig).keyboardbutton) do event
+        if event.action == Keyboard.press
+            handle_key_press(string(event.key), state)
+            # Start timer if movement begins
+            if state.is_moving && state.update_timer === nothing
+                start_movement_timer!(state, position)
+            end
+        elseif event.action == Keyboard.release
+            handle_key_release(string(event.key), state)
+            # Stop timer if no keys are pressed
+            if !state.is_moving
+                stop_movement_timer!(state)
+            end
+        end
+    end
+    
+    return fig
+end
+
+"""
     setup_keyboard_events!(fig::Figure, state::MovementState)
 
-Set up GLMakie keyboard event listeners for the given figure.
-Connects key press and release events to the movement state handlers.
+Legacy version for backward compatibility - delegates to the new version.
+Note: This version won't have continuous movement without position parameter.
 """
 function setup_keyboard_events!(fig::Figure, state::MovementState)
-    # Set up key press event listener
+    # Set up key press event listener (basic version without timing)
     on(events(fig).keyboardbutton) do event
         if event.action == Keyboard.press
             handle_key_press(string(event.key), state)
