@@ -2,14 +2,18 @@
 
 # Test Runner for Point Controller
 using Pkg
+using Logging
 
-println("Activating project environment...")
+# Set up basic logging for the test runner
+global_logger(ConsoleLogger(stderr, Logging.Info))
+
+@info "Activating project environment..."
 Pkg.activate(@__DIR__)
 
-println("Installing dependencies...")
+@info "Installing dependencies..."
 Pkg.instantiate()
 
-println("Running tests...")
+@info "Running tests..."
 Pkg.test()
 
-println("Tests completed!")
+@info "Tests completed!"

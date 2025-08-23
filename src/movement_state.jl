@@ -36,6 +36,7 @@ vector = calculate_movement_vector(state)  # Get current movement direction
 """
 
 using GLMakie
+using Logging
 
 """
     MovementState
@@ -237,7 +238,7 @@ function start_movement_timer!(state::MovementState, position::Observable{Point2
         
         # Validate update interval for performance
         if update_interval <= 0.0 || update_interval > 1.0
-            println("WARNING: Invalid update interval $update_interval, using default 1/60")
+            @warn "Invalid update interval $update_interval, using default 1/60" context="timer_setup"
             update_interval = 1/60
         end
         
@@ -263,7 +264,7 @@ function start_movement_timer!(state::MovementState, position::Observable{Point2
                 state.last_update_time = current_time
                 
             catch timer_error
-                println("WARNING: Error in movement timer: $(string(timer_error))")
+                @warn "Error in movement timer" exception=string(timer_error) context="timer_execution"
                 # Stop timer on error to prevent continuous errors
                 stop_movement_timer!(state)
             end
@@ -272,7 +273,7 @@ function start_movement_timer!(state::MovementState, position::Observable{Point2
         return state
         
     catch e
-        println("ERROR: Failed to start movement timer: $(string(e))")
+        @error "Failed to start movement timer" exception=string(e) context="timer_start"
         # Ensure timer is cleared on error
         state.update_timer = nothing
         return state
@@ -292,7 +293,7 @@ function stop_movement_timer!(state::MovementState)
         end
         return state
     catch e
-        println("WARNING: Error stopping movement timer: $(string(e))")
+        @warn "Error stopping movement timer" exception=string(e) context="timer_stop"
         # Force clear timer reference even if close fails
         state.update_timer = nothing
         return state
@@ -321,10 +322,10 @@ function clear_all_keys_safely!(state::MovementState)
         empty!(state.keys_pressed)
         state.is_moving = false
         stop_movement_timer!(state)
-        println("All key states cleared safely.")
+        @debug "All key states cleared safely"
         return state
     catch e
-        println("WARNING: Error clearing key states: $(string(e))")
+        @warn "Error clearing key states" exception=string(e) context="key_clearing"
         # Force reset even if there's an error
         state.keys_pressed = Set{String}()
         state.is_moving = false

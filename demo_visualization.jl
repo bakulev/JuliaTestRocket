@@ -8,33 +8,37 @@ Pkg.activate(".")
 
 using PointController
 using GLMakie
+using Logging
 
-println("Testing GLMakie visualization setup...")
+# Set up logging for the demo
+global_logger(ConsoleLogger(stderr, Logging.Info))
+
+@info "Testing GLMakie visualization setup..."
 
 # Create the visualization
-println("Creating visualization components...")
+@info "Creating visualization components..."
 fig, ax, point_pos, coord_text = create_visualization()
 
 # Test updating the point position
-println("Testing point position updates...")
+@info "Testing point position updates..."
 update_point_position!(point_pos, 3.0, 2.0)
-println("Point moved to: $(get_current_position(point_pos))")
+@info "Point moved to: $(get_current_position(point_pos))"
 
 # Test coordinate display
-println("Current coordinate text: $(coord_text[])")
+@info "Current coordinate text: $(coord_text[])"
 
 # Test another position update
 update_point_position!(point_pos, -2.5, 4.1)
-println("Point moved to: $(get_current_position(point_pos))")
-println("Updated coordinate text: $(coord_text[])")
+@info "Point moved to: $(get_current_position(point_pos))"
+@info "Updated coordinate text: $(coord_text[])"
 
 # Setup the window (this will display the visualization)
-println("Setting up visualization window...")
+@info "Setting up visualization window..."
 setup_visualization_window(fig)
 
-println("Visualization setup complete!")
-println("The window should display a red point with coordinate text.")
-println("Press Ctrl+C to exit.")
+@info "Visualization setup complete!"
+@info "The window should display a red point with coordinate text."
+@info "Press Ctrl+C to exit."
 
 # Keep the script running to show the window
 try
@@ -42,5 +46,5 @@ try
         sleep(0.1)
     end
 catch InterruptException
-    println("\nExiting...")
+    @info "\nExiting..."
 end

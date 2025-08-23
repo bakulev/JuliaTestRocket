@@ -41,6 +41,7 @@ handle_key_release("w", state)  # Process 'w' key release
 """
 
 using GLMakie
+using Logging
 
 """
     handle_key_press(key::String, state::MovementState)
@@ -61,7 +62,7 @@ function handle_key_press(key::String, state::MovementState)
         
         # Handle quit key
         if key_lower == "q"
-            println("Quit requested by user (q key pressed)")
+            log_user_action("Quit requested", "q key pressed")
             request_quit!(state)
             return state
         end
@@ -70,7 +71,7 @@ function handle_key_press(key::String, state::MovementState)
         if key_lower in keys(KEY_MAPPINGS)
             add_key!(state, key_lower)
             update_movement_timing!(state)
-            println("Key pressed: $key_lower")  # Debug output
+            log_user_action("Key pressed", key_lower)
         else
             # Silently ignore non-movement keys (don't spam console)
             # This handles invalid key inputs gracefully
@@ -79,7 +80,7 @@ function handle_key_press(key::String, state::MovementState)
         return state
         
     catch e
-        println("WARNING: Error processing key press '$key': $(string(e))")
+        @warn "Error processing key press" exception=string(e) context="key_press"
         # Return state unchanged on error
         return state
     end
@@ -105,7 +106,7 @@ function handle_key_release(key::String, state::MovementState)
         if key_lower in keys(KEY_MAPPINGS)
             remove_key!(state, key_lower)
             update_movement_timing!(state)
-            println("Key released: $key_lower")  # Debug output
+            log_user_action("Key released", key_lower)
         else
             # Silently ignore non-movement keys (don't spam console)
             # This handles invalid key inputs gracefully
@@ -114,7 +115,7 @@ function handle_key_release(key::String, state::MovementState)
         return state
         
     catch e
-        println("WARNING: Error processing key release '$key': $(string(e))")
+        @warn "Error processing key release" exception=string(e) context="key_release"
         # Return state unchanged on error
         return state
     end
@@ -147,7 +148,7 @@ function setup_keyboard_events!(fig::Figure, state::MovementState, position::Obs
                 end
             end
         catch e
-            println("WARNING: Error in keyboard event handler: $(string(e))")
+            @warn "Error in keyboard event handler" exception=string(e) context="event_handler"
             # Clear key states on error to prevent stuck keys
             clear_all_keys_safely!(state)
         end

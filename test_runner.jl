@@ -4,23 +4,26 @@
 # This runs tests and displays results in a readable format
 
 import Pkg
+using Logging
 
-println("🧪 Point Controller Test Runner")
-println("=" ^ 40)
+# Set up basic logging for the test runner
+global_logger(ConsoleLogger(stderr, Logging.Info))
+
+@info "🧪 Point Controller Test Runner"
+@info "=" ^ 40
 
 # Activate project
-println("📦 Activating project...")
+@info "📦 Activating project..."
 Pkg.activate(@__DIR__)
 
 # Run tests
-println("🚀 Running tests...")
+@info "🚀 Running tests..."
 try
     Pkg.test()
-    println("✅ All tests passed!")
+    @info "✅ All tests passed!"
 catch e
-    println("❌ Tests failed:")
-    println(e)
+    @error "❌ Tests failed:" exception=string(e)
 end
 
-println("=" ^ 40)
-println("✨ Test run complete!")
+@info "=" ^ 40
+@info "✨ Test run complete!"

@@ -50,6 +50,8 @@ update_coordinate_display!(position)
 """
 
 using GLMakie
+using Logging
+using Logging
 
 """
     create_visualization()
@@ -61,41 +63,41 @@ Returns the figure, axis, point observable, and coordinate text observable.
 function create_visualization()
     # Note: GLMakie backend should be activated by the user before calling this function
     # Call GLMakie.activate!() in your script before using PointController functions
-    
+
     # Create figure with optimized configuration for performance
     fig = Figure(
-        size = (800, 600), 
-        title = "Point Controller",
+        size=(800, 600),
+        title="Point Controller",
         # Performance optimizations
-        figure_padding = 10,
-        fontsize = 12
+        figure_padding=10,
+        fontsize=12
     )
-    
+
     # Create axis with coordinate system and performance settings
-    ax = Axis(fig[1, 1], 
-        xlabel = "X Coordinate",
-        ylabel = "Y Coordinate",
-        title = "Interactive Point Control (Use WASD keys)",
-        aspect = DataAspect(),
-        limits = (-10, 10, -10, 10),
+    ax = Axis(fig[1, 1],
+        xlabel="X Coordinate",
+        ylabel="Y Coordinate",
+        title="Interactive Point Control (Use WASD keys)",
+        aspect=DataAspect(),
+        limits=(-10, 10, -10, 10),
         # Performance optimizations
-        xticklabelsize = 10,
-        yticklabelsize = 10,
-        titlesize = 14
+        xticklabelsize=10,
+        yticklabelsize=10,
+        titlesize=14
     )
-    
+
     # Create observable point position (initialized at origin)
     point_position = create_point_position()
-    
+
     # Implement optimized point rendering using scatter plot
-    scatter!(ax, point_position, 
-        color = :red, 
-        markersize = 20,
-        marker = :circle,
+    scatter!(ax, point_position,
+        color=:red,
+        markersize=20,
+        marker=:circle,
         # Performance optimization: reduce overdraw
-        strokewidth = 0
+        strokewidth=0
     )
-    
+
     # Add coordinate text display that updates with point position
     # Optimized to reduce string allocations
     coordinate_text = lift(point_position) do pos
@@ -104,28 +106,28 @@ function create_visualization()
             y_rounded = round(pos[2], digits=2)
             return "Position: ($x_rounded, $y_rounded)"
         catch e
-            println("WARNING: Error updating coordinate text: $(string(e))")
+            @warn "Error updating coordinate text" exception=string(e) context="coordinate_display"
             return "Position: (Error, Error)"
         end
     end
-    
+
     # Display coordinate text in the top-left corner of the plot
-    text!(ax, -9.5, 9.5, 
-        text = coordinate_text,
-        fontsize = 14,
-        color = :black,
-        align = (:left, :top)
+    text!(ax, -9.5, 9.5,
+        text=coordinate_text,
+        fontsize=14,
+        color=:black,
+        align=(:left, :top)
     )
-    
+
     # Add grid for better coordinate reference with performance settings
     ax.xgridvisible = true
     ax.ygridvisible = true
     ax.xminorgridvisible = false  # Disable minor grid for performance
     ax.yminorgridvisible = false  # Disable minor grid for performance
-    
+
     # Performance optimization: Modern GLMakie handles rendering efficiently by default
     # Note: render_on_demand is no longer available in newer GLMakie versions
-    
+
     return fig, ax, point_position, coordinate_text
 end
 
@@ -139,7 +141,7 @@ function setup_visualization_window(fig::Figure)
         # Configure window properties for better performance and user experience
         # Set window to be resizable and properly positioned
         display(fig)
-        
+
         # Additional performance optimizations if available
         try
             # Limit framerate for better performance
@@ -147,12 +149,12 @@ function setup_visualization_window(fig::Figure)
         catch e
             # Ignore if not supported
         end
-        
-        println("Visualization window set up successfully with performance optimizations.")
+
+        @info "Visualization window set up successfully with performance optimizations"
         return fig
-        
+
     catch e
-        println("ERROR: Failed to set up visualization window: $(string(e))")
+        @error "Failed to set up visualization window" exception=string(e) context="window_setup"
         rethrow(e)
     end
 end

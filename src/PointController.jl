@@ -73,9 +73,15 @@ export apply_movement_to_position!, update_position_from_state!, setup_visualiza
 export update_coordinate_display!
 # Export timer functions
 export start_movement_timer!, stop_movement_timer!
+# Export logging functions
+export setup_logging, get_current_log_level
+export log_application_start, log_application_stop, log_glmakie_activation
+export log_component_initialization, log_user_action
+export log_error_with_context, log_warning_with_context
 
 # Include component modules
 # Each module handles a specific aspect of the application
+include("logging_config.jl")    # Logging configuration and utilities
 include("movement_state.jl")    # Point position and movement state management
 include("input_handler.jl")     # Keyboard event processing and validation  
 include("visualization.jl")     # GLMakie visualization setup and rendering
@@ -104,40 +110,41 @@ run_point_controller()
 - Modern GLMakie integration following best practices
 """
 function run_point_controller()
-    println("Starting Point Controller...")
+    # Initialize logging system
+    setup_logging(Logging.Info)
+    log_application_start()
     
     local movement_state = nothing
     local fig = nothing
 
     try
         # Initialize GLMakie with error handling
-        println("Initializing GLMakie backend...")
+        log_component_initialization("GLMakie backend")
         if !initialize_glmakie_safely()
             error("Failed to initialize GLMakie. Please check your graphics drivers and OpenGL support.")
         end
 
         # Initialize all components with error handling
-        println("Initializing visualization...")
+        log_component_initialization("visualization")
         fig, ax, point_position, coordinate_text = create_visualization_safely()
 
         # Create movement state
-        println("Setting up movement state...")
+        log_component_initialization("movement state")
         movement_state = MovementState(movement_speed = 0.1)  # Movement speed of 0.1 units per frame
 
         # Set up GLMakie window with proper configuration and error handling
-        println("Setting up window...")
+        log_component_initialization("window")
         setup_visualization_window_safely(fig)
 
         # Connect all event handlers with error handling
-        println("Setting up keyboard event handlers...")
+        log_component_initialization("keyboard event handlers")
         setup_keyboard_events_safely!(fig, movement_state, point_position)
 
         # Set up window focus handling for robustness
         setup_window_focus_handling!(fig, movement_state)
 
         # Start the application loop
-        println("Point Controller is ready!")
-        println("Use WASD keys to move the point. Press 'q' to quit or close the window to exit.")
+        @info "Point Controller is ready! Use WASD keys to move the point. Press 'q' to quit or close the window to exit."
 
         # Keep the application running and responsive
         # GLMakie handles the event loop internally, so we just need to keep the process alive
@@ -146,9 +153,9 @@ function run_point_controller()
         # Set up window close handler for proper cleanup
         on(events(fig).window_open) do is_open
             if !is_open
-                println("Window closed. Cleaning up...")
+                @info "Window closed. Cleaning up..."
                 cleanup_application_safely(movement_state)
-                println("Point Controller stopped.")
+                log_application_stop()
             end
         end
 
@@ -160,7 +167,7 @@ function run_point_controller()
         
         # Handle quit request
         if movement_state.should_quit
-            println("Exiting application...")
+            @info "Exiting application..."
             # Close the window if quit was requested via 'q' key
             cleanup_application_safely(movement_state)
             GLMakie.closeall()
@@ -171,7 +178,7 @@ function run_point_controller()
         rethrow(e)
     end
 
-    println("Point Controller application finished.")
+    log_application_stop()
 end
 
 """
@@ -191,36 +198,35 @@ function initialize_glmakie_safely()
         test_fig = Figure(size = (100, 100))
         # Note: Figures don't need explicit closing in GLMakie
         
-        println("GLMakie backend is ready and functional.")
+        @info "GLMakie backend is ready and functional"
         return true
         
     catch e
         if contains(string(e), "backend") || contains(string(e), "activate")
-            println("ERROR: GLMakie backend not activated.")
-            println("Please call GLMakie.activate!() before using PointController:")
-            println("  using GLMakie")
-            println("  GLMakie.activate!()")
-            println("  using PointController")
-            println("  run_point_controller()")
+            log_error_with_context("GLMakie backend not activated", "backend_initialization", e)
+            @error "Please call GLMakie.activate!() before using PointController:"
+            @error "  using GLMakie"
+            @error "  GLMakie.activate!()"
+            @error "  using PointController"
+            @error "  run_point_controller()"
         elseif contains(string(e), "OpenGL") || contains(string(e), "GL")
-            println("ERROR: OpenGL initialization failed.")
-            println("This usually indicates:")
-            println("  - Outdated graphics drivers")
-            println("  - Insufficient OpenGL version (3.3+ required)")
-            println("  - Missing graphics hardware acceleration")
-            println("Please update your graphics drivers and ensure OpenGL 3.3+ support.")
+            log_error_with_context("OpenGL initialization failed", "graphics_system", e)
+            @error "This usually indicates:"
+            @error "  - Outdated graphics drivers"
+            @error "  - Insufficient OpenGL version (3.3+ required)"
+            @error "  - Missing graphics hardware acceleration"
+            @error "Please update your graphics drivers and ensure OpenGL 3.3+ support."
         elseif contains(string(e), "display") || contains(string(e), "DISPLAY")
-            println("ERROR: Display system not available.")
-            println("This usually indicates:")
-            println("  - Running in headless environment without display")
-            println("  - X11 forwarding not enabled (if using SSH)")
-            println("  - Wayland compatibility issues")
-            println("Please ensure you have a working display system.")
+            log_error_with_context("Display system not available", "display_system", e)
+            @error "This usually indicates:"
+            @error "  - Running in headless environment without display"
+            @error "  - X11 forwarding not enabled (if using SSH)"
+            @error "  - Wayland compatibility issues"
+            @error "Please ensure you have a working display system."
         else
-            println("ERROR: GLMakie backend check failed:")
-            println("  $(string(e))")
-            println("Make sure to activate GLMakie before using PointController:")
-            println("  GLMakie.activate!()")
+            log_error_with_context("GLMakie backend check failed", "backend_check", e)
+            @error "Make sure to activate GLMakie before using PointController:"
+            @error "  GLMakie.activate!()"
         end
         return false
     end
@@ -235,8 +241,8 @@ function create_visualization_safely()
     try
         return create_visualization()
     catch e
-        println("ERROR: Failed to create visualization: $(string(e))")
-        println("This may indicate insufficient graphics memory or rendering capabilities.")
+        log_error_with_context("Failed to create visualization", "visualization_creation", e)
+        @error "This may indicate insufficient graphics memory or rendering capabilities"
         rethrow(e)
     end
 end
@@ -251,8 +257,8 @@ function setup_visualization_window_safely(fig::Figure)
         setup_visualization_window(fig)
         return fig
     catch e
-        println("ERROR: Failed to display window: $(string(e))")
-        println("This may indicate window system compatibility issues.")
+        log_error_with_context("Failed to display window", "window_setup", e)
+        @error "This may indicate window system compatibility issues"
         rethrow(e)
     end
 end
@@ -267,8 +273,8 @@ function setup_keyboard_events_safely!(fig::Figure, state::MovementState, positi
         setup_keyboard_events!(fig, state, position)
         return fig
     catch e
-        println("ERROR: Failed to set up keyboard events: $(string(e))")
-        println("Keyboard input may not work properly.")
+        log_error_with_context("Failed to set up keyboard events", "keyboard_setup", e)
+        @warn "Keyboard input may not work properly"
         # Don't rethrow - application can still run without keyboard events
         return fig
     end
@@ -287,20 +293,20 @@ function setup_window_focus_handling!(fig::Figure, state::MovementState)
             if !has_focus
                 # Clear all pressed keys when window loses focus
                 # This prevents "stuck" keys when focus is lost while keys are pressed
-                println("Window lost focus - clearing key states for safety")
+                @debug "Window lost focus - clearing key states for safety"
                 clear_all_keys_safely!(state)
                 stop_movement_timer!(state)
             else
-                println("Window gained focus")
+                @debug "Window gained focus"
             end
         end
         
-        println("Window focus handling set up successfully.")
+        @debug "Window focus handling set up successfully"
         return fig
         
     catch e
-        println("WARNING: Could not set up window focus handling: $(string(e))")
-        println("Application will continue but may have issues with focus changes.")
+        log_warning_with_context("Could not set up window focus handling", "focus_handling")
+        @warn "Application will continue but may have issues with focus changes"
         # Don't rethrow - this is not critical for basic functionality
         return fig
     end
@@ -313,19 +319,19 @@ Centralized error handling for the application.
 Provides clear error messages and performs cleanup.
 """
 function handle_application_error(e::Exception, movement_state, fig)
-    println("ERROR: Point Controller encountered an error:")
+    log_error_with_context("Point Controller encountered an error", "application_error", e)
     
     if isa(e, InterruptException)
-        println("Application interrupted by user (Ctrl+C)")
+        @info "Application interrupted by user (Ctrl+C)"
     elseif contains(string(e), "OpenGL") || contains(string(e), "GL")
-        println("OpenGL/Graphics error: $(string(e))")
-        println("This may indicate graphics driver or hardware issues.")
+        log_error_with_context("OpenGL/Graphics error", "graphics_error", e)
+        @error "This may indicate graphics driver or hardware issues"
     elseif contains(string(e), "OutOfMemoryError")
-        println("Out of memory error: $(string(e))")
-        println("Try closing other applications to free up memory.")
+        log_error_with_context("Out of memory error", "memory_error", e)
+        @error "Try closing other applications to free up memory"
     else
-        println("Unexpected error: $(string(e))")
-        println("Error type: $(typeof(e))")
+        log_error_with_context("Unexpected error", "unknown_error", e)
+        @error "Error type: $(typeof(e))"
     end
     
     # Attempt cleanup
@@ -343,9 +349,9 @@ function cleanup_application_safely(movement_state)
             stop_movement_timer!(movement_state)
             clear_all_keys_safely!(movement_state)
         end
-        println("Application cleanup completed.")
+        @info "Application cleanup completed"
     catch cleanup_error
-        println("WARNING: Error during cleanup: $(string(cleanup_error))")
+        log_warning_with_context("Error during cleanup", "cleanup", cleanup_error)
         # Continue cleanup despite errors
     end
 end

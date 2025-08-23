@@ -4,23 +4,27 @@
 # This script activates the project environment and runs the application
 
 import Pkg
+using Logging
+
+# Set up basic logging for the runner script
+global_logger(ConsoleLogger(stderr, Logging.Info))
 
 # Activate the project environment
-println("Activating Point Controller project...")
+@info "Activating Point Controller project..."
 Pkg.activate(@__DIR__)
 
 # Install dependencies if needed
-println("Checking dependencies...")
+@info "Checking dependencies..."
 Pkg.instantiate()
 
 # Activate GLMakie backend (required for PointController)
-println("Activating GLMakie backend...")
+@info "Activating GLMakie backend..."
 using GLMakie
 GLMakie.activate!()
 
 # Load and run the application
-println("Loading Point Controller...")
+@info "Loading Point Controller..."
 using PointController
 
-println("Starting Point Controller application...")
+@info "Starting Point Controller application..."
 run_point_controller()
