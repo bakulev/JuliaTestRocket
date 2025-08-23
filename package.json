@@ -1,0 +1,12 @@
+{
+  "name": "point-controller-julia",
+  "version": "1.0.0",
+  "description": "Julia Point Controller with WASD controls",
+  "scripts": {
+    "test": "julia --project=. test/runtests.jl",
+    "test:watch": "julia --project=. test/runtests.jl",
+    "start": "julia --project=. run_app.jl"
+  },
+  "keywords": ["julia", "graphics", "interactive"],
+  "author": "User"
+}

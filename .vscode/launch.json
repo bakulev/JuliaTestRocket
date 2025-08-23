@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "julia",
+            "request": "launch",
+            "name": "Run Point Controller",
+            "program": "${workspaceFolder}/src/PointController.jl",
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "juliaEnv": "${workspaceFolder}",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "julia",
+            "request": "launch", 
+            "name": "Run Point Controller (Interactive)",
+            "program": "${workspaceFolder}/run_app.jl",
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "juliaEnv": "${workspaceFolder}",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "julia",
+            "request": "launch",
+            "name": "Run Tests",
+            "program": "${workspaceFolder}/run_tests.jl",
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "juliaEnv": "${workspaceFolder}",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "julia",
+            "request": "launch",
+            "name": "Run Basic Test",
+            "program": "${workspaceFolder}/test/basic_test.jl",
+            "stopOnEntry": false,
+            "cwd": "${workspaceFolder}",
+            "juliaEnv": "${workspaceFolder}",
+            "args": [],
+            "console": "integratedTerminal"
+        }
+    ]
+}
