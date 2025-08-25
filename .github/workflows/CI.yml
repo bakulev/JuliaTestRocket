@@ -84,11 +84,22 @@ jobs:
         with:
           version: '1.10'
           
+      - name: Setup display for GLMakie
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          
       - name: Install quality tools
+        env:
+          DISPLAY: :99
         run: |
           julia -e 'using Pkg; Pkg.add(["JuliaFormatter", "Aqua"])'
           
       - name: Check formatting
+        env:
+          DISPLAY: :99
         run: |
           julia -e '
             using JuliaFormatter
@@ -99,6 +110,8 @@ jobs:
           '
           
       - name: Run Aqua.jl quality checks
+        env:
+          DISPLAY: :99
         run: |
           julia --project=. -e '
             using Pkg
