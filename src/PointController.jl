@@ -63,13 +63,16 @@ using GLMakie
 # Export public API - functions and types that users and tests need
 export run_point_controller, MovementState, KEY_MAPPINGS
 # Export movement state functions
-export add_key!, remove_key!, calculate_movement_vector, reset_movement_state!, request_quit!
+export add_key!,
+    remove_key!, calculate_movement_vector, reset_movement_state!, request_quit!
 export clear_all_keys_safely!, update_movement_timing!
 export update_time_display!, format_current_time
 # Export input handler functions  
-export handle_key_press, handle_key_release, is_movement_key, get_pressed_keys, setup_keyboard_events!
+export handle_key_press,
+    handle_key_release, is_movement_key, get_pressed_keys, setup_keyboard_events!
 # Export visualization functions
-export create_visualization, create_point_position, update_point_position!, get_current_position
+export create_visualization,
+    create_point_position, update_point_position!, get_current_position
 export apply_movement_to_position!, update_position_from_state!, setup_visualization_window
 export update_coordinate_display!, create_time_observable
 # Export timer functions
@@ -122,7 +125,9 @@ function run_point_controller()
         # Initialize GLMakie with error handling
         log_component_initialization("GLMakie backend")
         if !initialize_glmakie_safely()
-            error("Failed to initialize GLMakie. Please check your graphics drivers and OpenGL support.")
+            error(
+                "Failed to initialize GLMakie. Please check your graphics drivers and OpenGL support.",
+            )
         end
 
         # Initialize all components with error handling
@@ -131,7 +136,7 @@ function run_point_controller()
 
         # Create movement state
         log_component_initialization("movement state")
-        movement_state = MovementState(movement_speed=0.1)  # Movement speed of 0.1 units per frame
+        movement_state = MovementState(movement_speed = 0.1)  # Movement speed of 0.1 units per frame
 
         # Set up GLMakie window with proper configuration and error handling
         log_component_initialization("window")
@@ -183,7 +188,7 @@ function run_point_controller()
         rethrow(e)
     end
 
-    log_application_stop()
+    return log_application_stop()
 end
 
 """
@@ -200,7 +205,7 @@ function initialize_glmakie_safely()
         # This will fail if GLMakie.activate!() hasn't been called by the user
 
         # Test basic GLMakie functionality to ensure backend is working
-        test_fig = Figure(size=(100, 100))
+        test_fig = Figure(size = (100, 100))
         # Note: Figures don't need explicit closing in GLMakie
 
         @info "GLMakie backend is ready and functional"
@@ -208,7 +213,11 @@ function initialize_glmakie_safely()
 
     catch e
         if contains(string(e), "backend") || contains(string(e), "activate")
-            log_error_with_context("GLMakie backend not activated", "backend_initialization", e)
+            log_error_with_context(
+                "GLMakie backend not activated",
+                "backend_initialization",
+                e,
+            )
             @error "Please call GLMakie.activate!() before using PointController:"
             @error "  using GLMakie"
             @error "  GLMakie.activate!()"
@@ -246,7 +255,11 @@ function create_visualization_safely()
     try
         return create_visualization()
     catch e
-        log_error_with_context("Failed to create visualization", "visualization_creation", e)
+        log_error_with_context(
+            "Failed to create visualization",
+            "visualization_creation",
+            e,
+        )
         @error "This may indicate insufficient graphics memory or rendering capabilities"
         rethrow(e)
     end
@@ -273,7 +286,12 @@ end
 
 Set up keyboard events with comprehensive error handling.
 """
-function setup_keyboard_events_safely!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String},Nothing}=nothing)
+function setup_keyboard_events_safely!(
+    fig::Figure,
+    state::MovementState,
+    position::Observable{Point2f},
+    time_obs::Union{Observable{String}, Nothing} = nothing,
+)
     try
         setup_keyboard_events!(fig, state, position, time_obs)
         return fig
@@ -340,7 +358,7 @@ function handle_application_error(e::Exception, movement_state, fig)
     end
 
     # Attempt cleanup
-    cleanup_application_safely(movement_state)
+    return cleanup_application_safely(movement_state)
 end
 
 """

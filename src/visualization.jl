@@ -65,24 +65,24 @@ function create_visualization()
 
     # Create figure with optimized configuration for performance
     fig = Figure(
-        size=(800, 600),
-        title="Point Controller",
+        size = (800, 600),
+        title = "Point Controller",
         # Performance optimizations
-        figure_padding=10,
-        fontsize=12
+        figure_padding = 10,
+        fontsize = 12,
     )
 
     # Create axis with coordinate system and performance settings
     ax = Axis(fig[1, 1],
-        xlabel="X Coordinate",
-        ylabel="Y Coordinate",
-        title="Interactive Point Control (Use WASD keys)",
-        aspect=DataAspect(),
-        limits=(-10, 10, -10, 10),
+        xlabel = "X Coordinate",
+        ylabel = "Y Coordinate",
+        title = "Interactive Point Control (Use WASD keys)",
+        aspect = DataAspect(),
+        limits = (-10, 10, -10, 10),
         # Performance optimizations
-        xticklabelsize=10,
-        yticklabelsize=10,
-        titlesize=14
+        xticklabelsize = 10,
+        yticklabelsize = 10,
+        titlesize = 14,
     )
 
     # Create observable point position (initialized at origin)
@@ -93,11 +93,11 @@ function create_visualization()
 
     # Implement optimized point rendering using scatter plot
     scatter!(ax, point_position,
-        color=:red,
-        markersize=20,
-        marker=:circle,
+        color = :red,
+        markersize = 20,
+        marker = :circle,
         # Performance optimization: reduce overdraw
-        strokewidth=0
+        strokewidth = 0,
     )
 
     # Add time display in the upper left corner
@@ -112,18 +112,18 @@ function create_visualization()
 
     # Display time text in the upper left corner of the plot
     text!(ax, -9.5, 8.5,
-        text=time_text,
-        fontsize=12,
-        color=:blue,
-        align=(:left, :top)
+        text = time_text,
+        fontsize = 12,
+        color = :blue,
+        align = (:left, :top),
     )
 
     # Add coordinate text display that updates with point position
     # Optimized to reduce string allocations
     coordinate_text = lift(point_position) do pos
         try
-            x_rounded = round(pos[1], digits=2)
-            y_rounded = round(pos[2], digits=2)
+            x_rounded = round(pos[1], digits = 2)
+            y_rounded = round(pos[2], digits = 2)
             return "Position: ($x_rounded, $y_rounded)"
         catch e
             @warn "Error updating coordinate text" exception = string(e) context = "coordinate_display"
@@ -133,10 +133,10 @@ function create_visualization()
 
     # Display coordinate text below the time display
     text!(ax, -9.5, 7.5,
-        text=coordinate_text,
-        fontsize=12,
-        color=:black,
-        align=(:left, :top)
+        text = coordinate_text,
+        fontsize = 12,
+        color = :black,
+        align = (:left, :top),
     )
 
     # Add grid for better coordinate reference with performance settings
@@ -190,8 +190,6 @@ function create_time_observable()
     # Create observable with initial time
     return Observable(format_current_time())
 end
-
-
 
 """
     update_coordinate_display!(position::Observable{Point2f})

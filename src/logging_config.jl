@@ -44,14 +44,14 @@ function setup_logging(level::LogLevel = Logging.Info; show_timestamp::Bool = tr
         # Create console logger with specified level
         # Note: Custom formatters require more complex setup in newer Julia versions
         logger = ConsoleLogger(stderr, level)
-        
+
         # Set as global logger
         global_logger(logger)
-        
+
         @info "PointController logging initialized" level=level show_timestamp=show_timestamp
-        
+
         return true
-        
+
     catch e
         # Fallback to basic logging if setup fails
         println("WARNING: Failed to set up logging system: $(string(e))")
@@ -150,7 +150,11 @@ Log errors with context information.
 - `context::String`: Context where the error occurred (optional)
 - `exception`: Exception object for additional details (optional)
 """
-function log_error_with_context(error_msg::String, context::String = "", exception = nothing)
+function log_error_with_context(
+    error_msg::String,
+    context::String = "",
+    exception = nothing,
+)
     if !isempty(context) && exception !== nothing
         @error error_msg context=context exception=string(exception)
     elseif !isempty(context)

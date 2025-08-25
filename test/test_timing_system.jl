@@ -3,7 +3,6 @@ using PointController
 using GLMakie
 
 @testset "Timing System Tests" begin
-
     @testset "Movement Timer Management" begin
         # Test timer creation and cleanup
         state = MovementState(movement_speed = 2.0)

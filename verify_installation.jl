@@ -64,7 +64,7 @@ required_functions = [
     :KEY_MAPPINGS,
     :handle_key_press,
     :handle_key_release,
-    :calculate_movement_vector
+    :calculate_movement_vector,
 ]
 
 for func in required_functions
@@ -82,7 +82,7 @@ try
     # Test MovementState creation
     state = PointController.MovementState(movement_speed = 0.1)
     println("   ✓ MovementState creation works")
-    
+
     # Test key handling
     PointController.add_key!(state, "w")
     if "w" in state.keys_pressed
@@ -91,7 +91,7 @@ try
         println("   ✗ Key press handling failed")
         exit(1)
     end
-    
+
     # Test movement calculation
     vector = PointController.calculate_movement_vector(state)
     if vector == (0.0, 0.1)
@@ -100,7 +100,7 @@ try
         println("   ✗ Movement calculation failed: expected (0.0, 0.1), got $vector")
         exit(1)
     end
-    
+
     # Test key removal
     PointController.remove_key!(state, "w")
     if isempty(state.keys_pressed)
@@ -109,7 +109,7 @@ try
         println("   ✗ Key release handling failed")
         exit(1)
     end
-    
+
 catch e
     println("   ✗ Basic functionality test failed: $e")
     exit(1)
@@ -132,7 +132,9 @@ println("✓ All checks passed!")
 println("\nTo run the application:")
 println("  julia run_app.jl")
 println("\nTo run manually with backend activation:")
-println("  julia --project=. -e \"using GLMakie; GLMakie.activate!(); using PointController; run_point_controller()\"")
+println(
+    "  julia --project=. -e \"using GLMakie; GLMakie.activate!(); using PointController; run_point_controller()\"",
+)
 println("\nTo run tests:")
 println("  julia --project=. test/runtests.jl")
 println("\nFor help:")

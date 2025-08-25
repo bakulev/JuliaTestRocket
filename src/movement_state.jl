@@ -63,7 +63,7 @@ Base.@kwdef mutable struct MovementState
     movement_speed::Float64 = 1.0
     last_update_time::Float64 = 0.0
     is_moving::Bool = false
-    update_timer::Union{Timer,Nothing} = nothing
+    update_timer::Union{Timer, Nothing} = nothing
     should_quit::Bool = false
 end
 
@@ -125,11 +125,11 @@ Each vector represents the direction of movement as (x, y) coordinates.
 - `"a"`: Left movement (-1.0, 0.0)
 - `"d"`: Right movement (1.0, 0.0)
 """
-const KEY_MAPPINGS = Dict{String,Tuple{Float64,Float64}}(
+const KEY_MAPPINGS = Dict{String, Tuple{Float64, Float64}}(
     "w" => (0.0, 1.0),   # Up
     "s" => (0.0, -1.0),  # Down
     "a" => (-1.0, 0.0),  # Left
-    "d" => (1.0, 0.0)    # Right
+    "d" => (1.0, 0.0),    # Right
 )
 
 """
@@ -168,7 +168,10 @@ end
 Apply a movement vector to the current position and update the observable.
 Takes the current position and adds the movement vector components.
 """
-function apply_movement_to_position!(position::Observable{Point2f}, movement_vector::Tuple{Float64,Float64})
+function apply_movement_to_position!(
+    position::Observable{Point2f},
+    movement_vector::Tuple{Float64, Float64},
+)
     current_pos = get_current_position(position)
     new_x = current_pos[1] + movement_vector[1]
     new_y = current_pos[2] + movement_vector[2]
@@ -233,7 +236,12 @@ Creates a timer that updates the point position at regular intervals while keys 
 Also updates the time display if time_obs is provided.
 Includes performance optimizations and robust error handling.
 """
-function start_movement_timer!(state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing, update_interval::Float64=1 / 60)
+function start_movement_timer!(
+    state::MovementState,
+    position::Observable{Point2f},
+    time_obs::Union{Observable{String}, Nothing} = nothing,
+    update_interval::Float64 = 1 / 60,
+)
     try
         # Stop existing timer if running
         stop_movement_timer!(state)
@@ -245,7 +253,7 @@ function start_movement_timer!(state::MovementState, position::Observable{Point2
         end
 
         # Create new timer for continuous updates with error handling
-        state.update_timer = Timer(update_interval; interval=update_interval) do timer
+        state.update_timer = Timer(update_interval; interval = update_interval) do timer
             try
                 current_time = time()
 
@@ -258,7 +266,10 @@ function start_movement_timer!(state::MovementState, position::Observable{Point2
                         movement_vector = calculate_movement_vector(state)
                         # Performance optimization: limit movement scaling
                         scale_factor = min(dt * 60, 5.0)  # Cap scaling to prevent jumps
-                        scaled_movement = (movement_vector[1] * scale_factor, movement_vector[2] * scale_factor)
+                        scaled_movement = (
+                            movement_vector[1] * scale_factor,
+                            movement_vector[2] * scale_factor,
+                        )
                         apply_movement_to_position!(position, scaled_movement)
                     end
                 end

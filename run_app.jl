@@ -3,7 +3,7 @@
 # Point Controller Application Runner
 # This script activates the project environment and runs the application
 
-import Pkg
+using Pkg: Pkg
 using Logging
 
 # Set up basic logging for the runner script

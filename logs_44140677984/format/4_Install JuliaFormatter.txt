@@ -1,0 +1,36 @@
+﻿2025-08-25T13:19:35.6262007Z ##[group]Run julia -e 'using Pkg; Pkg.add("JuliaFormatter")'
+2025-08-25T13:19:35.6262525Z [36;1mjulia -e 'using Pkg; Pkg.add("JuliaFormatter")'[0m
+2025-08-25T13:19:35.6367512Z shell: /usr/bin/bash -e {0}
+2025-08-25T13:19:35.6367829Z ##[endgroup]
+2025-08-25T13:19:35.9812889Z   Installing known registries into `~/.julia`
+2025-08-25T13:19:37.8019236Z        Added `General` registry to ~/.julia/registries
+2025-08-25T13:19:38.6879135Z     Updating registry at `~/.julia/registries/General.toml`
+2025-08-25T13:19:38.6992682Z    Resolving package versions...
+2025-08-25T13:19:40.3194289Z    Installed Glob ──────────── v1.3.1
+2025-08-25T13:19:40.3341946Z    Installed Preferences ───── v1.5.0
+2025-08-25T13:19:40.3344488Z    Installed JuliaSyntax ───── v0.4.10
+2025-08-25T13:19:40.3350389Z    Installed PrecompileTools ─ v1.2.1
+2025-08-25T13:19:40.3382948Z    Installed CommonMark ────── v0.9.1
+2025-08-25T13:19:40.3394148Z    Installed JuliaFormatter ── v2.1.6
+2025-08-25T13:19:41.1384934Z     Updating `~/.julia/environments/v1.10/Project.toml`
+2025-08-25T13:19:41.1389524Z   [98e50ef6] + JuliaFormatter v2.1.6
+2025-08-25T13:19:41.1454364Z     Updating `~/.julia/environments/v1.10/Manifest.toml`
+2025-08-25T13:19:41.1475299Z   [a80b9123] + CommonMark v0.9.1
+2025-08-25T13:19:41.1475892Z   [c27321d9] + Glob v1.3.1
+2025-08-25T13:19:41.1476403Z   [98e50ef6] + JuliaFormatter v2.1.6
+2025-08-25T13:19:41.1477390Z ⌅ [70703baa] + JuliaSyntax v0.4.10
+2025-08-25T13:19:41.1478065Z ⌅ [aea7be01] + PrecompileTools v1.2.1
+2025-08-25T13:19:41.1478639Z   [21216c6a] + Preferences v1.5.0
+2025-08-25T13:19:41.1479185Z   [ade2ca70] + Dates
+2025-08-25T13:19:41.1479672Z   [de0858da] + Printf
+2025-08-25T13:19:41.1480199Z   [fa267f1f] + TOML v1.0.3
+2025-08-25T13:19:41.1480716Z   [4ec0a83e] + Unicode
+2025-08-25T13:19:41.1482336Z         Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`
+2025-08-25T13:19:42.1902388Z Precompiling packages...
+2025-08-25T13:19:42.8449105Z     444.8 ms  ✓ Glob
+2025-08-25T13:19:42.9138020Z     522.4 ms  ✓ Preferences
+2025-08-25T13:19:43.2073158Z     293.5 ms  ✓ PrecompileTools
+2025-08-25T13:19:51.8510432Z    8643.6 ms  ✓ CommonMark
+2025-08-25T13:19:54.4873459Z   12292.2 ms  ✓ JuliaSyntax
+2025-08-25T13:20:16.8676952Z   22380.2 ms  ✓ JuliaFormatter
+2025-08-25T13:20:16.8677651Z   6 dependencies successfully precompiled in 36 seconds

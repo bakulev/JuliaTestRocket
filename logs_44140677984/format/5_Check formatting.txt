@@ -1,0 +1,37 @@
+﻿2025-08-25T13:20:16.8906236Z ##[group]Run julia -e '
+2025-08-25T13:20:16.8906513Z [36;1mjulia -e '[0m
+2025-08-25T13:20:16.8906976Z [36;1m  using JuliaFormatter[0m
+2025-08-25T13:20:16.8907265Z [36;1m  if !format(".", verbose=true, overwrite=false)[0m
+2025-08-25T13:20:16.8907725Z [36;1m    @error "Code formatting check failed. Please run JuliaFormatter.format(\".\")"[0m
+2025-08-25T13:20:16.8908096Z [36;1m    exit(1)[0m
+2025-08-25T13:20:16.8908275Z [36;1m  else[0m
+2025-08-25T13:20:16.8908473Z [36;1m    @info "Code formatting is correct ✓"[0m
+2025-08-25T13:20:16.8908726Z [36;1m  end[0m
+2025-08-25T13:20:16.8908888Z [36;1m'[0m
+2025-08-25T13:20:16.8948939Z shell: /usr/bin/bash -e {0}
+2025-08-25T13:20:16.8949177Z ##[endgroup]
+2025-08-25T13:20:17.4112091Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/docs/make.jl
+2025-08-25T13:20:17.4611207Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/run_app.jl
+2025-08-25T13:20:17.4614452Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/run_tests.jl
+2025-08-25T13:20:17.4617612Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/scripts/version_management.jl
+2025-08-25T13:20:17.4707346Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/PointController.jl
+2025-08-25T13:20:17.4732591Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/input_handler.jl
+2025-08-25T13:20:17.4745701Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/logging_config.jl
+2025-08-25T13:20:17.4756082Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/movement_state.jl
+2025-08-25T13:20:17.4784648Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/visualization.jl
+2025-08-25T13:20:17.4797913Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/basic_test.jl
+2025-08-25T13:20:17.4800319Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/runtests.jl
+2025-08-25T13:20:17.4803237Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_error_handling.jl
+2025-08-25T13:20:17.4847093Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_input.jl
+2025-08-25T13:20:17.4879245Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_integration_comprehensive.jl
+2025-08-25T13:20:17.4943801Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_integration_runner.jl
+2025-08-25T13:20:17.4953892Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_keyboard_integration.jl
+2025-08-25T13:20:17.5508711Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_movement.jl
+2025-08-25T13:20:17.5511774Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_movement_state.jl
+2025-08-25T13:20:17.5548511Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_task5_movement.jl
+2025-08-25T13:20:17.5575540Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_timing_system.jl
+2025-08-25T13:20:17.5587168Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_visualization.jl
+2025-08-25T13:20:17.5598340Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/verify_installation.jl
+2025-08-25T13:20:17.9135241Z ┌ Error: Code formatting check failed. Please run JuliaFormatter.format(".")
+2025-08-25T13:20:17.9135850Z └ @ Main none:4
+2025-08-25T13:20:17.9328807Z ##[error]Process completed with exit code 1.

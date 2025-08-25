@@ -57,16 +57,16 @@ function handle_key_press(key::String, state::MovementState)
         if isempty(key)
             return state  # Ignore empty key strings
         end
-        
+
         key_lower = lowercase(string(key))  # Ensure string conversion
-        
+
         # Handle quit key
         if key_lower == "q"
             log_user_action("Quit requested", "q key pressed")
             request_quit!(state)
             return state
         end
-        
+
         # Only process WASD keys for movement
         if key_lower in keys(KEY_MAPPINGS)
             add_key!(state, key_lower)
@@ -76,9 +76,9 @@ function handle_key_press(key::String, state::MovementState)
             # Silently ignore non-movement keys (don't spam console)
             # This handles invalid key inputs gracefully
         end
-        
+
         return state
-        
+
     catch e
         @warn "Error processing key press" exception=string(e) context="key_press"
         # Return state unchanged on error
@@ -99,9 +99,9 @@ function handle_key_release(key::String, state::MovementState)
         if isempty(key)
             return state  # Ignore empty key strings
         end
-        
+
         key_lower = lowercase(string(key))  # Ensure string conversion
-        
+
         # Only process WASD keys
         if key_lower in keys(KEY_MAPPINGS)
             remove_key!(state, key_lower)
@@ -111,17 +111,15 @@ function handle_key_release(key::String, state::MovementState)
             # Silently ignore non-movement keys (don't spam console)
             # This handles invalid key inputs gracefully
         end
-        
+
         return state
-        
+
     catch e
         @warn "Error processing key release" exception=string(e) context="key_release"
         # Return state unchanged on error
         return state
     end
 end
-
-
 
 """
     setup_keyboard_events!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
@@ -131,7 +129,12 @@ Connects key press and release events to the movement state handlers and manages
 Includes robust error handling for keyboard event processing.
 If time_obs is provided, the timer will also update the time display.
 """
-function setup_keyboard_events!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
+function setup_keyboard_events!(
+    fig::Figure,
+    state::MovementState,
+    position::Observable{Point2f},
+    time_obs::Union{Observable{String}, Nothing} = nothing,
+)
     # Set up key press event listener with error handling
     on(events(fig).keyboardbutton) do event
         try
@@ -151,7 +154,7 @@ function setup_keyboard_events!(fig::Figure, state::MovementState, position::Obs
             clear_all_keys_safely!(state)
         end
     end
-    
+
     return fig
 end
 
@@ -170,7 +173,7 @@ function setup_keyboard_events!(fig::Figure, state::MovementState)
             handle_key_release(string(event.key), state)
         end
     end
-    
+
     return fig
 end
 

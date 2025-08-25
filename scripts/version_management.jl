@@ -25,20 +25,24 @@ Returns (major, minor, patch) tuple.
 function parse_semver(version_str::String)
     # Remove 'v' prefix if present
     version_str = startswith(version_str, "v") ? version_str[2:end] : version_str
-    
+
     # Split version components
     parts = split(version_str, ".")
     if length(parts) != 3
-        error("Invalid semantic version format: $version_str. Expected format: MAJOR.MINOR.PATCH")
+        error(
+            "Invalid semantic version format: $version_str. Expected format: MAJOR.MINOR.PATCH",
+        )
     end
-    
+
     try
         major = parse(Int, parts[1])
         minor = parse(Int, parts[2])
         patch = parse(Int, parts[3])
         return (major, minor, patch)
     catch
-        error("Invalid semantic version format: $version_str. All components must be integers.")
+        error(
+            "Invalid semantic version format: $version_str. All components must be integers.",
+        )
     end
 end
 
@@ -56,14 +60,14 @@ function get_current_version()
     if !isfile(PROJECT_FILE)
         error("Project.toml not found in current directory")
     end
-    
+
     project = TOML.parsefile(PROJECT_FILE)
     version = get(project, "version", nothing)
-    
+
     if version === nothing
         error("No version field found in Project.toml")
     end
-    
+
     return version
 end
 
@@ -73,12 +77,12 @@ Update version in Project.toml.
 function update_project_version(new_version::String)
     project = TOML.parsefile(PROJECT_FILE)
     project["version"] = new_version
-    
+
     open(PROJECT_FILE, "w") do io
-        TOML.print(io, project)
+        return TOML.print(io, project)
     end
-    
-    println("Updated Project.toml version to $new_version")
+
+    return println("Updated Project.toml version to $new_version")
 end
 
 """
@@ -86,7 +90,7 @@ Validate that current version follows semantic versioning.
 """
 function validate_version()
     current = get_current_version()
-    
+
     try
         parse_semver(current)
         println("✓ Current version ($current) is valid semantic version")
@@ -104,10 +108,10 @@ function bump_version(bump_type::String)
     if !(bump_type in ["patch", "minor", "major"])
         error("Invalid bump type: $bump_type. Must be 'patch', 'minor', or 'major'")
     end
-    
+
     current = get_current_version()
     (major, minor, patch) = parse_semver(current)
-    
+
     # Apply version bump
     if bump_type == "patch"
         patch += 1
@@ -119,12 +123,12 @@ function bump_version(bump_type::String)
         minor = 0  # Reset minor version
         patch = 0  # Reset patch version
     end
-    
+
     new_version = format_semver(major, minor, patch)
-    
+
     println("Bumping version from $current to $new_version ($bump_type)")
     update_project_version(new_version)
-    
+
     return new_version
 end
 
@@ -136,15 +140,15 @@ function validate_changelog()
         println("⚠ CHANGELOG.md not found - consider creating one for release management")
         return false
     end
-    
+
     content = read(CHANGELOG_FILE, String)
-    
+
     # Check for basic changelog structure
     if !occursin("## [Unreleased]", content)
         println("⚠ CHANGELOG.md missing [Unreleased] section")
         return false
     end
-    
+
     println("✓ CHANGELOG.md exists and has proper structure")
     return true
 end
@@ -154,24 +158,26 @@ Prepare for release by validating version and changelog.
 """
 function prepare_release()
     println("Preparing for release...")
-    
+
     # Validate current version
     if !validate_version()
         error("Cannot prepare release with invalid version")
     end
-    
+
     # Check changelog
     validate_changelog()
-    
+
     current = get_current_version()
     println("✓ Ready for release of version $current")
-    
+
     println("\nRelease checklist:")
     println("1. Ensure all tests pass: julia --project=. -e 'using Pkg; Pkg.test()'")
     println("2. Update CHANGELOG.md with release notes")
-    println("3. Commit changes: git add -A && git commit -m 'chore: prepare release v$current'")
+    println(
+        "3. Commit changes: git add -A && git commit -m 'chore: prepare release v$current'",
+    )
     println("4. Create git tag: git tag v$current")
-    println("5. Push changes: git push && git push --tags")
+    return println("5. Push changes: git push && git push --tags")
 end
 
 """
@@ -187,17 +193,17 @@ function main()
         println("  prepare    - Prepare for release")
         return
     end
-    
+
     command = ARGS[1]
-    
+
     if command == "current"
         current = get_current_version()
         println("Current version: $current")
-        
+
     elseif command == "validate"
         validate_version()
         validate_changelog()
-        
+
     elseif command == "bump"
         if length(ARGS) < 2
             error("Bump command requires type: patch, minor, or major")
@@ -205,10 +211,10 @@ function main()
         bump_type = ARGS[2]
         new_version = bump_version(bump_type)
         println("Version bumped to $new_version")
-        
+
     elseif command == "prepare"
         prepare_release()
-        
+
     else
         error("Unknown command: $command")
     end
