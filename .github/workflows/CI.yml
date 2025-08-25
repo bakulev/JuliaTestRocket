@@ -40,14 +40,6 @@ jobs:
           
       - uses: julia-actions/cache@v1
       
-      - name: Install dependencies
-        run: |
-          julia --project=. -e "
-            using Pkg
-            Pkg.instantiate()
-            Pkg.precompile()
-          "
-          
       - name: Setup display (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -56,9 +48,33 @@ jobs:
           export DISPLAY=:99
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           
+      - name: Setup display (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          # macOS doesn't need Xvfb, but we need to set up software rendering
+          export LIBGL_ALWAYS_SOFTWARE=1
+          
+      - name: Setup display (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          # Windows needs software rendering for GLMakie
+          set LIBGL_ALWAYS_SOFTWARE=1
+          
+      - name: Install dependencies
+        env:
+          DISPLAY: ${{ runner.os == 'Linux' && ':99' || '' }}
+          LIBGL_ALWAYS_SOFTWARE: ${{ runner.os == 'macOS' && '1' || '' }}
+        run: |
+          julia --project=. -e "
+            using Pkg
+            Pkg.instantiate()
+            Pkg.precompile()
+          "
+          
       - name: Run tests
         env:
           DISPLAY: ${{ runner.os == 'Linux' && ':99' || '' }}
+          LIBGL_ALWAYS_SOFTWARE: ${{ runner.os == 'macOS' && '1' || '' }}
         run: |
           julia --project=. -e "
             using Pkg
