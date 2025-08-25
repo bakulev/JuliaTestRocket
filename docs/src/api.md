@@ -8,6 +8,23 @@ CurrentModule = PointController
 
 ```@docs
 run_point_controller
+PointController
+```
+
+## Core Functions
+
+```@docs
+setup_visualization_window
+setup_keyboard_events!
+setup_logging
+log_application_start
+log_application_stop
+log_glmakie_activation
+log_component_initialization
+log_user_action
+log_error_with_context
+log_warning_with_context
+get_current_log_level
 ```
 
 ## Movement State
@@ -19,6 +36,10 @@ remove_key!
 calculate_movement_vector
 reset_movement_state!
 request_quit!
+get_pressed_keys
+start_movement_timer!
+stop_movement_timer!
+update_movement_timing!
 ```
 
 ## Input Handling
@@ -27,6 +48,7 @@ request_quit!
 handle_key_press
 handle_key_release
 is_movement_key
+clear_all_keys_safely!
 ```
 
 ## Visualization
@@ -34,6 +56,14 @@ is_movement_key
 ```@docs
 create_visualization
 update_point_position!
+create_point_position
+get_current_position
+update_position_from_state!
+apply_movement_to_position!
+update_coordinate_display!
+update_time_display!
+create_time_observable
+format_current_time
 ```
 
 ## Constants

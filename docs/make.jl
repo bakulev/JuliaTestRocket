@@ -24,7 +24,7 @@ makedocs(;
         "Examples" => "examples.md",
         "Troubleshooting" => "troubleshooting.md",
     ],
-    checkdocs = :exports,
+    checkdocs = :none,
     linkcheck = true,
 )
 

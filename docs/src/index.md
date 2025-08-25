@@ -6,7 +6,7 @@ CurrentModule = PointController
 
 An interactive Julia application that displays a controllable point using GLMakie visualization. Control the point's movement using WASD keys with real-time coordinate updates and smooth continuous movement.
 
-![PointController Application](../assets/WorkingApp.png)
+![PointController Application](assets/WorkingApp.png)
 
 ## Features
 
