@@ -1,0 +1,108 @@
+name: CI
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - '1.10'  # LTS
+          - '1.11'  # Latest stable
+          - 'nightly'
+        os:
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest
+        arch:
+          - x64
+        exclude:
+          - os: macOS-latest
+            arch: x86
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ matrix.version }}
+          arch: ${{ matrix.arch }}
+          
+      - uses: julia-actions/cache@v1
+      
+      - name: Install dependencies
+        run: |
+          julia --project=. -e "
+            using Pkg
+            Pkg.instantiate()
+            Pkg.precompile()
+          "
+          
+      - name: Setup display (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          
+      - name: Run tests
+        env:
+          DISPLAY: ${{ runner.os == 'Linux' && ':99' || '' }}
+        run: |
+          julia --project=. -e "
+            using Pkg
+            Pkg.test(coverage=true)
+          "
+          
+      - uses: julia-actions/julia-processcoverage@v1
+        if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
+        
+      - uses: codecov/codecov-action@v3
+        if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
+        with:
+          files: lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+          
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '1.10'
+          
+      - name: Install quality tools
+        run: |
+          julia -e 'using Pkg; Pkg.add(["JuliaFormatter", "Aqua"])'
+          
+      - name: Check formatting
+        run: |
+          julia -e '
+            using JuliaFormatter
+            if !format(".", verbose=true, overwrite=false)
+              @error "Code is not formatted correctly"
+              exit(1)
+            end
+          '
+          
+      - name: Run Aqua.jl quality checks
+        run: |
+          julia --project=. -e '
+            using Pkg
+            Pkg.instantiate()
+            using Aqua, PointController
+            Aqua.test_all(PointController, ambiguities=false)
+          '

@@ -4,8 +4,8 @@ authors = ["User <user@example.com>"]
 version = "0.1.0"
 description = "Interactive Julia application for controlling a point using WASD keys with GLMakie visualization"
 license = "MIT"
-repository = "https://github.com/user/PointController.jl"
-documentation = "https://user.github.io/PointController.jl/"
+repository = "https://github.com/bakulev/JuliaTestRocket"
+documentation = "https://bakulev.github.io/JuliaTestRocket/"
 categories = ["Graphics", "Visualization", "GUI"]
 keywords = ["visualization", "interactive", "graphics", "makie", "gui", "wasd", "keyboard", "control", "real-time", "julia"]
 

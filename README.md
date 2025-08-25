@@ -1,6 +1,17 @@
-# Point Controller
+# JuliaTestRocket
+
+[![CI](https://github.com/bakulev/JuliaTestRocket/actions/workflows/CI.yml/badge.svg)](https://github.com/bakulev/JuliaTestRocket/actions/workflows/CI.yml)
+[![Documentation](https://github.com/bakulev/JuliaTestRocket/actions/workflows/Documentation.yml/badge.svg)](https://bakulev.github.io/JuliaTestRocket/)
+[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An interactive Julia application that displays a controllable point using GLMakie visualization. Control the point's movement using WASD keys with real-time coordinate updates and smooth continuous movement.
+
+## Application Preview
+
+![PointController Application](docs/assets/WorkingApp.png)
+
+*The PointController application showing the interactive point (red dot) with real-time coordinate display and reference grid. Use WASD keys to move the point smoothly around the coordinate space.*
 
 ## Features
 
@@ -25,8 +36,8 @@ An interactive Julia application that displays a controllable point using GLMaki
 
 2. **Clone or download this project**:
    ```bash
-   git clone <repository-url>
-   cd PointController
+   git clone https://github.com/bakulev/JuliaTestRocket.git
+   cd JuliaTestRocket
    ```
 
 3. **Activate the project environment**:
@@ -121,15 +132,20 @@ julia run_app.jl
 - **Grid system**: Reference grid for precise positioning
 - **Axis labels**: X and Y coordinate axes with proper scaling
 
+> 💡 **Tip**: See the [application preview](#application-preview) above for a visual example of the interface in action.
+
 ## Project Structure
 
 ```
-PointController/
+JuliaTestRocket/
 ├── Project.toml                          # Package configuration and dependencies
 ├── README.md                             # This documentation file
 ├── LICENSE                               # MIT license file
 ├── run_app.jl                           # Standalone application launcher
 ├── verify_installation.jl               # Installation verification script
+├── docs/                                # Documentation and assets
+│   └── assets/                          # Images and media files
+│       └── WorkingApp.png               # Application screenshot
 ├── src/                                 # Source code directory
 │   ├── PointController.jl               # Main module and application entry point
 │   ├── movement_state.jl                # Movement state management and key tracking
