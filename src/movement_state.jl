@@ -37,6 +37,7 @@ vector = calculate_movement_vector(state)  # Get current movement direction
 
 using GLMakie
 using Logging
+using Dates
 
 """
     MovementState
@@ -62,7 +63,7 @@ Base.@kwdef mutable struct MovementState
     movement_speed::Float64 = 1.0
     last_update_time::Float64 = 0.0
     is_moving::Bool = false
-    update_timer::Union{Timer, Nothing} = nothing
+    update_timer::Union{Timer,Nothing} = nothing
     should_quit::Bool = false
 end
 
@@ -124,7 +125,7 @@ Each vector represents the direction of movement as (x, y) coordinates.
 - `"a"`: Left movement (-1.0, 0.0)
 - `"d"`: Right movement (1.0, 0.0)
 """
-const KEY_MAPPINGS = Dict{String, Tuple{Float64, Float64}}(
+const KEY_MAPPINGS = Dict{String,Tuple{Float64,Float64}}(
     "w" => (0.0, 1.0),   # Up
     "s" => (0.0, -1.0),  # Down
     "a" => (-1.0, 0.0),  # Left
@@ -167,7 +168,7 @@ end
 Apply a movement vector to the current position and update the observable.
 Takes the current position and adds the movement vector components.
 """
-function apply_movement_to_position!(position::Observable{Point2f}, movement_vector::Tuple{Float64, Float64})
+function apply_movement_to_position!(position::Observable{Point2f}, movement_vector::Tuple{Float64,Float64})
     current_pos = get_current_position(position)
     new_x = current_pos[1] + movement_vector[1]
     new_y = current_pos[2] + movement_vector[2]
@@ -185,7 +186,7 @@ Handles diagonal movement when multiple keys are pressed simultaneously.
 function calculate_movement_vector(state::MovementState)
     dx = 0.0
     dy = 0.0
-    
+
     # Sum up movement vectors for all currently pressed keys
     for key in state.keys_pressed
         if haskey(KEY_MAPPINGS, key)
@@ -194,7 +195,7 @@ function calculate_movement_vector(state::MovementState)
             dy += movement[2]
         end
     end
-    
+
     # Normalize diagonal movement to maintain consistent speed
     if dx != 0.0 && dy != 0.0
         # Apply normalization factor for diagonal movement
@@ -202,11 +203,11 @@ function calculate_movement_vector(state::MovementState)
         dx *= norm_factor
         dy *= norm_factor
     end
-    
+
     # Apply movement speed
     dx *= state.movement_speed
     dy *= state.movement_speed
-    
+
     return (dx, dy)
 end
 
@@ -225,28 +226,29 @@ function update_position_from_state!(position::Observable{Point2f}, state::Movem
 end
 
 """
-    start_movement_timer!(state::MovementState, position::Observable{Point2f}, update_interval::Float64 = 1/60)
+    start_movement_timer!(state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing, update_interval::Float64 = 1/60)
 
 Start a timer-based update loop for smooth continuous movement with error handling.
 Creates a timer that updates the point position at regular intervals while keys are pressed.
+Also updates the time display if time_obs is provided.
 Includes performance optimizations and robust error handling.
 """
-function start_movement_timer!(state::MovementState, position::Observable{Point2f}, update_interval::Float64 = 1/60)
+function start_movement_timer!(state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing, update_interval::Float64=1 / 60)
     try
         # Stop existing timer if running
         stop_movement_timer!(state)
-        
+
         # Validate update interval for performance
         if update_interval <= 0.0 || update_interval > 1.0
-            @warn "Invalid update interval $update_interval, using default 1/60" context="timer_setup"
-            update_interval = 1/60
+            @warn "Invalid update interval $update_interval, using default 1/60" context = "timer_setup"
+            update_interval = 1 / 60
         end
-        
+
         # Create new timer for continuous updates with error handling
         state.update_timer = Timer(update_interval; interval=update_interval) do timer
             try
                 current_time = time()
-                
+
                 # Update position if keys are pressed
                 if state.is_moving && !isempty(state.keys_pressed)
                     # Calculate time-based movement for smooth animation
@@ -260,20 +262,25 @@ function start_movement_timer!(state::MovementState, position::Observable{Point2
                         apply_movement_to_position!(position, scaled_movement)
                     end
                 end
-                
+
+                # Update time display if time observable is provided
+                if time_obs !== nothing
+                    update_time_display!(time_obs)
+                end
+
                 state.last_update_time = current_time
-                
+
             catch timer_error
-                @warn "Error in movement timer" exception=string(timer_error) context="timer_execution"
+                @warn "Error in movement timer" exception = string(timer_error) context = "timer_execution"
                 # Stop timer on error to prevent continuous errors
                 stop_movement_timer!(state)
             end
         end
-        
+
         return state
-        
+
     catch e
-        @error "Failed to start movement timer" exception=string(e) context="timer_start"
+        @error "Failed to start movement timer" exception = string(e) context = "timer_start"
         # Ensure timer is cleared on error
         state.update_timer = nothing
         return state
@@ -293,7 +300,7 @@ function stop_movement_timer!(state::MovementState)
         end
         return state
     catch e
-        @warn "Error stopping movement timer" exception=string(e) context="timer_stop"
+        @warn "Error stopping movement timer" exception = string(e) context = "timer_stop"
         # Force clear timer reference even if close fails
         state.update_timer = nothing
         return state
@@ -325,10 +332,40 @@ function clear_all_keys_safely!(state::MovementState)
         @debug "All key states cleared safely"
         return state
     catch e
-        @warn "Error clearing key states" exception=string(e) context="key_clearing"
+        @warn "Error clearing key states" exception = string(e) context = "key_clearing"
         # Force reset even if there's an error
         state.keys_pressed = Set{String}()
         state.is_moving = false
         return state
+    end
+end
+
+"""
+    update_time_display!(time_obs::Observable{String})
+
+Update the time observable with the current time.
+This function is called by the movement timer system.
+"""
+function update_time_display!(time_obs::Observable{String})
+    try
+        time_obs[] = format_current_time()
+    catch e
+        @warn "Error updating time display" exception=string(e) context="time_update"
+    end
+    return time_obs
+end
+
+"""
+    format_current_time()
+
+Format the current time as a readable string.
+Returns a string in HH:MM:SS format.
+"""
+function format_current_time()
+    try
+        return Dates.format(now(), "HH:MM:SS")
+    catch e
+        @warn "Error formatting current time" exception=string(e) context="time_formatting"
+        return "??:??:??"
     end
 end

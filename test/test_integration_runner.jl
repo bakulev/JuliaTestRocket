@@ -30,6 +30,7 @@ GLMakie.activate!()
                 :create_point_position, :update_point_position!, :get_current_position,
                 :apply_movement_to_position!, :update_position_from_state!,
                 :create_visualization, :setup_visualization_window, :update_coordinate_display!,
+                :create_time_observable, :format_current_time,
                 :setup_keyboard_events!, :is_movement_key, :get_pressed_keys,
                 :start_movement_timer!, :stop_movement_timer!, :update_movement_timing!
             ]
@@ -73,7 +74,7 @@ GLMakie.activate!()
             position = create_point_position()
             @test position isa Observable{Point2f}
             
-            fig, ax, pos, text = create_visualization()
+            fig, ax, pos, text, time_obs = create_visualization()
             @test fig isa Figure
             @test pos isa Observable{Point2f}
             @test text isa Observable{String}

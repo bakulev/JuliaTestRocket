@@ -14,7 +14,7 @@ using GLMakie
         GLMakie.activate!()
         
         # Initialize all components
-        fig, ax, point_position, coordinate_text = create_visualization()
+        fig, ax, point_position, coordinate_text, time_obs = create_visualization()
         movement_state = MovementState(movement_speed = 1.0)
         
         # Set up keyboard events
@@ -138,7 +138,7 @@ using GLMakie
     @testset "Coordinate Display Accuracy During Movement" begin
         # Note: GLMakie should be activated by the test runner
         GLMakie.activate!()
-        fig, ax, point_position, coordinate_text = create_visualization()
+        fig, ax, point_position, coordinate_text, time_obs = create_visualization()
         movement_state = MovementState(movement_speed = 0.5)  # Slower speed for precision testing
         
         # Test coordinate display accuracy with various movements

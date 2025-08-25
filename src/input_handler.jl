@@ -124,28 +124,26 @@ end
 
 
 """
-    setup_keyboard_events!(fig::Figure, state::MovementState, position::Observable{Point2f})
+    setup_keyboard_events!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
 
 Set up GLMakie keyboard event listeners for the given figure with timing integration and error handling.
 Connects key press and release events to the movement state handlers and manages the movement timer.
 Includes robust error handling for keyboard event processing.
+If time_obs is provided, the timer will also update the time display.
 """
-function setup_keyboard_events!(fig::Figure, state::MovementState, position::Observable{Point2f})
+function setup_keyboard_events!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
     # Set up key press event listener with error handling
     on(events(fig).keyboardbutton) do event
         try
             if event.action == Keyboard.press
                 handle_key_press(string(event.key), state)
-                # Start timer if movement begins
-                if state.is_moving && state.update_timer === nothing
-                    start_movement_timer!(state, position)
+                # Start timer if movement begins or if timer is not running (for time updates)
+                if state.update_timer === nothing
+                    start_movement_timer!(state, position, time_obs)
                 end
             elseif event.action == Keyboard.release
                 handle_key_release(string(event.key), state)
-                # Stop timer if no keys are pressed
-                if !state.is_moving
-                    stop_movement_timer!(state)
-                end
+                # Note: Timer continues running for time updates even when not moving
             end
         catch e
             @warn "Error in keyboard event handler" exception=string(e) context="event_handler"

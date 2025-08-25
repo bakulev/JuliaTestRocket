@@ -65,12 +65,13 @@ export run_point_controller, MovementState, KEY_MAPPINGS
 # Export movement state functions
 export add_key!, remove_key!, calculate_movement_vector, reset_movement_state!, request_quit!
 export clear_all_keys_safely!, update_movement_timing!
+export update_time_display!, format_current_time
 # Export input handler functions  
 export handle_key_press, handle_key_release, is_movement_key, get_pressed_keys, setup_keyboard_events!
 # Export visualization functions
 export create_visualization, create_point_position, update_point_position!, get_current_position
 export apply_movement_to_position!, update_position_from_state!, setup_visualization_window
-export update_coordinate_display!
+export update_coordinate_display!, create_time_observable
 # Export timer functions
 export start_movement_timer!, stop_movement_timer!
 # Export logging functions
@@ -126,7 +127,7 @@ function run_point_controller()
 
         # Initialize all components with error handling
         log_component_initialization("visualization")
-        fig, ax, point_position, coordinate_text = create_visualization_safely()
+        fig, ax, point_position, coordinate_text, time_obs = create_visualization_safely()
 
         # Create movement state
         log_component_initialization("movement state")
@@ -138,7 +139,11 @@ function run_point_controller()
 
         # Connect all event handlers with error handling
         log_component_initialization("keyboard event handlers")
-        setup_keyboard_events_safely!(fig, movement_state, point_position)
+        setup_keyboard_events_safely!(fig, movement_state, point_position, time_obs)
+
+        # Start the timer for continuous updates (movement and time)
+        log_component_initialization("update timer")
+        start_movement_timer!(movement_state, point_position, time_obs)
 
         # Set up window focus handling for robustness
         setup_window_focus_handling!(fig, movement_state)
@@ -264,13 +269,13 @@ function setup_visualization_window_safely(fig::Figure)
 end
 
 """
-    setup_keyboard_events_safely!(fig::Figure, state::MovementState, position::Observable{Point2f})
+    setup_keyboard_events_safely!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
 
 Set up keyboard events with comprehensive error handling.
 """
-function setup_keyboard_events_safely!(fig::Figure, state::MovementState, position::Observable{Point2f})
+function setup_keyboard_events_safely!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
     try
-        setup_keyboard_events!(fig, state, position)
+        setup_keyboard_events!(fig, state, position, time_obs)
         return fig
     catch e
         log_error_with_context("Failed to set up keyboard events", "keyboard_setup", e)

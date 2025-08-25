@@ -57,7 +57,7 @@ using Logging
 
 Create and configure the GLMakie visualization window with point and coordinate display.
 Includes performance optimizations and error handling.
-Returns the figure, axis, point observable, and coordinate text observable.
+Returns the figure, axis, point observable, coordinate text observable, and time observable.
 """
 function create_visualization()
     # Note: GLMakie backend should be activated by the user before calling this function
@@ -88,6 +88,9 @@ function create_visualization()
     # Create observable point position (initialized at origin)
     point_position = create_point_position()
 
+    # Create observable for current time display
+    current_time_obs = create_time_observable()
+
     # Implement optimized point rendering using scatter plot
     scatter!(ax, point_position,
         color=:red,
@@ -95,6 +98,24 @@ function create_visualization()
         marker=:circle,
         # Performance optimization: reduce overdraw
         strokewidth=0
+    )
+
+    # Add time display in the upper left corner
+    time_text = lift(current_time_obs) do time_val
+        try
+            return "Time: $time_val"
+        catch e
+            @warn "Error updating time text" exception = string(e) context = "time_display"
+            return "Time: Error"
+        end
+    end
+
+    # Display time text in the upper left corner of the plot
+    text!(ax, -9.5, 8.5,
+        text=time_text,
+        fontsize=12,
+        color=:blue,
+        align=(:left, :top)
     )
 
     # Add coordinate text display that updates with point position
@@ -110,10 +131,10 @@ function create_visualization()
         end
     end
 
-    # Display coordinate text in the top-left corner of the plot
-    text!(ax, -9.5, 9.5,
+    # Display coordinate text below the time display
+    text!(ax, -9.5, 7.5,
         text=coordinate_text,
-        fontsize=14,
+        fontsize=12,
         color=:black,
         align=(:left, :top)
     )
@@ -127,7 +148,7 @@ function create_visualization()
     # Performance optimization: Modern GLMakie handles rendering efficiently by default
     # Note: render_on_demand is no longer available in newer GLMakie versions
 
-    return fig, ax, point_position, coordinate_text
+    return fig, ax, point_position, coordinate_text, current_time_obs
 end
 
 """
@@ -157,6 +178,20 @@ function setup_visualization_window(fig::Figure)
         rethrow(e)
     end
 end
+
+"""
+    create_time_observable()
+
+Create an observable that displays the current time.
+Returns an Observable containing a formatted time string.
+Note: Time updates are handled by the movement timer system.
+"""
+function create_time_observable()
+    # Create observable with initial time
+    return Observable(format_current_time())
+end
+
+
 
 """
     update_coordinate_display!(position::Observable{Point2f})
