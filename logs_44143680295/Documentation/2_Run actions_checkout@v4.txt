@@ -1,0 +1,69 @@
+﻿2025-08-25T14:00:58.1353192Z ##[group]Run actions/checkout@v4
+2025-08-25T14:00:58.1354101Z with:
+2025-08-25T14:00:58.1354586Z   repository: bakulev/JuliaTestRocket
+2025-08-25T14:00:58.1355478Z   token: ***
+2025-08-25T14:00:58.1355956Z   ssh-strict: true
+2025-08-25T14:00:58.1356411Z   ssh-user: git
+2025-08-25T14:00:58.1356871Z   persist-credentials: true
+2025-08-25T14:00:58.1357371Z   clean: true
+2025-08-25T14:00:58.1357832Z   sparse-checkout-cone-mode: true
+2025-08-25T14:00:58.1358360Z   fetch-depth: 1
+2025-08-25T14:00:58.1358805Z   fetch-tags: false
+2025-08-25T14:00:58.1359263Z   show-progress: true
+2025-08-25T14:00:58.1359727Z   lfs: false
+2025-08-25T14:00:58.1360151Z   submodules: false
+2025-08-25T14:00:58.1360612Z   set-safe-directory: true
+2025-08-25T14:00:58.1361354Z ##[endgroup]
+2025-08-25T14:00:58.2447649Z Syncing repository: bakulev/JuliaTestRocket
+2025-08-25T14:00:58.2449575Z ##[group]Getting Git version info
+2025-08-25T14:00:58.2450429Z Working directory is '/home/runner/work/JuliaTestRocket/JuliaTestRocket'
+2025-08-25T14:00:58.2451607Z [command]/usr/bin/git version
+2025-08-25T14:00:58.2528995Z git version 2.51.0
+2025-08-25T14:00:58.2556242Z ##[endgroup]
+2025-08-25T14:00:58.2573886Z Temporarily overriding HOME='/home/runner/work/_temp/51af5efd-11bb-42ef-9036-46508af128ad' before making global git config changes
+2025-08-25T14:00:58.2576708Z Adding repository directory to the temporary git global config as a safe directory
+2025-08-25T14:00:58.2589374Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/JuliaTestRocket/JuliaTestRocket
+2025-08-25T14:00:58.2630639Z Deleting the contents of '/home/runner/work/JuliaTestRocket/JuliaTestRocket'
+2025-08-25T14:00:58.2634723Z ##[group]Initializing the repository
+2025-08-25T14:00:58.2640030Z [command]/usr/bin/git init /home/runner/work/JuliaTestRocket/JuliaTestRocket
+2025-08-25T14:00:58.2717700Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-08-25T14:00:58.2719592Z hint: is subject to change. To configure the initial branch name to use in all
+2025-08-25T14:00:58.2721272Z hint: of your new repositories, which will suppress this warning, call:
+2025-08-25T14:00:58.2722458Z hint:
+2025-08-25T14:00:58.2723351Z hint: 	git config --global init.defaultBranch <name>
+2025-08-25T14:00:58.2724790Z hint:
+2025-08-25T14:00:58.2726122Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-08-25T14:00:58.2727875Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-08-25T14:00:58.2729221Z hint:
+2025-08-25T14:00:58.2730043Z hint: 	git branch -m <name>
+2025-08-25T14:00:58.2730913Z hint:
+2025-08-25T14:00:58.2732086Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-08-25T14:00:58.2734030Z Initialized empty Git repository in /home/runner/work/JuliaTestRocket/JuliaTestRocket/.git/
+2025-08-25T14:00:58.2740312Z [command]/usr/bin/git remote add origin https://github.com/bakulev/JuliaTestRocket
+2025-08-25T14:00:58.2792086Z ##[endgroup]
+2025-08-25T14:00:58.2798161Z ##[group]Disabling automatic garbage collection
+2025-08-25T14:00:58.2799462Z [command]/usr/bin/git config --local gc.auto 0
+2025-08-25T14:00:58.2831397Z ##[endgroup]
+2025-08-25T14:00:58.2832746Z ##[group]Setting up auth
+2025-08-25T14:00:58.2839274Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-08-25T14:00:58.2872690Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-08-25T14:00:58.3225717Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-08-25T14:00:58.3259724Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-08-25T14:00:58.3493140Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-08-25T14:00:58.3533686Z ##[endgroup]
+2025-08-25T14:00:58.3535142Z ##[group]Fetching the repository
+2025-08-25T14:00:58.3552860Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +89dea1b110f55195b614ad85dd0e9eef89b1434d:refs/remotes/origin/main
+2025-08-25T14:00:58.5512039Z From https://github.com/bakulev/JuliaTestRocket
+2025-08-25T14:00:58.5513010Z  * [new ref]         89dea1b110f55195b614ad85dd0e9eef89b1434d -> origin/main
+2025-08-25T14:00:58.5541942Z ##[endgroup]
+2025-08-25T14:00:58.5542745Z ##[group]Determining the checkout info
+2025-08-25T14:00:58.5544056Z ##[endgroup]
+2025-08-25T14:00:58.5549184Z [command]/usr/bin/git sparse-checkout disable
+2025-08-25T14:00:58.5589282Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-08-25T14:00:58.5617011Z ##[group]Checking out the ref
+2025-08-25T14:00:58.5620994Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-08-25T14:00:58.5726361Z Switched to a new branch 'main'
+2025-08-25T14:00:58.5729245Z branch 'main' set up to track 'origin/main'.
+2025-08-25T14:00:58.5735157Z ##[endgroup]
+2025-08-25T14:00:58.5767029Z [command]/usr/bin/git log -1 --format=%H
+2025-08-25T14:00:58.5787856Z 89dea1b110f55195b614ad85dd0e9eef89b1434d

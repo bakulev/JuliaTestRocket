@@ -1,0 +1,43 @@
+﻿2025-08-25T14:07:12.9301472Z ##[group]Run julia --project=docs/ docs/make.jl
+2025-08-25T14:07:12.9301874Z [36;1mjulia --project=docs/ docs/make.jl[0m
+2025-08-25T14:07:12.9342060Z shell: /usr/bin/bash -e {0}
+2025-08-25T14:07:12.9342313Z env:
+2025-08-25T14:07:12.9342829Z   GITHUB_TOKEN: ***
+2025-08-25T14:07:12.9344777Z   DOCUMENTER_KEY: ***
+2025-08-25T14:07:12.9344999Z   DISPLAY: :99
+2025-08-25T14:07:12.9345371Z ##[endgroup]
+2025-08-25T14:07:19.5345531Z [ Info: SetupBuildDirectory: setting up build directory.
+2025-08-25T14:07:20.8530910Z [ Info: Doctest: running doctests.
+2025-08-25T14:07:20.8953166Z [ Info: ExpandTemplates: expanding markdown templates.
+2025-08-25T14:07:23.5489313Z [ Info: CrossReferences: building cross-references.
+2025-08-25T14:07:23.6462611Z ┌ Error: invalid local link/image: file does not exist in docs/src/index.md
+2025-08-25T14:07:23.6463359Z │   link =
+2025-08-25T14:07:23.6463776Z │    @ast MarkdownAST.Image("assets/WorkingApp.png", "") do
+2025-08-25T14:07:23.6464301Z │      MarkdownAST.Text("PointController Application")
+2025-08-25T14:07:23.6464788Z │    end
+2025-08-25T14:07:23.6465026Z │    
+2025-08-25T14:07:23.6465788Z └ @ Documenter ~/.julia/packages/Documenter/eoWm2/src/utilities/utilities.jl:47
+2025-08-25T14:07:24.2136694Z [ Info: CheckDocument: running document checks.
+2025-08-25T14:07:24.9963785Z [ Info: Populate: populating indices.
+2025-08-25T14:07:26.3816076Z ERROR: LoadError: `makedocs` encountered an error [:cross_references] -- terminating build before rendering.
+2025-08-25T14:07:26.3817134Z Stacktrace:
+2025-08-25T14:07:26.3824314Z  [1] error(s::String)
+2025-08-25T14:07:26.3824754Z    @ Base ./error.jl:35
+2025-08-25T14:07:26.3825637Z  [2] runner(::Type{Documenter.Builder.RenderDocument}, doc::Documenter.Document)
+2025-08-25T14:07:26.3826753Z    @ Documenter ~/.julia/packages/Documenter/eoWm2/src/builder_pipeline.jl:259
+2025-08-25T14:07:26.3827972Z  [3] dispatch(::Type{Documenter.Builder.DocumentPipeline}, x::Documenter.Document)
+2025-08-25T14:07:26.3829490Z    @ Documenter.Selectors ~/.julia/packages/Documenter/eoWm2/src/utilities/Selectors.jl:170
+2025-08-25T14:07:26.3830238Z  [4] #88
+2025-08-25T14:07:26.3830762Z    @ ~/.julia/packages/Documenter/eoWm2/src/makedocs.jl:280 [inlined]
+2025-08-25T14:07:26.4028024Z  [5] withenv(::Documenter.var"#88#90"{Documenter.Document}, ::Pair{String, Nothing}, ::Vararg{Pair{String, Nothing}})
+2025-08-25T14:07:26.4029474Z    @ Base ./env.jl:257
+2025-08-25T14:07:26.4029784Z  [6] #87
+2025-08-25T14:07:26.4036484Z    @ ~/.julia/packages/Documenter/eoWm2/src/makedocs.jl:279 [inlined]
+2025-08-25T14:07:26.4037342Z  [7] cd(f::Documenter.var"#87#89"{Documenter.Document}, dir::String)
+2025-08-25T14:07:26.4037961Z    @ Base.Filesystem ./file.jl:112
+2025-08-25T14:07:26.4038411Z  [8] #makedocs#86
+2025-08-25T14:07:26.4038930Z    @ ~/.julia/packages/Documenter/eoWm2/src/makedocs.jl:278 [inlined]
+2025-08-25T14:07:26.4039548Z  [9] top-level scope
+2025-08-25T14:07:26.4040136Z    @ ~/work/JuliaTestRocket/JuliaTestRocket/docs/make.jl:8
+2025-08-25T14:07:26.4041250Z in expression starting at /home/runner/work/JuliaTestRocket/JuliaTestRocket/docs/make.jl:8
+2025-08-25T14:07:26.4830976Z ##[error]Process completed with exit code 1.
