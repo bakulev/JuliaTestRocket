@@ -114,7 +114,7 @@ function run_point_controller()
     # Initialize logging system
     setup_logging(Logging.Info)
     log_application_start()
-    
+
     local movement_state = nothing
     local fig = nothing
 
@@ -131,7 +131,7 @@ function run_point_controller()
 
         # Create movement state
         log_component_initialization("movement state")
-        movement_state = MovementState(movement_speed = 0.1)  # Movement speed of 0.1 units per frame
+        movement_state = MovementState(movement_speed=0.1)  # Movement speed of 0.1 units per frame
 
         # Set up GLMakie window with proper configuration and error handling
         log_component_initialization("window")
@@ -169,7 +169,7 @@ function run_point_controller()
         while events(fig).window_open[] && !movement_state.should_quit
             sleep(0.1)  # Small sleep to prevent busy waiting
         end
-        
+
         # Handle quit request
         if movement_state.should_quit
             @info "Exiting application..."
@@ -198,14 +198,14 @@ function initialize_glmakie_safely()
     try
         # Check if GLMakie backend is available and activated
         # This will fail if GLMakie.activate!() hasn't been called by the user
-        
+
         # Test basic GLMakie functionality to ensure backend is working
-        test_fig = Figure(size = (100, 100))
+        test_fig = Figure(size=(100, 100))
         # Note: Figures don't need explicit closing in GLMakie
-        
+
         @info "GLMakie backend is ready and functional"
         return true
-        
+
     catch e
         if contains(string(e), "backend") || contains(string(e), "activate")
             log_error_with_context("GLMakie backend not activated", "backend_initialization", e)
@@ -273,7 +273,7 @@ end
 
 Set up keyboard events with comprehensive error handling.
 """
-function setup_keyboard_events_safely!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
+function setup_keyboard_events_safely!(fig::Figure, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String},Nothing}=nothing)
     try
         setup_keyboard_events!(fig, state, position, time_obs)
         return fig
@@ -305,10 +305,10 @@ function setup_window_focus_handling!(fig::Figure, state::MovementState)
                 @debug "Window gained focus"
             end
         end
-        
+
         @debug "Window focus handling set up successfully"
         return fig
-        
+
     catch e
         log_warning_with_context("Could not set up window focus handling", "focus_handling")
         @warn "Application will continue but may have issues with focus changes"
@@ -325,7 +325,7 @@ Provides clear error messages and performs cleanup.
 """
 function handle_application_error(e::Exception, movement_state, fig)
     log_error_with_context("Point Controller encountered an error", "application_error", e)
-    
+
     if isa(e, InterruptException)
         @info "Application interrupted by user (Ctrl+C)"
     elseif contains(string(e), "OpenGL") || contains(string(e), "GL")
@@ -338,7 +338,7 @@ function handle_application_error(e::Exception, movement_state, fig)
         log_error_with_context("Unexpected error", "unknown_error", e)
         @error "Error type: $(typeof(e))"
     end
-    
+
     # Attempt cleanup
     cleanup_application_safely(movement_state)
 end

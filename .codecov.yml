@@ -1,0 +1,25 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 2%
+        if_not_found: success
+    patch:
+      default:
+        target: 70%
+        threshold: 5%
+        if_not_found: success
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: false
+
+ignore:
+  - "docs/"
+  - "examples/"
+  - "benchmarks/"
+  - "*.md"
+  - "run_app.jl"
+  - "verify_installation.jl"
