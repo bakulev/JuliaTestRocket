@@ -19,8 +19,6 @@ using PointController
     # Include input handler tests (backend-agnostic)
     include("test_input.jl")
 
-
-
     # Include error handling tests (backend-agnostic)
     include("test_error_handling.jl")
 end
@@ -32,13 +30,13 @@ end
         try
             using CairoMakie
             CairoMakie.activate!()
-            
+
             # Include visualization tests with CairoMakie
             include("test_visualization.jl")
-            
+
             # Include integration tests with CairoMakie
             include("test_integration_comprehensive.jl")
-            
+
         catch e
             @warn "CairoMakie not available, skipping CairoMakie tests: $e"
         end
@@ -49,10 +47,10 @@ end
         try
             using GLMakie
             GLMakie.activate!()
-            
+
             # Include GLMakie-specific tests
             include("test_glmakie_smoke.jl")
-            
+
         catch e
             @warn "GLMakie not available, skipping GLMakie tests: $e"
         end

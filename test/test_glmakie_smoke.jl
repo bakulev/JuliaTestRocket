@@ -17,48 +17,48 @@ PointController.update_backend_detection()
         # Test that GLMakie backend is detected
         @test PointController.check_backend_loaded()
         @test PointController.get_backend_name() == "GLMakie"
-        
+
         # Test basic figure creation
-        fig = Figure(size=(100, 100))
+        fig = Figure(size = (100, 100))
         @test fig isa Figure
-        
+
         # Test basic axis creation
-        ax = Axis(fig[1,1])
+        ax = Axis(fig[1, 1])
         @test ax isa Axis
-        
+
         # Test basic point creation
         point = Observable(Point2f(0, 0))
         @test point isa Observable{Point2f}
-        
+
         # Test basic scatter plot
-        scatter!(ax, point, color=:red, markersize=10)
+        scatter!(ax, point, color = :red, markersize = 10)
         @test true  # If we get here, scatter worked
-        
+
         # Test basic text
-        text!(ax, 0, 0, text="Test")
+        text!(ax, 0, 0, text = "Test")
         @test true  # If we get here, text worked
-        
+
         # Test basic event setup (without running the full app)
         state = MovementState()
         @test state isa MovementState
-        
+
         # Test that we can set up keyboard events (this should not fail)
         @test_nowarn setup_keyboard_events!(fig, state, point)
-        
+
         # Test basic movement calculation
         add_key!(state, 'w')
         movement = calculate_movement_vector(state)
         @test movement == [0.0, 1.0]
-        
+
         # Test position update
         @test_nowarn apply_movement_to_position!(point, state)
         @test point[] == Point2f(0.0, 0.1)  # movement_speed = 0.1
-        
+
         # Clean up
         remove_key!(state, 'w')
         clear_all_keys_safely!(state)
     end
-    
+
     @testset "GLMakie Event System" begin
         # Test that GLMakie events are available
         fig = Figure()
@@ -67,4 +67,3 @@ PointController.update_backend_detection()
         @test hasfield(typeof(events(fig)), :hasfocus)
     end
 end
-

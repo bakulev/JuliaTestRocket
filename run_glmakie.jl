@@ -28,7 +28,7 @@ using PointController
 if PointController.check_backend_loaded()
     @info "GLMakie backend activated successfully!"
     @info "Starting Point Controller application..."
-    
+
     # Run the application
     run_point_controller()
 else

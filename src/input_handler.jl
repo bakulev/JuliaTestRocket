@@ -156,7 +156,7 @@ function setup_keyboard_events!(
                 # Convert Makie key (Symbol) to Char for our system
                 key_string = string(event.key)
                 key_char = first(key_string)
-                
+
                 if event.action == Main.Keyboard.press
                     handle_key_press(key_char, state)
                 elseif event.action == Main.Keyboard.release

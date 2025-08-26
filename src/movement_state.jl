@@ -100,9 +100,8 @@ mutable struct MovementState
     should_quit::Bool
     last_update_time::Float64
 
-    
     function MovementState(; movement_speed::Float64 = 0.1)
-        new(Set{Char}(), movement_speed, false, time())
+        return new(Set{Char}(), movement_speed, false, time())
     end
 end
 
@@ -146,10 +145,10 @@ function calculate_movement_vector(state::MovementState)
     if isempty(state.pressed_keys)
         return [0.0, 0.0]
     end
-    
+
     # Calculate total movement vector
     total_movement = [0.0, 0.0]
-    
+
     for key in state.pressed_keys
         if haskey(KEY_MAPPINGS, key)
             movement = KEY_MAPPINGS[key]
@@ -157,14 +156,14 @@ function calculate_movement_vector(state::MovementState)
             total_movement[2] += movement[2]
         end
     end
-    
+
     # Normalize the movement vector for consistent speed
     magnitude = sqrt(total_movement[1]^2 + total_movement[2]^2)
-    
+
     if magnitude > 0
         normalized_movement = [
             total_movement[1] / magnitude,
-            total_movement[2] / magnitude
+            total_movement[2] / magnitude,
         ]
         return normalized_movement
     else
@@ -182,20 +181,20 @@ function apply_movement_to_position!(position::Observable{Point2f}, state::Movem
     try
         current_pos = position[]
         movement_vector = calculate_movement_vector(state)
-        
+
         # Calculate new position
         new_x = current_pos[1] + movement_vector[1] * state.movement_speed
         new_y = current_pos[2] + movement_vector[2] * state.movement_speed
-        
+
         # Apply boundary constraints (keep point within -10 to +10 range)
         new_x = clamp(new_x, -10.0, 10.0)
         new_y = clamp(new_y, -10.0, 10.0)
-        
+
         # Update position observable
         position[] = Point2f(new_x, new_y)
-        
+
         @debug "Position updated: ($new_x, $new_y)" context = "movement_state"
-        
+
     catch e
         @error "Error applying movement to position" exception = string(e) context = "movement_state"
     end
@@ -207,7 +206,7 @@ end
 Update position from movement state (alias for apply_movement_to_position!).
 """
 function update_position_from_state!(position::Observable{Point2f}, state::MovementState)
-    apply_movement_to_position!(position, state)
+    return apply_movement_to_position!(position, state)
 end
 
 """
@@ -262,10 +261,8 @@ end
 Update the movement timing information.
 """
 function update_movement_timing!(state::MovementState)
-    state.last_update_time = time()
+    return state.last_update_time = time()
 end
-
-
 
 """
     format_current_time()
@@ -282,5 +279,5 @@ end
 Update the time display observable.
 """
 function update_time_display!(time_obs::Observable{String})
-    time_obs[] = format_current_time()
+    return time_obs[] = format_current_time()
 end

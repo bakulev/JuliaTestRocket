@@ -74,9 +74,11 @@ Note: This function requires a Makie backend to be activated before calling.
 function create_visualization()
     # Check if a Makie backend is available
     if !isdefined(Main, :Figure)
-        error("No Makie backend detected. Please activate a backend before calling create_visualization():\n" *
-              "  using GLMakie; GLMakie.activate!()  # for interactive use\n" *
-              "  using CairoMakie; CairoMakie.activate!()  # for headless use")
+        error(
+            "No Makie backend detected. Please activate a backend before calling create_visualization():\n" *
+            "  using GLMakie; GLMakie.activate!()  # for interactive use\n" *
+            "  using CairoMakie; CairoMakie.activate!()  # for headless use",
+        )
     end
 
     # Create figure with optimized configuration for performance

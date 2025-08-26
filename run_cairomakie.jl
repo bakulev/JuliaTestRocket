@@ -28,7 +28,7 @@ using PointController
 if PointController.check_backend_loaded()
     @info "CairoMakie backend activated successfully!"
     @info "Starting Point Controller application (headless mode)..."
-    
+
     # Run the application
     run_point_controller()
 else

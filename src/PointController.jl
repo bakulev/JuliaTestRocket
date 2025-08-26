@@ -117,7 +117,7 @@ function check_backend_loaded()
     if BACKEND_LOADED[]
         return true
     end
-    
+
     # If not cached, try to detect at runtime
     return update_backend_detection()
 end
@@ -133,7 +133,7 @@ function get_backend_name()
     if BACKEND_LOADED[] && BACKEND_NAME[] !== nothing
         return BACKEND_NAME[]
     end
-    
+
     # If not cached, try to detect at runtime
     if update_backend_detection()
         return BACKEND_NAME[]
@@ -178,7 +178,7 @@ function run_point_controller()
         error(
             "No Makie backend detected. Please activate a backend before using PointController:\n" *
             "  using GLMakie; GLMakie.activate!()  # for interactive use\n" *
-            "  using CairoMakie; CairoMakie.activate!()  # for headless use"
+            "  using CairoMakie; CairoMakie.activate!()  # for headless use",
         )
     end
 
@@ -219,7 +219,7 @@ function run_point_controller()
 
         # Set up window focus handling for robustness
         setup_window_focus_handling!(fig, movement_state)
-        
+
         # Ensure the window is displayed and focused
         @info "Window setup complete. Application is ready for interaction."
 
@@ -242,29 +242,29 @@ function run_point_controller()
         # Main application loop - handle movement updates and window events
         last_update_time = time()
         update_interval = 1/60  # 60 FPS
-        
+
         while Main.events(fig).window_open[] && !movement_state.should_quit
             current_time = time()
-            
+
             # Update movement and time display at 60 FPS
             if current_time - last_update_time >= update_interval
                 # Update position based on current key states
                 apply_movement_to_position!(point_position, movement_state)
-                
+
                 # Update time display
                 time_obs[] = format_current_time()
-                
+
                 # Update timing
                 update_movement_timing!(movement_state)
-                
+
                 # Debug: log movement updates (occasionally)
                 if rand() < 0.01  # 1% chance to log
                     @debug "Main loop update: position = $(point_position[]), keys = $(movement_state.pressed_keys)" context = "main_loop"
                 end
-                
+
                 last_update_time = current_time
             end
-            
+
             sleep(0.5)  # Very small sleep to prevent busy waiting but allow responsive updates
         end
 
@@ -410,7 +410,7 @@ function setup_window_focus_handling!(fig, state::MovementState)
                 # This prevents "stuck" keys when focus is lost while keys are pressed
                 @debug "Window lost focus - clearing key states for safety"
                 clear_all_keys_safely!(state)
-        
+
             else
                 @debug "Window gained focus"
             end
@@ -461,7 +461,6 @@ Safely clean up application resources with error handling.
 function cleanup_application_safely(movement_state)
     try
         if movement_state !== nothing
-    
             clear_all_keys_safely!(movement_state)
         end
         @info "Application cleanup completed"

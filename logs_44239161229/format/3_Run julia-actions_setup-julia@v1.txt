@@ -1,0 +1,10 @@
+﻿2025-08-26T18:14:32.9775964Z ##[group]Run julia-actions/setup-julia@v1
+2025-08-26T18:14:32.9776616Z with:
+2025-08-26T18:14:32.9777035Z   version: 1.10
+2025-08-26T18:14:32.9777528Z   include-all-prereleases: false
+2025-08-26T18:14:32.9778067Z   arch: X64
+2025-08-26T18:14:32.9778513Z   show-versioninfo: false
+2025-08-26T18:14:32.9779013Z ##[endgroup]
+2025-08-26T18:14:35.0046790Z [command]/usr/bin/tar xf /home/runner/work/_temp/e0cd6f27-685c-4bd0-a9f7-a6841e0c5805 --strip-components=1 -C /opt/hostedtoolcache/julia/1.10.10/x64
+2025-08-26T18:14:38.7041359Z [command]/opt/hostedtoolcache/julia/1.10.10/x64/bin/julia --version
+2025-08-26T18:14:38.7167530Z julia version 1.10.10
