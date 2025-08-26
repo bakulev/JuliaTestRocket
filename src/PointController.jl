@@ -253,7 +253,7 @@ function run_point_controller()
                 time_obs[] = format_current_time()
 
                 # Update timing
-                update_movement_timing!(movement_state)
+                update_movement_timing!(movement_state, current_time)
 
                 # Update position based on current key states
                 apply_movement_to_position!(point_position, movement_state)

@@ -261,12 +261,12 @@ function clear_all_keys_safely!(state::MovementState)
 end
 
 """
-    update_movement_timing!(state::MovementState)
+    update_movement_timing!(state::MovementState, current_time::Float64)
 
 Update the movement timing information.
+Calculates the elapsed time since the last update and stores it in the state.
 """
-function update_movement_timing!(state::MovementState)
-    current_time = time()
+function update_movement_timing!(state::MovementState, current_time::Float64)
     state.elapsed_time = current_time - state.last_update_time
     state.last_update_time = current_time
     @debug "Timing updated: elapsed=$(state.elapsed_time)s" context = "movement_state"

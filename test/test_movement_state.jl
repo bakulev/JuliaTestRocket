@@ -160,14 +160,16 @@ const Point2f = SVector{2, Float32}
 
         # Test timing update
         sleep(0.1)  # Wait a bit to ensure time difference
-        update_movement_timing!(state)
+        current_time = time()
+        update_movement_timing!(state, current_time)
         @test state.elapsed_time > 0.0
         @test state.last_update_time > initial_time
 
         # Test that elapsed time is calculated correctly
         previous_elapsed = state.elapsed_time
         sleep(0.1)  # Wait again
-        update_movement_timing!(state)
+        current_time = time()
+        update_movement_timing!(state, current_time)
         @test state.elapsed_time > 0.0  # Should be positive
         @test state.last_update_time > initial_time  # Should be updated
 
