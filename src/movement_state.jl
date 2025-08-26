@@ -89,9 +89,10 @@ Represents the current state of movement and input for the Point Controller.
 ## Fields
 
 - `pressed_keys::Set{Char}`: Set of currently pressed keys
-- `movement_speed::Float64`: Movement speed in units per frame
+- `movement_speed::Float64`: Movement speed in units per second
 - `should_quit::Bool`: Flag indicating if the application should quit
 - `last_update_time::Float64`: Timestamp of the last movement update
+- `elapsed_time::Float64`: Time elapsed since last update in seconds
 
 """
 mutable struct MovementState
@@ -99,9 +100,10 @@ mutable struct MovementState
     movement_speed::Float64
     should_quit::Bool
     last_update_time::Float64
+    elapsed_time::Float64
 
-    function MovementState(; movement_speed::Float64 = 0.1)
-        return new(Set{Char}(), movement_speed, false, time())
+    function MovementState(; movement_speed::Float64 = 2.0)
+        return new(Set{Char}(), movement_speed, false, time(), 0.0)
     end
 end
 
@@ -182,9 +184,11 @@ function apply_movement_to_position!(position::Observable{Point2f}, state::Movem
         current_pos = position[]
         movement_vector = calculate_movement_vector(state)
 
-        # Calculate new position
-        new_x = current_pos[1] + movement_vector[1] * state.movement_speed
-        new_y = current_pos[2] + movement_vector[2] * state.movement_speed
+        # Calculate new position using time-based movement
+        # movement_speed is in units per second, elapsed_time is in seconds
+        distance = state.movement_speed * state.elapsed_time
+        new_x = current_pos[1] + movement_vector[1] * distance
+        new_y = current_pos[2] + movement_vector[2] * distance
 
         # Apply boundary constraints (keep point within -10 to +10 range)
         new_x = clamp(new_x, -10.0, 10.0)
@@ -193,7 +197,7 @@ function apply_movement_to_position!(position::Observable{Point2f}, state::Movem
         # Update position observable
         position[] = Point2f(new_x, new_y)
 
-        @debug "Position updated: ($new_x, $new_y)" context = "movement_state"
+        @debug "Position updated: ($new_x, $new_y), elapsed: $(state.elapsed_time)s, distance: $distance" context = "movement_state"
 
     catch e
         @error "Error applying movement to position" exception = string(e) context = "movement_state"
@@ -228,6 +232,7 @@ function reset_movement_state!(state::MovementState)
     empty!(state.pressed_keys)
     state.should_quit = false
     state.last_update_time = time()
+    state.elapsed_time = 0.0
     @debug "Movement state reset" context = "movement_state"
 end
 
@@ -261,7 +266,10 @@ end
 Update the movement timing information.
 """
 function update_movement_timing!(state::MovementState)
-    return state.last_update_time = time()
+    current_time = time()
+    state.elapsed_time = current_time - state.last_update_time
+    state.last_update_time = current_time
+    @debug "Timing updated: elapsed=$(state.elapsed_time)s" context = "movement_state"
 end
 
 """

@@ -64,7 +64,6 @@ function handle_key_press(key::Char, state::MovementState)
         # Only process WASD keys for movement
         if haskey(KEY_MAPPINGS, key)
             add_key!(state, key)
-            update_movement_timing!(state)
             log_user_action("Key pressed", string(key))
             @debug "Key pressed: $key, pressed keys: $(state.pressed_keys)" context = "key_press"
         else
@@ -94,7 +93,6 @@ function handle_key_release(key::Char, state::MovementState)
         # Only process WASD keys for movement
         if haskey(KEY_MAPPINGS, key)
             remove_key!(state, key)
-            update_movement_timing!(state)
             log_user_action("Key released", string(key))
             @debug "Key released: $key, pressed keys: $(state.pressed_keys)" context = "key_release"
         else

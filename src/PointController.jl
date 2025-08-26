@@ -248,14 +248,15 @@ function run_point_controller()
 
             # Update movement and time display at 60 FPS
             if current_time - last_update_time >= update_interval
-                # Update position based on current key states
-                apply_movement_to_position!(point_position, movement_state)
 
                 # Update time display
                 time_obs[] = format_current_time()
 
                 # Update timing
                 update_movement_timing!(movement_state)
+
+                # Update position based on current key states
+                apply_movement_to_position!(point_position, movement_state)
 
                 # Debug: log movement updates (occasionally)
                 if rand() < 0.01  # 1% chance to log

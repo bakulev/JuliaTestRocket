@@ -13,7 +13,7 @@ using PointController
             fig, ax, point_position, coordinate_text, time_obs = create_visualization()
 
             # Create movement state
-            state = MovementState(movement_speed = 0.1)
+            state = MovementState(movement_speed = 2.0)
 
             # Set up keyboard events
             setup_keyboard_events!(fig, state, point_position, time_obs)
@@ -28,25 +28,28 @@ using PointController
     @testset "Movement and Visualization Integration" begin
         # Test that movement affects visualization
         fig, ax, point_position, coordinate_text, time_obs = create_visualization()
-        state = MovementState(movement_speed = 0.1)
+        state = MovementState(movement_speed = 2.0)
 
         # Test initial position
         @test point_position[] == Point2f(0, 0)
 
-        # Test movement affects position
+        # Test movement affects position with time-based movement
         add_key!(state, 'w')
+        state.elapsed_time = 0.5  # 0.5 seconds
         apply_movement_to_position!(point_position, state)
-        @test point_position[] == Point2f(0, 0.1)
+        @test point_position[] == Point2f(0, 1.0)  # 2.0 units/sec * 0.5 sec = 1.0 unit
 
         # Test coordinate text updates
         @test occursin("0.0", coordinate_text[])
-        @test occursin("0.1", coordinate_text[])
+        @test occursin("1.0", coordinate_text[])  # Now 1.0 due to time-based movement
 
         # Test diagonal movement
         add_key!(state, 'd')
+        state.elapsed_time = 0.5  # 0.5 seconds
         apply_movement_to_position!(point_position, state)
-        expected_x = 0.0 + 0.1/sqrt(2)
-        expected_y = 0.1 + 0.1/sqrt(2)
+        # Previous position was (0, 1.0), new movement is 1.0 units in diagonal direction
+        expected_x = 1.0/sqrt(2)  # 1.0 unit * cos(45°) = 1.0/sqrt(2)
+        expected_y = 1.0 + 1.0/sqrt(2)  # Previous 1.0 + 1.0 unit * sin(45°)
         @test abs(point_position[][1] - expected_x) < 1e-6
         @test abs(point_position[][2] - expected_y) < 1e-6
     end
@@ -95,9 +98,10 @@ using PointController
         state = MovementState()
         point_position = Observable(Point2f(0, 0))
 
-        # Test many position updates
+        # Test many position updates with time-based movement
         for i in 1:100
             add_key!(state, 'w')
+            state.elapsed_time = 0.1  # 0.1 seconds per update
             apply_movement_to_position!(point_position, state)
             remove_key!(state, 'w')
         end

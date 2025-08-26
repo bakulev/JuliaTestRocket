@@ -15,12 +15,13 @@ const Point2f = SVector{2, Float32}
         # Test default constructor
         state = MovementState()
         @test state.pressed_keys == Set{Char}()
-        @test state.movement_speed == 0.1
+        @test state.movement_speed == 2.0
         @test state.should_quit == false
+        @test state.elapsed_time == 0.0
 
         # Test custom movement speed
-        state = MovementState(movement_speed = 0.5)
-        @test state.movement_speed == 0.5
+        state = MovementState(movement_speed = 5.0)
+        @test state.movement_speed == 5.0
     end
 
     @testset "Key Management" begin
@@ -78,22 +79,25 @@ const Point2f = SVector{2, Float32}
     end
 
     @testset "Position Updates" begin
-        state = MovementState(movement_speed = 0.1)
+        state = MovementState(movement_speed = 2.0)
 
         # Create a mock position observable (we don't need actual Makie for this)
         position = Observable(Point2f(0.0, 0.0))
 
-        # Test movement from origin
+        # Test movement from origin with time-based movement
         add_key!(state, 'w')
+        state.elapsed_time = 0.5  # 0.5 seconds
         apply_movement_to_position!(position, state)
-        @test position[] == Point2f(0.0, 0.1)
+        @test position[] == Point2f(0.0, 1.0)  # 2.0 units/sec * 0.5 sec = 1.0 unit
 
         # Test diagonal movement
         add_key!(state, 'd')
+        state.elapsed_time = 0.5  # 0.5 seconds
         apply_movement_to_position!(position, state)
         # Should move diagonally with normalized speed
-        expected_x = 0.0 + 0.1/sqrt(2)
-        expected_y = 0.1 + 0.1/sqrt(2)
+        # Previous position was (0, 1.0), new movement is 1.0 units in diagonal direction
+        expected_x = 1.0/sqrt(2)  # 1.0 unit * cos(45°) = 1.0/sqrt(2)
+        expected_y = 1.0 + 1.0/sqrt(2)  # Previous 1.0 + 1.0 unit * sin(45°)
         @test abs(position[][1] - expected_x) < 1e-6
         @test abs(position[][2] - expected_y) < 1e-6
 
@@ -145,6 +149,31 @@ const Point2f = SVector{2, Float32}
         time_str = format_current_time()
         @test time_str isa String
         @test length(time_str) > 0
+    end
+
+    @testset "Timing Management" begin
+        state = MovementState()
+
+        # Test initial timing state
+        @test state.elapsed_time == 0.0
+        initial_time = state.last_update_time
+
+        # Test timing update
+        sleep(0.1)  # Wait a bit to ensure time difference
+        update_movement_timing!(state)
+        @test state.elapsed_time > 0.0
+        @test state.last_update_time > initial_time
+
+        # Test that elapsed time is calculated correctly
+        previous_elapsed = state.elapsed_time
+        sleep(0.1)  # Wait again
+        update_movement_timing!(state)
+        @test state.elapsed_time > 0.0  # Should be positive
+        @test state.last_update_time > initial_time  # Should be updated
+
+        # Test reset clears timing
+        reset_movement_state!(state)
+        @test state.elapsed_time == 0.0
     end
 
     @testset "Error Handling" begin

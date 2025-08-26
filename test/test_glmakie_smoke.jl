@@ -50,9 +50,10 @@ PointController.update_backend_detection()
         movement = calculate_movement_vector(state)
         @test movement == [0.0, 1.0]
 
-        # Test position update
+        # Test position update with time-based movement
+        state.elapsed_time = 0.05  # 0.05 seconds
         @test_nowarn apply_movement_to_position!(point, state)
-        @test point[] == Point2f(0.0, 0.1)  # movement_speed = 0.1
+        @test point[] == Point2f(0.0, 0.1)  # 2.0 units/sec * 0.05 sec = 0.1 units
 
         # Clean up
         remove_key!(state, 'w')
