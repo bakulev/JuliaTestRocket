@@ -17,14 +17,18 @@ Pkg.activate(@__DIR__)
 @info "Checking dependencies..."
 Pkg.instantiate()
 
-# Activate GLMakie backend (required for PointController)
-@info "Activating GLMakie backend..."
-using GLMakie
-GLMakie.activate!()
+# Don't activate any specific backend - let user choose
+@info "Point Controller requires a Makie backend to be activated."
+@info "Please choose your preferred backend:"
+@info "  using GLMakie; GLMakie.activate!()     # for interactive graphics"
+@info "  using CairoMakie; CairoMakie.activate!() # for static graphics"
+@info "  using WGLMakie; WGLMakie.activate!()    # for web-based graphics"
+@info ""
+@info "Then run: using PointController; run_point_controller()"
 
-# Load and run the application
+# Load the application module
 @info "Loading Point Controller..."
 using PointController
 
-@info "Starting Point Controller application..."
-run_point_controller()
+@info "Point Controller loaded successfully!"
+@info "Activate your preferred Makie backend and run run_point_controller() to start."

@@ -40,30 +40,7 @@ jobs:
           
       - uses: julia-actions/cache@v1
       
-      - name: Setup display (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          export DISPLAY=:99
-          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          
-      - name: Setup display (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          # macOS doesn't need Xvfb, but we need to set up software rendering
-          export LIBGL_ALWAYS_SOFTWARE=1
-          
-      - name: Setup display (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          # Windows needs software rendering for GLMakie
-          set LIBGL_ALWAYS_SOFTWARE=1
-          
       - name: Install dependencies
-        env:
-          DISPLAY: ${{ runner.os == 'Linux' && ':99' || '' }}
-          LIBGL_ALWAYS_SOFTWARE: ${{ runner.os == 'macOS' && '1' || '' }}
         run: |
           julia --project=. -e "
             using Pkg
@@ -71,13 +48,14 @@ jobs:
             Pkg.precompile()
           "
           
-      - name: Run tests
-        env:
-          DISPLAY: ${{ runner.os == 'Linux' && ':99' || '' }}
-          LIBGL_ALWAYS_SOFTWARE: ${{ runner.os == 'macOS' && '1' || '' }}
+      - name: Run tests with CairoMakie
         run: |
           julia --project=. -e "
             using Pkg
+            # Use CairoMakie for CI (no display required)
+            Pkg.add(\"CairoMakie\")
+            using CairoMakie
+            CairoMakie.activate!()
             Pkg.test(coverage=true)
           "
           
@@ -100,22 +78,11 @@ jobs:
         with:
           version: '1.10'
           
-      - name: Setup display for GLMakie
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          export DISPLAY=:99
-          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          
       - name: Install quality tools
-        env:
-          DISPLAY: :99
         run: |
           julia -e 'using Pkg; Pkg.add(["JuliaFormatter", "Aqua"])'
           
       - name: Check formatting
-        env:
-          DISPLAY: :99
         run: |
           julia -e '
             using JuliaFormatter
@@ -125,13 +92,15 @@ jobs:
             end
           '
           
-      - name: Run Aqua.jl quality checks
-        env:
-          DISPLAY: :99
+      - name: Run Aqua.jl quality checks with CairoMakie
         run: |
           julia --project=. -e '
             using Pkg
             Pkg.instantiate()
+            # Use CairoMakie for CI (no display required)
+            Pkg.add("CairoMakie")
+            using CairoMakie
+            CairoMakie.activate!()
             using Aqua, PointController
             Aqua.test_all(PointController, ambiguities=false)
           '

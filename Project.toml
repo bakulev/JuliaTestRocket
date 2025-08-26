@@ -21,6 +21,9 @@ Logging = "1"
 Test = "1"
 julia = "1.10"
 
+# CairoMakie is used for CI/testing but not required for normal usage
+# Users can install it separately if needed: using Pkg; Pkg.add("CairoMakie")
+
 # CompatHelper configuration
 # Automatically update patch versions, require manual approval for minor/major
 # Update frequency: weekly for patches, monthly for minor versions

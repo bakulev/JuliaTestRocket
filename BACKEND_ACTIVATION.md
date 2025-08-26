@@ -1,10 +1,10 @@
-# GLMakie Backend Activation Guide
+# Makie Backend Activation Guide
 
 This document explains the modern backend activation patterns used in PointController, following current Makie.jl best practices.
 
 ## Overview
 
-PointController follows modern Makie.jl patterns where **users control backend activation**. This means you must explicitly activate GLMakie before using PointController functions.
+PointController follows modern Makie.jl patterns where **users control backend activation**. This means you must explicitly activate your preferred Makie backend before using PointController functions.
 
 ## Why This Pattern?
 
@@ -13,6 +13,7 @@ PointController follows modern Makie.jl patterns where **users control backend a
 - **Flexibility**: Allows switching between backends (GLMakie, CairoMakie, WGLMakie)
 - **No Side Effects**: Libraries don't automatically change global state
 - **Explicit Dependencies**: Clear separation between backend and application logic
+- **CI Compatibility**: Different backends for different environments
 
 ### Previous Anti-Pattern
 ```julia
@@ -35,12 +36,57 @@ using PointController
 run_point_controller()
 ```
 
-## Usage Examples
+## Available Backends
 
-### Basic Usage
+### GLMakie (Interactive Graphics)
 ```julia
 using GLMakie
 GLMakie.activate!()
+```
+- **Best for**: Interactive applications, real-time graphics
+- **Features**: Full OpenGL acceleration, interactive windows
+- **Requirements**: OpenGL 3.3+, display system
+
+### CairoMakie (Static Graphics)
+```julia
+using CairoMakie
+CairoMakie.activate!()
+```
+- **Best for**: Publication-quality plots, CI environments
+- **Features**: Vector graphics, no display required
+- **Requirements**: None (works in headless environments)
+
+### WGLMakie (Web Graphics)
+```julia
+using WGLMakie
+WGLMakie.activate!()
+```
+- **Best for**: Web applications, browser-based graphics
+- **Features**: WebGL-based, runs in browsers
+- **Requirements**: WebGL-capable browser
+
+## Usage Examples
+
+### Basic Usage (Interactive)
+```julia
+using GLMakie
+GLMakie.activate!()
+using PointController
+run_point_controller()
+```
+
+### For Publication/Static Graphics
+```julia
+using CairoMakie
+CairoMakie.activate!()
+using PointController
+run_point_controller()
+```
+
+### For Web Applications
+```julia
+using WGLMakie
+WGLMakie.activate!()
 using PointController
 run_point_controller()
 ```
@@ -91,35 +137,65 @@ using PointController
 run_point_controller()
 ```
 
+## CI/Testing Environment
+
+For CI environments, PointController automatically uses CairoMakie:
+
+```julia
+# In CI (automatic)
+using CairoMakie
+CairoMakie.activate!()
+using PointController
+run_point_controller()
+```
+
+This approach:
+- ✅ **No display setup required** - works in any headless environment
+- ✅ **No Xvfb needed** - eliminates all display complexity
+- ✅ **Fast and reliable** - perfect for CI testing
+- ✅ **Follows best practices** - users can still choose GLMakie locally
+
 ## Backend Configuration Options
 
-GLMakie.activate!() accepts many configuration options:
+### GLMakie Configuration
+```julia
+GLMakie.activate!(
+    # Window Settings
+    title = "Makie",
+    fullscreen = false,
+    visible = true,
+    decorated = true,
+    float = false,
+    focus_on_show = false,
+    
+    # Rendering Settings
+    vsync = false,
+    framerate = 30.0,
+    render_on_demand = true,
+    fxaa = true,
+    ssao = true,
+    oit = false,
+    
+    # Display Settings
+    scalefactor = automatic,
+    px_per_unit = automatic,
+    monitor = nothing,
+    
+    # Performance Settings
+    pause_renderloop = false,
+    max_lights = 64,
+    transparency_weight_scale = 1000f0
+)
+```
 
-### Window Settings
-- `title::String = "Makie"`: Window title
-- `fullscreen = false`: Start in fullscreen mode
-- `visible = true`: Window visibility
-- `decorated = true`: Show window decorations
-- `float = false`: Window floats above others
-- `focus_on_show = false`: Focus window when opened
-
-### Rendering Settings
-- `vsync = false`: Enable vertical sync
-- `framerate = 30.0`: Target frames per second
-- `render_on_demand = true`: Only render when needed
-- `fxaa = true`: Enable anti-aliasing
-- `ssao = true`: Enable ambient occlusion
-- `oit = false`: Enable order-independent transparency
-
-### Display Settings
-- `scalefactor = automatic`: Window scaling factor
-- `px_per_unit = automatic`: Pixel density
-- `monitor = nothing`: Target monitor
-
-### Performance Settings
-- `pause_renderloop = false`: Start with paused rendering
-- `max_lights = 64`: Maximum number of lights
-- `transparency_weight_scale = 1000f0`: Transparency rendering scale
+### CairoMakie Configuration
+```julia
+CairoMakie.activate!(
+    type = "png",  # or "svg"
+    pt_per_unit = 0.75,  # for vector formats
+    px_per_unit = 1      # for png
+)
+```
 
 ## Error Handling
 
@@ -127,12 +203,12 @@ GLMakie.activate!() accepts many configuration options:
 ```julia
 # This will fail with helpful error message
 using PointController
-run_point_controller()  # ERROR: GLMakie backend not activated
+run_point_controller()  # ERROR: No Makie backend activated
 ```
 
 **Solution:**
 ```julia
-using GLMakie
+using GLMakie  # or CairoMakie, WGLMakie
 GLMakie.activate!()
 using PointController
 run_point_controller()  # Works correctly
@@ -145,33 +221,16 @@ If you encounter graphics-related errors:
 2. **Check OpenGL version**: `glxinfo | grep "OpenGL version"` (Linux)
 3. **Try software rendering**: `GLMakie.activate!(debugging = true)`
 4. **Check display system**: Ensure X11/Wayland is working
-
-## Alternative Backends
-
-You can use other Makie backends instead of GLMakie:
-
-### CairoMakie (Vector Graphics)
-```julia
-using CairoMakie
-CairoMakie.activate!()
-# Note: PointController requires interactive features, so CairoMakie may not work fully
-```
-
-### WGLMakie (Web-based)
-```julia
-using WGLMakie
-WGLMakie.activate!()
-# Note: PointController keyboard events may not work in web environments
-```
+5. **Use CairoMakie**: For headless environments or static graphics
 
 ## Testing Considerations
 
 ### Test Files
-Test files should activate GLMakie at the beginning:
+Test files should activate an appropriate backend:
 ```julia
 using Test
-using GLMakie
-GLMakie.activate!()  # Required for tests
+using CairoMakie  # Use CairoMakie for tests
+CairoMakie.activate!()
 using PointController
 
 @testset "PointController Tests" begin
@@ -182,34 +241,10 @@ end
 ### CI/CD Environments
 For headless testing environments:
 ```julia
-# Use virtual display
-ENV["DISPLAY"] = ":99"
-using GLMakie
-GLMakie.activate!(visible = false)
+# Use CairoMakie (no display needed)
+using CairoMakie
+CairoMakie.activate!()
 ```
-
-## Optional Automatic Activation
-
-PointController includes commented-out code for automatic activation:
-
-```julia
-# In src/PointController.jl (commented out by default)
-function __init__()
-    try
-        GLMakie.activate!()
-        @info "GLMakie backend automatically activated"
-    catch e
-        @warn "Failed to automatically activate GLMakie: $e"
-    end
-end
-```
-
-**To enable automatic activation:**
-1. Uncomment the `__init__()` function in `src/PointController.jl`
-2. Restart Julia session
-3. PointController will automatically activate GLMakie when loaded
-
-**Note:** This goes against modern Makie patterns and is not recommended for production use.
 
 ## Migration Guide
 
@@ -225,7 +260,7 @@ run_point_controller()  # This used to work
 Update to the new pattern:
 ```julia
 # NEW
-using GLMakie
+using GLMakie  # or your preferred backend
 GLMakie.activate!()
 using PointController
 run_point_controller()
@@ -234,14 +269,23 @@ run_point_controller()
 ### Batch Update
 For multiple scripts, you can create a helper function:
 ```julia
-function setup_pointcontroller()
-    using GLMakie
-    GLMakie.activate!()
+function setup_pointcontroller(backend = :glmakie)
+    if backend == :glmakie
+        using GLMakie
+        GLMakie.activate!()
+    elseif backend == :cairomakie
+        using CairoMakie
+        CairoMakie.activate!()
+    elseif backend == :wglmakie
+        using WGLMakie
+        WGLMakie.activate!()
+    end
     using PointController
 end
 
 # Then in your scripts:
-setup_pointcontroller()
+setup_pointcontroller(:glmakie)  # for interactive
+setup_pointcontroller(:cairomakie)  # for static
 run_point_controller()
 ```
 
@@ -249,14 +293,14 @@ run_point_controller()
 
 ### Common Issues
 
-**"GLMakie backend not activated"**
-- Solution: Call `GLMakie.activate!()` before using PointController
+**"No Makie backend activated"**
+- Solution: Call `GLMakie.activate!()` (or other backend) before using PointController
 
 **"OpenGL initialization failed"**
 - Solution: Update graphics drivers, check OpenGL 3.3+ support
 
 **"Display system not available"**
-- Solution: Ensure X11/Wayland is running, enable X11 forwarding for SSH
+- Solution: Use CairoMakie instead: `using CairoMakie; CairoMakie.activate!()`
 
 **Performance issues**
 - Solution: Try `GLMakie.activate!(vsync = false, render_on_demand = true)`
@@ -270,5 +314,7 @@ GLMakie.activate!(debugging = true)
 ## References
 
 - [Makie.jl Documentation](https://docs.makie.org/)
+- [Backends & Output Guide](https://tlienart.github.io/Makie.jl/dev/documentation/backends_and_output/)
 - [GLMakie Backend Guide](https://docs.makie.org/stable/explanations/backends/glmakie/)
-- [Backend Configuration Options](https://docs.makie.org/stable/explanations/backends/backends/)
+- [CairoMakie Backend Guide](https://docs.makie.org/stable/explanations/backends/cairomakie/)
+- [WGLMakie Backend Guide](https://docs.makie.org/stable/explanations/backends/wglmakie/)
