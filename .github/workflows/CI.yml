@@ -49,6 +49,8 @@ jobs:
           "
           
       - name: Run tests with CairoMakie
+        env:
+          JULIA_NUM_THREADS: 2
         run: |
           julia --project=. -e "
             using Pkg
@@ -67,6 +69,43 @@ jobs:
         with:
           files: lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
+          
+  # Optional GLMakie smoke test (only for interactive features)
+  smoke-glmakie:
+    name: GLMakie Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '1.10'
+          
+      - uses: julia-actions/cache@v1
+      
+      - name: Install X11/Mesa & xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xorg-dev mesa-utils xvfb libgl1 freeglut3-dev \
+            libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev
+          
+      - name: Install dependencies
+        run: |
+          julia --project=. -e "
+            using Pkg
+            Pkg.instantiate()
+            Pkg.add(\"GLMakie\")
+          "
+          
+      - name: Run GL smoke test under xvfb
+        run: |
+          DISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24' \
+            julia --project=. -e "
+              using GLMakie
+              GLMakie.activate!()
+              using Pkg
+              Pkg.test()
+            "
           
   quality:
     name: Code Quality

@@ -1,35 +1,33 @@
 name = "PointController"
 uuid = "eae52b99-c8d7-4aa0-bde8-6d33da01be07"
-authors = ["User <user@example.com>"]
-version = "0.1.0"
-description = "Interactive Julia application for controlling a point using WASD keys with GLMakie visualization"
-license = "MIT"
-repository = "https://github.com/bakulev/JuliaTestRocket"
-documentation = "https://bakulev.github.io/JuliaTestRocket/"
-categories = ["Graphics", "Visualization", "GUI"]
 keywords = ["visualization", "interactive", "graphics", "makie", "gui", "wasd", "keyboard", "control", "real-time", "julia"]
+license = "MIT"
+authors = ["User <user@example.com>"]
+categories = ["Graphics", "Visualization", "GUI"]
+description = "Interactive Julia application for controlling a point using WASD keys with Makie.jl visualization"
+documentation = "https://bakulev.github.io/JuliaTestRocket/"
+repository = "https://github.com/bakulev/JuliaTestRocket"
+version = "0.1.0"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
-GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
 Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
+Observables = "510215fc-4207-5dde-b226-833fc4488ee2"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 Dates = "1"
-GLMakie = "0.10, 0.11, 0.12, 0.13"
 Logging = "1"
+Observables = "0.5"
+StaticArrays = "1"
 Test = "1"
 julia = "1.10"
 
-# CairoMakie is used for CI/testing but not required for normal usage
-# Users can install it separately if needed: using Pkg; Pkg.add("CairoMakie")
-
-# CompatHelper configuration
-# Automatically update patch versions, require manual approval for minor/major
-# Update frequency: weekly for patches, monthly for minor versions
-
 [extras]
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
+ReferenceTests = "324d217c-45ce-50fc-8257-e2c3b3f3cba4"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test"]
+test = ["Test", "GLMakie", "CairoMakie", "ReferenceTests"]

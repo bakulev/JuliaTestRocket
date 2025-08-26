@@ -4,8 +4,8 @@
 
 ### Prerequisites
 - Julia 1.10 or higher
-- OpenGL 3.3+ compatible graphics card and drivers
-- Working display system (X11, Wayland, or native windowing)
+- For interactive graphics: OpenGL 3.3+ compatible graphics card and drivers
+- For headless operation: No graphics hardware required
 
 ### Setup Instructions
 
@@ -24,20 +24,38 @@
    Pkg.instantiate()
    ```
 
-4. **Verify installation**:
-   ```bash
-   julia --project=. verify_installation.jl
-   ```
-
 ## Backend Activation
 
-PointController follows modern Makie.jl patterns where users control backend activation. 
-**You must activate GLMakie before using PointController functions:**
+PointController follows modern Makie.jl patterns where **users control backend activation**. You must activate a Makie backend before using PointController functions.
 
+### Available Backends
+
+**GLMakie (Interactive Graphics)**:
 ```julia
 using GLMakie
-GLMakie.activate!()  # Required before using PointController
+GLMakie.activate!()
 ```
+- **Best for**: Interactive applications, real-time graphics
+- **Features**: Full OpenGL acceleration, interactive windows
+- **Requirements**: OpenGL 3.3+, display system
+
+**CairoMakie (Static/Headless Graphics)**:
+```julia
+using CairoMakie
+CairoMakie.activate!()
+```
+- **Best for**: Publication-quality plots, CI environments, headless operation
+- **Features**: Vector graphics, no display required
+- **Requirements**: None (works in headless environments)
+
+**WGLMakie (Web Graphics)**:
+```julia
+using WGLMakie
+WGLMakie.activate!()
+```
+- **Best for**: Web applications, browser-based graphics
+- **Features**: WebGL-based, runs in browsers
+- **Requirements**: WebGL-capable browser
 
 ### Configuration Options
 
@@ -59,9 +77,29 @@ GLMakie.activate!(scalefactor = 2.0)
 
 ## First Run
 
+### Interactive Mode (Recommended)
+```bash
+# Start interactive session
+julia --project=. -i start_interactive.jl
+
+# Then in the Julia REPL, activate your preferred backend:
+using GLMakie; GLMakie.activate!()
+run_point_controller()
+```
+
+### Direct Execution
+```bash
+# Run with GLMakie (interactive)
+julia run_glmakie.jl
+
+# Run with CairoMakie (headless)
+julia run_cairomakie.jl
+```
+
+### Manual Setup
 ```julia
-# First, activate the GLMakie backend
-using GLMakie
+# First, activate your preferred Makie backend
+using GLMakie  # or CairoMakie, WGLMakie
 GLMakie.activate!()
 
 # Then use PointController

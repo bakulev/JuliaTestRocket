@@ -6,7 +6,7 @@
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-An interactive Julia application that displays a controllable point using GLMakie visualization. Control the point's movement using WASD keys with real-time coordinate updates and smooth continuous movement.
+An interactive Julia application that displays a controllable point using Makie.jl visualization. Control the point's movement using WASD keys with real-time coordinate updates and smooth continuous movement. Built with a backend-agnostic architecture following modern Makie.jl best practices.
 
 ## Application Preview
 
@@ -16,20 +16,22 @@ An interactive Julia application that displays a controllable point using GLMaki
 
 ## Features
 
-- **Interactive Point Visualization**: Real-time point rendering using GLMakie
+- **Interactive Point Visualization**: Real-time point rendering using Makie.jl
+- **Backend-Agnostic Architecture**: Works with GLMakie, CairoMakie, or WGLMakie
 - **WASD Keyboard Controls**: Intuitive movement controls with immediate response
 - **Real-time Coordinate Display**: Live coordinate updates as the point moves
 - **Smooth Continuous Movement**: Fluid movement while keys are held down
 - **Diagonal Movement Support**: Natural diagonal movement when multiple keys are pressed
 - **Robust Error Handling**: Comprehensive error handling for graphics and input issues
 - **Performance Optimized**: Efficient rendering and input processing
+- **CI/CD Ready**: Comprehensive test suite with backend-specific testing strategies
 
 ## Installation
 
 ### Prerequisites
-- Julia 1.6 or higher
-- OpenGL 3.3+ compatible graphics card and drivers
-- Working display system (X11, Wayland, or native windowing)
+- Julia 1.10 or higher
+- For interactive graphics: OpenGL 3.3+ compatible graphics card and drivers
+- For headless operation: No graphics hardware required
 
 ### Setup Instructions
 
@@ -48,68 +50,95 @@ An interactive Julia application that displays a controllable point using GLMaki
    Pkg.instantiate()
    ```
 
-4. **Verify installation**:
-   ```bash
-   julia --project=. verify_installation.jl
-   ```
-   
-   This will check all dependencies and basic functionality. You should see:
-   ```
-   === Installation Verification Complete ===
-   ✓ All checks passed!
-   ```
-
 ## Usage
 
-### Backend Activation
+### Backend Activation (Required)
 
-PointController follows modern Makie.jl patterns where users control backend activation. 
-**You must activate GLMakie before using PointController functions:**
+PointController follows modern Makie.jl patterns where **users control backend activation**. You must activate a Makie backend before using PointController functions.
 
+#### Available Backends
+
+**GLMakie (Interactive Graphics)**:
 ```julia
 using GLMakie
-GLMakie.activate!()  # Required before using PointController
+GLMakie.activate!()
+```
+- **Best for**: Interactive applications, real-time graphics
+- **Features**: Full OpenGL acceleration, interactive windows
+- **Requirements**: OpenGL 3.3+, display system
+
+**CairoMakie (Static/Headless Graphics)**:
+```julia
+using CairoMakie
+CairoMakie.activate!()
+```
+- **Best for**: Publication-quality plots, CI environments, headless operation
+- **Features**: Vector graphics, no display required
+- **Requirements**: None (works in headless environments)
+
+**WGLMakie (Web Graphics)**:
+```julia
+using WGLMakie
+WGLMakie.activate!()
+```
+- **Best for**: Web applications, browser-based graphics
+- **Features**: WebGL-based, runs in browsers
+- **Requirements**: WebGL-capable browser
+
+### Recommended Usage Methods
+
+#### 1. Interactive Mode (Recommended for Development)
+
+Start an interactive Julia session with the project loaded:
+
+```bash
+# Start interactive session
+julia --project=. -i start_interactive.jl
+
+# Then in the Julia REPL, activate your preferred backend:
+using GLMakie; GLMakie.activate!()
+run_point_controller()
 ```
 
-**Backend Configuration Options:**
-```julia
-# Basic activation
-GLMakie.activate!()
+#### 2. Direct Execution with GLMakie (Interactive Graphics)
 
-# With custom window settings
-GLMakie.activate!(
-    title = "My Point Controller",
-    vsync = true,
-    framerate = 60.0,
-    fxaa = true
-)
+Run the application directly with interactive graphics:
 
-# For HiDPI displays
-GLMakie.activate!(scalefactor = 2.0)
+```bash
+julia run_glmakie.jl
 ```
 
-### Quick Start
+#### 3. Direct Execution with CairoMakie (Headless)
 
-**From Julia REPL**:
-```julia
-# First, activate the GLMakie backend
-using GLMakie
-GLMakie.activate!()
+Run the application in headless mode (for CI/headless environments):
 
-# Then use PointController
+```bash
+julia run_cairomakie.jl
+```
+
+#### 4. Manual Setup (Advanced Users)
+
+For advanced users who want full control:
+
+```bash
+# Start Julia with project
+julia --project=.
+
+# In Julia REPL:
+using Pkg; Pkg.instantiate()
+using GLMakie; GLMakie.activate!()
 using PointController
 run_point_controller()
 ```
 
-**From command line**:
-```bash
-julia --project=. -e "using GLMakie; GLMakie.activate!(); using PointController; run_point_controller()"
-```
+### Why These Methods Are Better
 
-**Using the provided script**:
-```bash
-julia run_app.jl
-```
+The recommended approach provides:
+- **Proper Module Loading**: Each module loads in the correct order
+- **Error Handling**: Each step can be verified before proceeding
+- **Interactive Debugging**: Can inspect state and debug issues
+- **Resource Management**: Proper cleanup and resource management
+- **Flexibility**: Can easily switch backends or modify behavior
 
 ### Controls
 
@@ -133,8 +162,6 @@ julia run_app.jl
 - **Grid system**: Reference grid for precise positioning
 - **Axis labels**: X and Y coordinate axes with proper scaling
 
-> 💡 **Tip**: See the [application preview](#application-preview) above for a visual example of the interface in action.
-
 ## Project Structure
 
 ```
@@ -142,8 +169,9 @@ JuliaTestRocket/
 ├── Project.toml                          # Package configuration and dependencies
 ├── README.md                             # This documentation file
 ├── LICENSE                               # MIT license file
-├── run_app.jl                           # Standalone application launcher
-├── verify_installation.jl               # Installation verification script
+├── start_interactive.jl                  # Interactive startup script
+├── run_glmakie.jl                        # GLMakie execution script
+├── run_cairomakie.jl                     # CairoMakie execution script
 ├── docs/                                # Documentation and assets
 │   └── assets/                          # Images and media files
 │       └── WorkingApp.png               # Application screenshot
@@ -151,13 +179,13 @@ JuliaTestRocket/
 │   ├── PointController.jl               # Main module and application entry point
 │   ├── movement_state.jl                # Movement state management and key tracking
 │   ├── input_handler.jl                 # Keyboard event processing and validation
-│   └── visualization.jl                 # GLMakie visualization setup and rendering
+│   └── visualization.jl                 # Makie visualization setup and rendering
 └── test/                                # Test suite directory
     ├── runtests.jl                      # Main test runner
     ├── test_movement_state.jl           # Movement state and calculation tests
     ├── test_input.jl                    # Input handler and keyboard event tests
     ├── test_visualization.jl            # Visualization component tests
-    ├── test_keyboard_integration.jl     # Keyboard integration tests
+    ├── test_glmakie_smoke.jl            # GLMakie smoke tests
     └── test_integration_comprehensive.jl # End-to-end integration tests
 ```
 
@@ -173,7 +201,7 @@ Pkg.test()
 
 **From command line**:
 ```bash
-julia --project=. test/runtests.jl
+julia --project=. -e "using Pkg; Pkg.test()"
 ```
 
 **Individual test files**:
@@ -191,7 +219,14 @@ The codebase is organized into modular components:
 - **`PointController.jl`**: Main module with application lifecycle management
 - **`movement_state.jl`**: State management for point position and key tracking
 - **`input_handler.jl`**: Keyboard event processing and input validation
-- **`visualization.jl`**: GLMakie setup, rendering, and display management
+- **`visualization.jl`**: Makie setup, rendering, and display management
+
+### Architecture Highlights
+
+- **Backend-Agnostic Core**: Core logic is independent of specific Makie backends
+- **Runtime Backend Detection**: Automatically detects and adapts to active backends
+- **Modular Design**: Separate concerns for movement, input, and visualization
+- **Modern Makie Patterns**: Follows current best practices for backend activation
 
 ### Adding Features
 
@@ -203,16 +238,23 @@ The codebase is organized into modular components:
 ## System Requirements
 
 ### Minimum Requirements
-- **Julia**: Version 1.6 or higher
-- **OpenGL**: Version 3.3 or higher
+- **Julia**: Version 1.10 or higher
 - **RAM**: 512 MB available memory
+
+### For Interactive Graphics (GLMakie)
+- **OpenGL**: Version 3.3 or higher
 - **Graphics**: Hardware-accelerated graphics card
+- **Display**: Working display system (X11, Wayland, or native windowing)
+
+### For Headless Operation (CairoMakie)
+- **No graphics hardware required**
+- **No display system required**
 
 ### Recommended Requirements
-- **Julia**: Version 1.8 or higher
-- **OpenGL**: Version 4.0 or higher
+- **Julia**: Version 1.11 or higher
+- **OpenGL**: Version 4.0 or higher (for GLMakie)
 - **RAM**: 1 GB available memory
-- **Graphics**: Dedicated graphics card with updated drivers
+- **Graphics**: Dedicated graphics card with updated drivers (for GLMakie)
 
 ### Supported Platforms
 - **Linux**: X11 and Wayland display systems
@@ -223,15 +265,21 @@ The codebase is organized into modular components:
 
 ### Common Issues
 
+**"No Makie backend activated"**:
+- Solution: Activate a backend before running the application
+- Example: `using GLMakie; GLMakie.activate!()`
+
 **GLMakie initialization fails**:
 - Update graphics drivers to latest version
 - Verify OpenGL 3.3+ support: `glxinfo | grep "OpenGL version"` (Linux)
 - Try software rendering if hardware acceleration unavailable
+- Use CairoMakie as alternative: `using CairoMakie; CairoMakie.activate!()`
 
 **Window doesn't appear**:
 - Check display system configuration (DISPLAY variable on Linux)
 - Verify X11 forwarding if using SSH: `ssh -X username@hostname`
 - Ensure window manager is running
+- Use CairoMakie for headless operation
 
 **Keyboard input not working**:
 - Click on the window to ensure it has focus
@@ -248,11 +296,13 @@ The codebase is organized into modular components:
 **"OpenGL initialization failed"**:
 ```
 Solution: Update graphics drivers and verify OpenGL 3.3+ support
+Alternative: Use CairoMakie for headless operation
 ```
 
 **"Display system not available"**:
 ```
-Solution: Ensure X11/Wayland is running or enable X11 forwarding for SSH
+Solution: Use CairoMakie or ensure display system is available
+For SSH: Enable X11 forwarding or use CairoMakie
 ```
 
 **"Out of memory error"**:
@@ -295,8 +345,10 @@ This project is licensed under the MIT License. See the LICENSE file for details
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature-name`
 3. Make changes and add tests
-4. Run the test suite: `julia --project=. test/runtests.jl`
+4. Run the test suite: `julia --project=. -e "using Pkg; Pkg.test()"`
 5. Submit a pull request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## Support
 

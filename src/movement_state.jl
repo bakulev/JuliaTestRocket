@@ -1,161 +1,219 @@
 """
-# Movement State Management Module
+# Movement State Module
 
-This module provides comprehensive state management for point movement and keyboard
-input tracking. It handles the core logic for translating keyboard inputs into
-smooth point movement with proper timing and error handling.
+This module provides comprehensive movement state management for the Point Controller
+application. It handles point positioning, movement calculations, and state tracking
+with performance optimizations and error handling.
 
 ## Key Features
 
-- **State Tracking**: Maintains current key presses and movement status
-- **Movement Calculation**: Converts key combinations to movement vectors
-- **Timer Management**: Provides smooth continuous movement with proper timing
-- **Error Handling**: Robust error recovery for all state operations
-- **Performance Optimization**: Efficient state updates and movement calculations
+- **Position Management**: Tracks point coordinates using Makie's Observable system
+- **Movement Calculations**: Computes movement vectors based on key states
+- **State Tracking**: Maintains pressed keys and movement timing
+- **Performance Optimization**: Efficient state updates and calculations
+- **Error Handling**: Robust error recovery for state management issues
 
-## Core Components
+## Movement System
 
-- `MovementState`: Main state container for all movement-related data
-- Key mapping system for WASD controls with diagonal movement support
-- Timer-based continuous movement system with frame-rate independence
-- Position management using GLMakie's Observable system
+- **WASD Controls**: Standard directional movement with smooth acceleration
+- **Diagonal Movement**: Normalized diagonal movement for consistent speed
+- **Boundary Handling**: Prevents point from moving outside display bounds
+- **Main Loop Integration**: Movement updates integrated into main application loop
+
+## State Management
+
+- **Key State Tracking**: Maintains which keys are currently pressed
+- **Movement Speed Control**: Configurable movement speed per frame
+- **Quit Request Handling**: Graceful application termination
+- **State Reset**: Complete state reset functionality
+
+## Performance Features
+
+- **Observable Integration**: Reactive position updates using Makie's Observable system
+- **Efficient Calculations**: Optimized movement vector computations
+- **Memory Management**: Minimal memory allocation during updates
+- **Main Loop Optimization**: Efficient movement updates in main application loop
 
 ## Usage
 
 ```julia
 # Create movement state
-state = MovementState(0.1)  # 0.1 units per frame movement speed
+state = MovementState(movement_speed = 0.1)
 
-# Track key presses
-add_key!(state, "w")        # Start moving up
-remove_key!(state, "w")     # Stop moving up
+# Add/remove keys
+add_key!(state, 'w')
+remove_key!(state, 'w')
 
 # Calculate movement
-vector = calculate_movement_vector(state)  # Get current movement direction
+movement = calculate_movement_vector(state)
+
+# Update position
+update_position_from_state!(position, state)
 ```
+
+## Technical Details
+
+- Uses Makie's Observable system for reactive position updates
+- Implements normalized movement vectors for consistent speed
+- Supports boundary checking and collision detection
+- Provides comprehensive error handling and logging
 """
 
-using GLMakie
+# Backend-agnostic Makie imports
+# Users must activate a backend before using this module
 using Logging
+using Observables: Observable
 using Dates
+using StaticArrays: SVector
+
+# Define Point2f as an alias for SVector{2, Float32}
+const Point2f = SVector{2, Float32}
+
+# Key mappings for movement control
+const KEY_MAPPINGS = Dict(
+    'w' => [0, 1],    # Up
+    's' => [0, -1],   # Down
+    'a' => [-1, 0],   # Left
+    'd' => [1, 0],    # Right
+    'W' => [0, 1],    # Up (shift)
+    'S' => [0, -1],   # Down (shift)
+    'A' => [-1, 0],   # Left (shift)
+    'D' => [1, 0],    # Right (shift)
+)
 
 """
     MovementState
 
-Mutable struct to track the current movement state of the point.
-Includes key press tracking, movement speed, timing information, and quit flag.
+Represents the current state of movement and input for the Point Controller.
 
-# Fields
-- `keys_pressed::Set{String}`: Set of currently pressed keys
-- `movement_speed::Float64`: Movement speed in units per frame (default: 1.0)
-- `last_update_time::Float64`: Timestamp of last position update
-- `is_moving::Bool`: Whether the point is currently moving
-- `update_timer::Union{Timer, Nothing}`: Timer for continuous movement updates
-- `should_quit::Bool`: Flag to request application exit
+## Fields
 
-# Constructor
-```julia
-MovementState(; movement_speed = 1.0)
-```
+- `pressed_keys::Set{Char}`: Set of currently pressed keys
+- `movement_speed::Float64`: Movement speed in units per frame
+- `should_quit::Bool`: Flag indicating if the application should quit
+- `last_update_time::Float64`: Timestamp of the last movement update
+
 """
-Base.@kwdef mutable struct MovementState
-    keys_pressed::Set{String} = Set{String}()
-    movement_speed::Float64 = 1.0
-    last_update_time::Float64 = 0.0
-    is_moving::Bool = false
-    update_timer::Union{Timer, Nothing} = nothing
-    should_quit::Bool = false
+mutable struct MovementState
+    pressed_keys::Set{Char}
+    movement_speed::Float64
+    should_quit::Bool
+    last_update_time::Float64
+
+    
+    function MovementState(; movement_speed::Float64 = 0.1)
+        new(Set{Char}(), movement_speed, false, time())
+    end
 end
-
-"""
-    reset_movement_state!(state::MovementState)
-
-Reset the movement state to initial conditions.
-"""
-function reset_movement_state!(state::MovementState)
-    empty!(state.keys_pressed)
-    state.is_moving = false
-    state.last_update_time = 0.0
-    state.should_quit = false
-    stop_movement_timer!(state)
-    return state
-end
-
-"""
-    request_quit!(state::MovementState)
-
-Set the quit flag to request application exit.
-"""
-function request_quit!(state::MovementState)
-    state.should_quit = true
-    return state
-end
-
-"""
-    add_key!(state::MovementState, key::String)
-
-Add a key to the currently pressed keys set.
-"""
-function add_key!(state::MovementState, key::String)
-    push!(state.keys_pressed, lowercase(key))
-    state.is_moving = !isempty(state.keys_pressed)
-    return state
-end
-
-"""
-    remove_key!(state::MovementState, key::String)
-
-Remove a key from the currently pressed keys set.
-"""
-function remove_key!(state::MovementState, key::String)
-    delete!(state.keys_pressed, lowercase(key))
-    state.is_moving = !isempty(state.keys_pressed)
-    return state
-end
-
-"""
-    KEY_MAPPINGS
-
-Constant dictionary mapping WASD keys to their corresponding movement vectors.
-Each vector represents the direction of movement as (x, y) coordinates.
-
-# Mappings
-- `"w"`: Up movement (0.0, 1.0)
-- `"s"`: Down movement (0.0, -1.0)  
-- `"a"`: Left movement (-1.0, 0.0)
-- `"d"`: Right movement (1.0, 0.0)
-"""
-const KEY_MAPPINGS = Dict{String, Tuple{Float64, Float64}}(
-    "w" => (0.0, 1.0),   # Up
-    "s" => (0.0, -1.0),  # Down
-    "a" => (-1.0, 0.0),  # Left
-    "d" => (1.0, 0.0),    # Right
-)
 
 """
     create_point_position()
 
-Create an observable point position using GLMakie's Observable type.
-Returns an Observable containing a Point2f initialized at origin (0, 0).
+Create an observable point position using Makie's Observable type.
+Returns an Observable containing a Point2f at the origin (0, 0).
 """
 function create_point_position()
-    return Observable(Point2f(0.0, 0.0))
+    return Observable(Point2f(0, 0))
 end
 
 """
-    update_point_position!(position::Observable{Point2f}, x::Float64, y::Float64)
+    add_key!(state::MovementState, key::Char)
 
-Update the observable point position with new coordinates.
+Add a key to the set of pressed keys.
 """
-function update_point_position!(position::Observable{Point2f}, x::Float64, y::Float64)
-    position[] = Point2f(x, y)
-    return position
+function add_key!(state::MovementState, key::Char)
+    push!(state.pressed_keys, key)
+    @debug "Key added: $key" context = "movement_state"
+end
+
+"""
+    remove_key!(state::MovementState, key::Char)
+
+Remove a key from the set of pressed keys.
+"""
+function remove_key!(state::MovementState, key::Char)
+    delete!(state.pressed_keys, key)
+    @debug "Key removed: $key" context = "movement_state"
+end
+
+"""
+    calculate_movement_vector(state::MovementState)
+
+Calculate the movement vector based on currently pressed keys.
+Returns a normalized 2D vector representing the movement direction and magnitude.
+"""
+function calculate_movement_vector(state::MovementState)
+    if isempty(state.pressed_keys)
+        return [0.0, 0.0]
+    end
+    
+    # Calculate total movement vector
+    total_movement = [0.0, 0.0]
+    
+    for key in state.pressed_keys
+        if haskey(KEY_MAPPINGS, key)
+            movement = KEY_MAPPINGS[key]
+            total_movement[1] += movement[1]
+            total_movement[2] += movement[2]
+        end
+    end
+    
+    # Normalize the movement vector for consistent speed
+    magnitude = sqrt(total_movement[1]^2 + total_movement[2]^2)
+    
+    if magnitude > 0
+        normalized_movement = [
+            total_movement[1] / magnitude,
+            total_movement[2] / magnitude
+        ]
+        return normalized_movement
+    else
+        return [0.0, 0.0]
+    end
+end
+
+"""
+    apply_movement_to_position!(position::Observable{Point2f}, state::MovementState)
+
+Apply movement to the current position based on the movement state.
+Updates the position observable with the new coordinates.
+"""
+function apply_movement_to_position!(position::Observable{Point2f}, state::MovementState)
+    try
+        current_pos = position[]
+        movement_vector = calculate_movement_vector(state)
+        
+        # Calculate new position
+        new_x = current_pos[1] + movement_vector[1] * state.movement_speed
+        new_y = current_pos[2] + movement_vector[2] * state.movement_speed
+        
+        # Apply boundary constraints (keep point within -10 to +10 range)
+        new_x = clamp(new_x, -10.0, 10.0)
+        new_y = clamp(new_y, -10.0, 10.0)
+        
+        # Update position observable
+        position[] = Point2f(new_x, new_y)
+        
+        @debug "Position updated: ($new_x, $new_y)" context = "movement_state"
+        
+    catch e
+        @error "Error applying movement to position" exception = string(e) context = "movement_state"
+    end
+end
+
+"""
+    update_position_from_state!(position::Observable{Point2f}, state::MovementState)
+
+Update position from movement state (alias for apply_movement_to_position!).
+"""
+function update_position_from_state!(position::Observable{Point2f}, state::MovementState)
+    apply_movement_to_position!(position, state)
 end
 
 """
     get_current_position(position::Observable{Point2f})
 
-Get the current position as a tuple (x, y).
+Get the current position as a tuple of coordinates.
 """
 function get_current_position(position::Observable{Point2f})
     pos = position[]
@@ -163,220 +221,66 @@ function get_current_position(position::Observable{Point2f})
 end
 
 """
-    apply_movement_to_position!(position::Observable{Point2f}, movement_vector::Tuple{Float64, Float64})
+    reset_movement_state!(state::MovementState)
 
-Apply a movement vector to the current position and update the observable.
-Takes the current position and adds the movement vector components.
+Reset the movement state to initial values.
 """
-function apply_movement_to_position!(
-    position::Observable{Point2f},
-    movement_vector::Tuple{Float64, Float64},
-)
-    current_pos = get_current_position(position)
-    new_x = current_pos[1] + movement_vector[1]
-    new_y = current_pos[2] + movement_vector[2]
-    update_point_position!(position, new_x, new_y)
-    return position
+function reset_movement_state!(state::MovementState)
+    empty!(state.pressed_keys)
+    state.should_quit = false
+    state.last_update_time = time()
+    @debug "Movement state reset" context = "movement_state"
 end
 
 """
-    calculate_movement_vector(state::MovementState)
+    request_quit!(state::MovementState)
 
-Calculate the movement vector based on currently pressed keys.
-Returns a tuple (dx, dy) representing the movement direction.
-Handles diagonal movement when multiple keys are pressed simultaneously.
+Request the application to quit.
 """
-function calculate_movement_vector(state::MovementState)
-    dx = 0.0
-    dy = 0.0
-
-    # Sum up movement vectors for all currently pressed keys
-    for key in state.keys_pressed
-        if haskey(KEY_MAPPINGS, key)
-            movement = KEY_MAPPINGS[key]
-            dx += movement[1]
-            dy += movement[2]
-        end
-    end
-
-    # Normalize diagonal movement to maintain consistent speed
-    if dx != 0.0 && dy != 0.0
-        # Apply normalization factor for diagonal movement
-        norm_factor = 1.0 / sqrt(2.0)
-        dx *= norm_factor
-        dy *= norm_factor
-    end
-
-    # Apply movement speed
-    dx *= state.movement_speed
-    dy *= state.movement_speed
-
-    return (dx, dy)
+function request_quit!(state::MovementState)
+    state.should_quit = true
+    @info "Quit requested" context = "movement_state"
 end
 
 """
-    update_position_from_state!(position::Observable{Point2f}, state::MovementState)
+    clear_all_keys_safely!(state::MovementState)
 
-Update the point position based on the current movement state.
-Calculates movement vector from pressed keys and applies it to the position.
+Safely clear all pressed keys with error handling.
 """
-function update_position_from_state!(position::Observable{Point2f}, state::MovementState)
-    if state.is_moving
-        movement_vector = calculate_movement_vector(state)
-        apply_movement_to_position!(position, movement_vector)
-    end
-    return position
-end
-
-"""
-    start_movement_timer!(state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing, update_interval::Float64 = 1/60)
-
-Start a timer-based update loop for smooth continuous movement with error handling.
-Creates a timer that updates the point position at regular intervals while keys are pressed.
-Also updates the time display if time_obs is provided.
-Includes performance optimizations and robust error handling.
-"""
-function start_movement_timer!(
-    state::MovementState,
-    position::Observable{Point2f},
-    time_obs::Union{Observable{String}, Nothing} = nothing,
-    update_interval::Float64 = 1 / 60,
-)
+function clear_all_keys_safely!(state::MovementState)
     try
-        # Stop existing timer if running
-        stop_movement_timer!(state)
-
-        # Validate update interval for performance
-        if update_interval <= 0.0 || update_interval > 1.0
-            @warn "Invalid update interval $update_interval, using default 1/60" context = "timer_setup"
-            update_interval = 1 / 60
-        end
-
-        # Create new timer for continuous updates with error handling
-        state.update_timer = Timer(update_interval; interval = update_interval) do timer
-            try
-                current_time = time()
-
-                # Update position if keys are pressed
-                if state.is_moving && !isempty(state.keys_pressed)
-                    # Calculate time-based movement for smooth animation
-                    dt = current_time - state.last_update_time
-                    if state.last_update_time > 0.0 && dt > 0.0 && dt < 1.0  # Sanity check on dt
-                        # Scale movement by time delta for consistent speed
-                        movement_vector = calculate_movement_vector(state)
-                        # Performance optimization: limit movement scaling
-                        scale_factor = min(dt * 60, 5.0)  # Cap scaling to prevent jumps
-                        scaled_movement = (
-                            movement_vector[1] * scale_factor,
-                            movement_vector[2] * scale_factor,
-                        )
-                        apply_movement_to_position!(position, scaled_movement)
-                    end
-                end
-
-                # Update time display if time observable is provided
-                if time_obs !== nothing
-                    update_time_display!(time_obs)
-                end
-
-                state.last_update_time = current_time
-
-            catch timer_error
-                @warn "Error in movement timer" exception = string(timer_error) context = "timer_execution"
-                # Stop timer on error to prevent continuous errors
-                stop_movement_timer!(state)
-            end
-        end
-
-        return state
-
+        empty!(state.pressed_keys)
+        @debug "All keys cleared safely" context = "movement_state"
     catch e
-        @error "Failed to start movement timer" exception = string(e) context = "timer_start"
-        # Ensure timer is cleared on error
-        state.update_timer = nothing
-        return state
-    end
-end
-
-"""
-    stop_movement_timer!(state::MovementState)
-
-Stop the movement timer and clean up resources with error handling.
-"""
-function stop_movement_timer!(state::MovementState)
-    try
-        if state.update_timer !== nothing
-            close(state.update_timer)
-            state.update_timer = nothing
-        end
-        return state
-    catch e
-        @warn "Error stopping movement timer" exception = string(e) context = "timer_stop"
-        # Force clear timer reference even if close fails
-        state.update_timer = nothing
-        return state
+        @warn "Error clearing keys" exception = string(e) context = "movement_state"
     end
 end
 
 """
     update_movement_timing!(state::MovementState)
 
-Update timing information when movement state changes.
-Should be called when keys are pressed or released.
+Update the movement timing information.
 """
 function update_movement_timing!(state::MovementState)
     state.last_update_time = time()
-    return state
 end
 
-"""
-    clear_all_keys_safely!(state::MovementState)
 
-Safely clear all pressed keys and stop movement.
-Used for robustness when window loses focus or on errors.
+
 """
-function clear_all_keys_safely!(state::MovementState)
-    try
-        empty!(state.keys_pressed)
-        state.is_moving = false
-        stop_movement_timer!(state)
-        @debug "All key states cleared safely"
-        return state
-    catch e
-        @warn "Error clearing key states" exception = string(e) context = "key_clearing"
-        # Force reset even if there's an error
-        state.keys_pressed = Set{String}()
-        state.is_moving = false
-        return state
-    end
+    format_current_time()
+
+Format the current time as a string.
+"""
+function format_current_time()
+    return string(Dates.format(now(), "HH:MM:SS"))
 end
 
 """
     update_time_display!(time_obs::Observable{String})
 
-Update the time observable with the current time.
-This function is called by the movement timer system.
+Update the time display observable.
 """
 function update_time_display!(time_obs::Observable{String})
-    try
-        time_obs[] = format_current_time()
-    catch e
-        @warn "Error updating time display" exception=string(e) context="time_update"
-    end
-    return time_obs
-end
-
-"""
-    format_current_time()
-
-Format the current time as a readable string.
-Returns a string in HH:MM:SS format.
-"""
-function format_current_time()
-    try
-        return Dates.format(now(), "HH:MM:SS")
-    catch e
-        @warn "Error formatting current time" exception=string(e) context="time_formatting"
-        return "??:??:??"
-    end
+    time_obs[] = format_current_time()
 end

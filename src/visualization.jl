@@ -1,13 +1,13 @@
 """
 # Visualization Module
 
-This module provides comprehensive GLMakie-based visualization for the Point Controller
+This module provides comprehensive Makie-based visualization for the Point Controller
 application. It handles all aspects of rendering, window management, and visual updates
 with performance optimizations and error handling.
 
 ## Key Features
 
-- **GLMakie Integration**: Full GLMakie backend setup and configuration
+- **Makie Integration**: Full Makie backend setup and configuration (GLMakie, CairoMakie, etc.)
 - **Real-time Rendering**: Efficient point and coordinate display updates
 - **Performance Optimization**: Render-on-demand and optimized drawing operations
 - **Visual Design**: Clean, professional interface with proper scaling and layout
@@ -43,28 +43,44 @@ update_coordinate_display!(position)
 
 ## Technical Details
 
-- Uses GLMakie's Observable system for reactive updates
+- Uses Makie's Observable system for reactive updates
 - Implements DataAspect for proper coordinate scaling
 - Optimized for 60 FPS smooth movement
 - Supports window resizing and focus changes
+- Backend-agnostic (works with GLMakie, CairoMakie, etc.)
 """
 
-using GLMakie
+# Backend-agnostic Makie imports
+# Users must activate a backend before using this module
 using Logging
+using Observables: Observable
+using StaticArrays: SVector
+
+# Define Point2f as an alias for SVector{2, Float32}
+const Point2f = SVector{2, Float32}
+
+# Note: Makie types (Figure, Axis, etc.) are not imported here
+# They will be available when a backend is activated by the user
 
 """
     create_visualization()
 
-Create and configure the GLMakie visualization window with point and coordinate display.
+Create and configure the Makie visualization window with point and coordinate display.
 Includes performance optimizations and error handling.
 Returns the figure, axis, point observable, coordinate text observable, and time observable.
+
+Note: This function requires a Makie backend to be activated before calling.
 """
 function create_visualization()
-    # Note: GLMakie backend should be activated by the user before calling this function
-    # Call GLMakie.activate!() in your script before using PointController functions
+    # Check if a Makie backend is available
+    if !isdefined(Main, :Figure)
+        error("No Makie backend detected. Please activate a backend before calling create_visualization():\n" *
+              "  using GLMakie; GLMakie.activate!()  # for interactive use\n" *
+              "  using CairoMakie; CairoMakie.activate!()  # for headless use")
+    end
 
     # Create figure with optimized configuration for performance
-    fig = Figure(
+    fig = Main.Figure(
         size = (800, 600),
         title = "Point Controller",
         # Performance optimizations
@@ -73,11 +89,11 @@ function create_visualization()
     )
 
     # Create axis with coordinate system and performance settings
-    ax = Axis(fig[1, 1],
+    ax = Main.Axis(fig[1, 1],
         xlabel = "X Coordinate",
         ylabel = "Y Coordinate",
         title = "Interactive Point Control (Use WASD keys)",
-        aspect = DataAspect(),
+        aspect = Main.DataAspect(),
         limits = (-10, 10, -10, 10),
         # Performance optimizations
         xticklabelsize = 10,
@@ -92,7 +108,7 @@ function create_visualization()
     current_time_obs = create_time_observable()
 
     # Implement optimized point rendering using scatter plot
-    scatter!(ax, point_position,
+    Main.scatter!(ax, point_position,
         color = :red,
         markersize = 20,
         marker = :circle,
@@ -101,7 +117,7 @@ function create_visualization()
     )
 
     # Add time display in the upper left corner
-    time_text = lift(current_time_obs) do time_val
+    time_text = Main.lift(current_time_obs) do time_val
         try
             return "Time: $time_val"
         catch e
@@ -111,7 +127,7 @@ function create_visualization()
     end
 
     # Display time text in the upper left corner of the plot
-    text!(ax, -9.5, 8.5,
+    Main.text!(ax, -9.5, 8.5,
         text = time_text,
         fontsize = 12,
         color = :blue,
@@ -120,7 +136,7 @@ function create_visualization()
 
     # Add coordinate text display that updates with point position
     # Optimized to reduce string allocations
-    coordinate_text = lift(point_position) do pos
+    coordinate_text = Main.lift(point_position) do pos
         try
             x_rounded = round(pos[1], digits = 2)
             y_rounded = round(pos[2], digits = 2)
@@ -132,7 +148,7 @@ function create_visualization()
     end
 
     # Display coordinate text below the time display
-    text!(ax, -9.5, 7.5,
+    Main.text!(ax, -9.5, 7.5,
         text = coordinate_text,
         fontsize = 12,
         color = :black,
@@ -145,22 +161,22 @@ function create_visualization()
     ax.xminorgridvisible = false  # Disable minor grid for performance
     ax.yminorgridvisible = false  # Disable minor grid for performance
 
-    # Performance optimization: Modern GLMakie handles rendering efficiently by default
-    # Note: render_on_demand is no longer available in newer GLMakie versions
+    # Performance optimization: Modern Makie handles rendering efficiently by default
+    # Note: render_on_demand is no longer available in newer Makie versions
 
     return fig, ax, point_position, coordinate_text, current_time_obs
 end
 
 """
-    setup_visualization_window(fig::Figure)
+    setup_visualization_window(fig)
 
-Set up and display the GLMakie window with proper configuration and performance optimizations.
+Set up and display the Makie window with proper configuration and performance optimizations.
 """
-function setup_visualization_window(fig::Figure)
+function setup_visualization_window(fig)
     try
         # Configure window properties for better performance and user experience
         # Set window to be resizable and properly positioned
-        display(fig)
+        Main.display(fig)
 
         # Additional performance optimizations if available
         try
@@ -184,7 +200,7 @@ end
 
 Create an observable that displays the current time.
 Returns an Observable containing a formatted time string.
-Note: Time updates are handled by the movement timer system.
+Note: Time updates are handled by the main application loop.
 """
 function create_time_observable()
     # Create observable with initial time

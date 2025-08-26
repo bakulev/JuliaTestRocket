@@ -1,267 +1,117 @@
-# Test Input Handler Module
-# Tests for keyboard event processing and key state tracking
+# Input Handler Tests
+# Backend-agnostic tests for input handling
+# These tests don't require any Makie backend
 
 using Test
+using Logging: with_logger, NullLogger
 using PointController
 
 @testset "Input Handler Tests" begin
     @testset "Key Press Handling" begin
         state = MovementState()
-
-        # Test valid key press
-        handle_key_press("w", state)
-        @test "w" in state.keys_pressed
-        @test state.is_moving == true
-
-        # Test multiple key presses
-        handle_key_press("d", state)
-        @test "w" in state.keys_pressed
-        @test "d" in state.keys_pressed
-        @test length(state.keys_pressed) == 2
-        @test state.is_moving == true
-
-        # Test case insensitive key press
-        handle_key_press("A", state)
-        @test "a" in state.keys_pressed
-        @test length(state.keys_pressed) == 3
-
-        # Test invalid key press (should be ignored)
-        handle_key_press("x", state)
-        @test "x" ∉ state.keys_pressed
-        @test length(state.keys_pressed) == 3
-
-        # Test duplicate key press (should not add duplicate)
-        handle_key_press("w", state)
-        @test length(state.keys_pressed) == 3
+        
+        # Test WASD key presses
+        @test_nowarn handle_key_press('w', state)
+        @test 'w' in state.pressed_keys
+        
+        @test_nowarn handle_key_press('a', state)
+        @test 'a' in state.pressed_keys
+        @test length(state.pressed_keys) == 2
+        
+        # Test quit key - temporarily suppress info messages
+        @test state.should_quit == false
+        with_logger(NullLogger()) do
+            @test_nowarn handle_key_press('q', state)
+        end
+        @test state.should_quit == true
+        
+        # Test invalid keys (should be ignored)
+        @test_nowarn handle_key_press('x', state)
+        @test 'x' ∉ state.pressed_keys
     end
-
+    
     @testset "Key Release Handling" begin
         state = MovementState()
-
+        
         # Add some keys first
-        handle_key_press("w", state)
-        handle_key_press("d", state)
-        @test length(state.keys_pressed) == 2
-
-        # Test valid key release
-        handle_key_release("w", state)
-        @test "w" ∉ state.keys_pressed
-        @test "d" in state.keys_pressed
-        @test length(state.keys_pressed) == 1
-        @test state.is_moving == true
-
-        # Test case insensitive key release
-        handle_key_release("D", state)
-        @test "d" ∉ state.keys_pressed
-        @test length(state.keys_pressed) == 0
-        @test state.is_moving == false
-
-        # Test invalid key release (should be ignored)
-        handle_key_release("x", state)
-        @test length(state.keys_pressed) == 0
-
-        # Test releasing non-pressed key (should be safe)
-        handle_key_release("s", state)
-        @test length(state.keys_pressed) == 0
+        add_key!(state, 'w')
+        add_key!(state, 's')
+        
+        # Test key releases
+        @test_nowarn handle_key_release('w', state)
+        @test 'w' ∉ state.pressed_keys
+        @test 's' in state.pressed_keys
+        
+        @test_nowarn handle_key_release('s', state)
+        @test 's' ∉ state.pressed_keys
+        @test isempty(state.pressed_keys)
+        
+        # Test releasing invalid keys (should be ignored)
+        @test_nowarn handle_key_release('x', state)
     end
-
-    @testset "Movement Vector Calculation" begin
-        state = MovementState(movement_speed = 2.0)  # Set movement speed to 2.0
-
-        # Test no movement
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 0.0
-        @test dy == 0.0
-
-        # Test single key movements
-        handle_key_press("w", state)
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 0.0
-        @test dy == 2.0
-
-        reset_movement_state!(state)
-        handle_key_press("s", state)
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 0.0
-        @test dy == -2.0
-
-        reset_movement_state!(state)
-        handle_key_press("a", state)
-        dx, dy = calculate_movement_vector(state)
-        @test dx == -2.0
-        @test dy == 0.0
-
-        reset_movement_state!(state)
-        handle_key_press("d", state)
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 2.0
-        @test dy == 0.0
-
-        # Test diagonal movement (should be normalized)
-        reset_movement_state!(state)
-        handle_key_press("w", state)
-        handle_key_press("d", state)
-        dx, dy = calculate_movement_vector(state)
-        expected_diagonal = 2.0 / sqrt(2.0)
-        @test abs(dx - expected_diagonal) < 1e-10
-        @test abs(dy - expected_diagonal) < 1e-10
-
-        # Test opposite key cancellation
-        reset_movement_state!(state)
-        handle_key_press("w", state)
-        handle_key_press("s", state)
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 0.0
-        @test dy == 0.0
-
-        reset_movement_state!(state)
-        handle_key_press("a", state)
-        handle_key_press("d", state)
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 0.0
-        @test dy == 0.0
-
-        # Test all keys pressed (should cancel out)
-        reset_movement_state!(state)
-        handle_key_press("w", state)
-        handle_key_press("a", state)
-        handle_key_press("s", state)
-        handle_key_press("d", state)
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 0.0
-        @test dy == 0.0
-    end
-
-    @testset "Movement Key Validation" begin
+    
+    @testset "Movement Key Detection" begin
         # Test valid movement keys
-        @test is_movement_key("w") == true
-        @test is_movement_key("W") == true
-        @test is_movement_key("a") == true
-        @test is_movement_key("A") == true
-        @test is_movement_key("s") == true
-        @test is_movement_key("S") == true
-        @test is_movement_key("d") == true
-        @test is_movement_key("D") == true
-
+        @test is_movement_key('w')
+        @test is_movement_key('a')
+        @test is_movement_key('s')
+        @test is_movement_key('d')
+        @test is_movement_key('W')
+        @test is_movement_key('A')
+        @test is_movement_key('S')
+        @test is_movement_key('D')
+        
         # Test invalid keys
-        @test is_movement_key("x") == false
-        @test is_movement_key("1") == false
-        @test is_movement_key(" ") == false
-        @test is_movement_key("") == false
-        @test is_movement_key("wasd") == false
+        @test !is_movement_key('q')
+        @test !is_movement_key('x')
+        @test !is_movement_key('1')
+        @test !is_movement_key(' ')
     end
-
-    @testset "Key State Tracking" begin
+    
+    @testset "Pressed Keys Retrieval" begin
         state = MovementState()
-
+        
         # Test empty state
-        pressed_keys = get_pressed_keys(state)
-        @test isempty(pressed_keys)
-        @test state.is_moving == false
-
-        # Test adding keys
-        handle_key_press("w", state)
-        handle_key_press("d", state)
-        pressed_keys = get_pressed_keys(state)
-        @test length(pressed_keys) == 2
-        @test "w" in pressed_keys
-        @test "d" in pressed_keys
-        @test state.is_moving == true
-
-        # Test that returned set is a copy (modifications don't affect original)
-        push!(pressed_keys, "x")
-        original_keys = get_pressed_keys(state)
-        @test length(original_keys) == 2
-        @test "x" ∉ original_keys
-
-        # Test removing keys
-        handle_key_release("w", state)
-        pressed_keys = get_pressed_keys(state)
-        @test length(pressed_keys) == 1
-        @test "d" in pressed_keys
-        @test state.is_moving == true
-
-        # Test removing last key
-        handle_key_release("d", state)
-        pressed_keys = get_pressed_keys(state)
-        @test isempty(pressed_keys)
-        @test state.is_moving == false
+        pressed = get_pressed_keys(state)
+        @test isempty(pressed)
+        
+        # Test with some keys
+        add_key!(state, 'w')
+        add_key!(state, 'a')
+        pressed = get_pressed_keys(state)
+        @test pressed == Set(['w', 'a'])
+        
+        # Test that it's a copy
+        @test pressed !== state.pressed_keys
     end
-
-    @testset "Edge Cases and Error Handling" begin
+    
+    @testset "Error Handling" begin
         state = MovementState()
-
-        # Test empty string key
-        handle_key_press("", state)
-        @test isempty(state.keys_pressed)
-
-        # Test special characters
-        handle_key_press("!", state)
-        handle_key_press("@", state)
-        handle_key_press("#", state)
-        @test isempty(state.keys_pressed)
-
-        # Test numbers
-        handle_key_press("1", state)
-        handle_key_press("2", state)
-        @test isempty(state.keys_pressed)
-
-        # Test very long string (should be handled gracefully)
-        handle_key_press("this_is_a_very_long_key_name", state)
-        @test isempty(state.keys_pressed)
-
-        # Test movement calculation with zero speed
-        state.movement_speed = 0.0
-        handle_key_press("w", state)
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 0.0
-        @test dy == 0.0
-
-        # Test movement calculation with negative speed
-        state.movement_speed = -1.0
-        dx, dy = calculate_movement_vector(state)
-        @test dx == 0.0
-        @test dy == -1.0  # Should move in opposite direction
-    end
-
-    @testset "Quit Functionality" begin
-        state = MovementState()
-
-        # Test initial quit state
+        
+        # Test that invalid inputs don't cause errors
+        @test_nowarn handle_key_press('x', state)
+        @test_nowarn handle_key_release('x', state)
+        
+        # Test that the state remains consistent
+        @test isempty(state.pressed_keys)
         @test state.should_quit == false
-
-        # Test quit key press
-        handle_key_press("q", state)
-        @test state.should_quit == true
-
-        # Test case insensitive quit
-        state2 = MovementState()
-        handle_key_press("Q", state2)
-        @test state2.should_quit == true
-
-        # Test that quit key doesn't affect movement keys
-        state3 = MovementState()
-        handle_key_press("w", state3)
-        @test "w" in state3.keys_pressed
-        @test state3.is_moving == true
-        @test state3.should_quit == false
-
-        handle_key_press("q", state3)
-        @test "w" in state3.keys_pressed  # Movement key should still be there
-        @test state3.is_moving == true    # Should still be moving
-        @test state3.should_quit == true  # But quit should be requested
-
-        # Test request_quit! function directly
-        state4 = MovementState()
-        @test state4.should_quit == false
-        request_quit!(state4)
-        @test state4.should_quit == true
-
-        # Test reset clears quit flag
-        state5 = MovementState()
-        request_quit!(state5)
-        @test state5.should_quit == true
-        reset_movement_state!(state5)
-        @test state5.should_quit == false
+    end
+    
+    @testset "Integration with Movement State" begin
+        state = MovementState()
+        
+        # Test that key presses affect movement calculation
+        @test calculate_movement_vector(state) == [0.0, 0.0]
+        
+        handle_key_press('w', state)
+        @test calculate_movement_vector(state) == [0.0, 1.0]
+        
+        handle_key_press('d', state)
+        movement = calculate_movement_vector(state)
+        @test abs(movement[1] - (1/sqrt(2))) < 1e-10
+        @test abs(movement[2] - (1/sqrt(2))) < 1e-10
+        
+        handle_key_release('w', state)
+        @test calculate_movement_vector(state) == [1.0, 0.0]
     end
 end

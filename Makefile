@@ -1,17 +1,23 @@
-# Makefile for PointController.jl
+# Makefile for JuliaTestRocket
 # Provides convenient commands for development and release management
 
-.PHONY: help test version-current version-validate bump-patch bump-minor bump-major prepare-release clean
+.PHONY: help test test-fast version-current version-validate bump-patch bump-minor bump-major prepare-release clean setup release-patch release-minor release-major
 
 # Default target
 help:
-	@echo "PointController.jl Development Commands"
-	@echo "======================================"
+	@echo "JuliaTestRocket Development Commands"
+	@echo "===================================="
 	@echo ""
 	@echo "Development:"
 	@echo "  test              Run full test suite"
 	@echo "  test-fast         Run basic tests only"
 	@echo "  clean             Clean build artifacts"
+	@echo "  setup             Set up development environment"
+	@echo ""
+	@echo "Application:"
+	@echo "  run-interactive   Start interactive session"
+	@echo "  run-glmakie       Run with GLMakie (interactive)"
+	@echo "  run-cairomakie    Run with CairoMakie (headless)"
 	@echo ""
 	@echo "Version Management:"
 	@echo "  version-current   Show current version"
@@ -23,6 +29,7 @@ help:
 	@echo ""
 	@echo "Dependencies:"
 	@echo "  deps-status       Show dependency status"
+	@echo "  deps-outdated     Check for outdated dependencies"
 	@echo "  deps-update       Update dependencies (careful!)"
 	@echo ""
 
@@ -34,6 +41,19 @@ test:
 test-fast:
 	@echo "Running basic tests..."
 	julia --project=. test/runtests.jl
+
+# Application targets
+run-interactive:
+	@echo "Starting interactive session..."
+	julia --project=. -i start_interactive.jl
+
+run-glmakie:
+	@echo "Running with GLMakie..."
+	julia run_glmakie.jl
+
+run-cairomakie:
+	@echo "Running with CairoMakie..."
+	julia run_cairomakie.jl
 
 # Version management targets
 version-current:
@@ -80,7 +100,13 @@ clean:
 setup:
 	@echo "Setting up development environment..."
 	@julia --project=. -e "using Pkg; Pkg.instantiate()"
-	@julia verify_installation.jl
+	@echo "✓ Development environment ready!"
+	@echo ""
+	@echo "To start development:"
+	@echo "  make run-interactive    # Start interactive session"
+	@echo "  make run-glmakie        # Run with GLMakie"
+	@echo "  make run-cairomakie     # Run with CairoMakie"
+	@echo "  make test               # Run tests"
 
 # Release workflow
 release-patch: version-validate test bump-patch

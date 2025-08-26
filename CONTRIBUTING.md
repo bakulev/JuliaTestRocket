@@ -7,7 +7,8 @@ Thank you for your interest in contributing to JuliaTestRocket! 🎉
 ### Prerequisites
 - Julia 1.10 or higher
 - Git
-- OpenGL 3.3+ compatible graphics
+- For interactive development: OpenGL 3.3+ compatible graphics
+- For headless development: No graphics hardware required
 
 ### Getting Started
 
@@ -58,6 +59,7 @@ julia --project=. test/test_movement_state.jl
 - Create test files in the `test/` directory
 - Follow existing test patterns
 - Ensure good test coverage
+- Use appropriate backends for tests (CairoMakie for most tests, GLMakie for smoke tests)
 
 ### Documentation
 
@@ -119,7 +121,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 feat(movement): add support for custom movement speeds
 fix(input): handle edge case with simultaneous key releases
 docs: update installation instructions
-test(visualization): add comprehensive GLMakie tests
+test(visualization): add comprehensive CairoMakie tests
 ```
 
 ### Pull Request Process
@@ -131,7 +133,7 @@ test(visualization): add comprehensive GLMakie tests
 
 2. **Format your code**:
    ```bash
-   julia -e "using JuliaFormatter; format(\".\")"
+   jl -e "using JuliaFormatter; format(\".\")"
    ```
 
 3. **Update documentation** if needed
@@ -153,6 +155,7 @@ All contributions require code review. We look for:
 - **Tests**: Are there adequate tests?
 - **Documentation**: Is it properly documented?
 - **Performance**: Are there any performance concerns?
+- **Backend Compatibility**: Does it work with multiple Makie backends?
 
 ## Types of Contributions
 
@@ -160,12 +163,14 @@ All contributions require code review. We look for:
 - Check existing issues first
 - Create a minimal reproduction case
 - Include tests that verify the fix
+- Test with multiple backends if applicable
 
 ### New Features
 - Discuss in an issue first for large features
 - Follow existing code patterns
 - Include comprehensive tests
 - Update documentation
+- Ensure backend-agnostic design
 
 ### Documentation
 - Fix typos and improve clarity
@@ -177,14 +182,19 @@ All contributions require code review. We look for:
 - Include benchmarks showing improvement
 - Ensure no functionality is broken
 - Document any API changes
+- Test with multiple backends
 
 ## Development Tips
 
-### GLMakie Development
+### Backend-Agnostic Development
 ```julia
 # For development, you might want to use a visible backend
 using GLMakie
-GLMakie.activate!(debugging = true, visible = true)
+GLMakie.activate!()
+
+# For testing, use CairoMakie
+using CairoMakie
+CairoMakie.activate!()
 ```
 
 ### Debugging
@@ -197,8 +207,22 @@ global_logger(ConsoleLogger(stderr, Logging.Debug))
 ### Testing Graphics Code
 ```julia
 # For headless testing (CI environments)
-ENV["DISPLAY"] = ":99"  # Use virtual display
+using CairoMakie
+CairoMakie.activate!()
+
+# For interactive testing
+using GLMakie
+GLMakie.activate!()
 ```
+
+### Architecture Guidelines
+
+When contributing, keep in mind the backend-agnostic architecture:
+
+1. **Core Logic**: Keep core functionality independent of specific backends
+2. **Backend Detection**: Use `PointController.check_backend_loaded()` and `PointController.get_backend_name()`
+3. **Dynamic Access**: Access Makie types via `Main.` prefix when needed
+4. **Conditional Dependencies**: Keep backend-specific code in `[extras]` section of Project.toml
 
 ## Getting Help
 

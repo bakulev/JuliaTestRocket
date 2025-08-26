@@ -25,8 +25,8 @@ This document contains manual GitHub UI configuration steps that must be complet
 ### Task 1.2: Configure Repository About Section
 - [ ] Go to repository main page
 - [ ] Click the ⚙️ gear icon next to "About"
-- [ ] Add description: "Interactive Julia application for controlling a point using WASD keys with GLMakie visualization"
-- [ ] Add website: `https://[username].github.io/PointController/` (replace [username] with your GitHub username)
+- [ ] Add description: "Interactive Julia application for controlling a point using WASD keys with Makie.jl visualization"
+- [ ] Add website: `https://[username].github.io/JuliaTestRocket/` (replace [username] with your GitHub username)
 - [ ] Add topics: `julia`, `visualization`, `interactive`, `makie`, `gui`, `graphics`, `real-time`, `keyboard-control`
 - [ ] ✅ Check "Use your repository description"
 - [ ] ✅ Check "Releases"
@@ -169,7 +169,7 @@ cat ~/.ssh/documenter_key
 - [ ] Go to **Projects** tab
 - [ ] Click **New project**
 - [ ] Choose **Board** template
-- [ ] Name: "PointController Development"
+- [ ] Name: "JuliaTestRocket Development"
 - [ ] Set up columns: Backlog, In Progress, Review, Done
 - [ ] Link to repository issues and PRs
 
@@ -197,7 +197,7 @@ cat ~/.ssh/documenter_key
 **⚠️ Do this AFTER the documentation workflow is created and SSH keys are configured:**
 
 - [ ] Wait for documentation workflow to complete (check Actions tab)
-- [ ] Visit `https://[username].github.io/PointController/` (replace [username])
+- [ ] Visit `https://[username].github.io/JuliaTestRocket/` (replace [username])
 - [ ] Verify documentation site loads correctly
 - [ ] Check all pages are accessible:
   - [ ] Home page

@@ -33,7 +33,7 @@ GLMakie.activate!()
                 :update_coordinate_display!,
                 :create_time_observable, :format_current_time,
                 :setup_keyboard_events!, :is_movement_key, :get_pressed_keys,
-                :start_movement_timer!, :stop_movement_timer!, :update_movement_timing!,
+
             ]
 
             for func in required_functions

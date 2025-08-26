@@ -8,23 +8,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- CompatHelper.jl integration for automatic dependency updates
-- Comprehensive version management script with SemVer support
-- Automated dependency update policies and configuration
-- Release management workflow and documentation
+- Backend-agnostic architecture following modern Makie.jl best practices
+- Runtime backend detection and dynamic backend access
+- Support for multiple Makie backends (GLMakie, CairoMakie, WGLMakie)
+- Comprehensive CI/CD pipeline with backend-specific testing strategies
+- Dedicated execution scripts for different backends (`run_glmakie.jl`, `run_cairomakie.jl`)
+- Interactive startup script (`start_interactive.jl`)
+- GLMakie smoke tests for interactive functionality
+- CairoMakie-based visual regression tests
+- Modern dependency management with conditional dependencies
 
 ### Changed
-- Enhanced Project.toml with comprehensive compatibility constraints
-- Improved dependency management practices
+- Refactored core application logic to be backend-agnostic
+- Moved Makie backends from `[deps]` to `[extras]` in Project.toml
+- Updated all source files to use dynamic backend access via `Main.` prefix
+- Restructured test suite to separate backend-agnostic and backend-specific tests
+- Enhanced error handling and user guidance for backend activation
+- Improved application responsiveness by integrating movement updates into main event loop
+- Updated documentation to reflect modern Makie.jl patterns
 
 ### Fixed
-- N/A
+- Precompilation errors in headless CI environments
+- Keyboard event handling issues (event.button vs event.key)
+- Movement timer integration and responsiveness
+- Test failures related to logging output and floating-point precision
+- Module loading conflicts and timing issues
 
 ### Removed
-- N/A
-
-### Security
-- N/A
+- Direct GLMakie dependency from core module
+- Redundant execution scripts (`run_app.jl`, `run_app_ci.jl`, `run_tests.jl`)
+- Outdated installation verification script
+- Hardcoded backend assumptions throughout the codebase
 
 ## [0.1.0] - 2024-01-XX
 
@@ -126,7 +140,7 @@ When contributing to this project, please update the `[Unreleased]` section with
 
 ## Links
 
-- [Project Repository](https://github.com/user/PointController.jl)
-- [Documentation](https://user.github.io/PointController.jl/)
-- [Issue Tracker](https://github.com/user/PointController.jl/issues)
-- [Releases](https://github.com/user/PointController.jl/releases)
+- [Project Repository](https://github.com/bakulev/JuliaTestRocket)
+- [Documentation](https://bakulev.github.io/JuliaTestRocket/)
+- [Issue Tracker](https://github.com/bakulev/JuliaTestRocket/issues)
+- [Releases](https://github.com/bakulev/JuliaTestRocket/releases)

@@ -2,7 +2,16 @@
 
 ## Common Issues
 
-### GLMakie Backend Issues
+### Backend Activation Issues
+
+**"No Makie backend activated"**
+```julia
+# Solution: Activate a backend before using PointController
+using GLMakie  # or CairoMakie, WGLMakie
+GLMakie.activate!()
+using PointController
+run_point_controller()
+```
 
 **"GLMakie backend not activated"**
 ```julia
@@ -17,6 +26,13 @@ run_point_controller()
 - Update graphics drivers to latest version
 - Verify OpenGL 3.3+ support: `glxinfo | grep "OpenGL version"` (Linux)
 - Try software rendering if hardware acceleration unavailable
+- **Alternative**: Use CairoMakie for headless operation:
+  ```julia
+  using CairoMakie
+  CairoMakie.activate!()
+  using PointController
+  run_point_controller()
+  ```
 
 ### Display Issues
 
@@ -24,6 +40,7 @@ run_point_controller()
 - Check display system configuration (DISPLAY variable on Linux)
 - Verify X11 forwarding if using SSH: `ssh -X username@hostname`
 - Ensure window manager is running
+- **Alternative**: Use CairoMakie for headless operation
 
 **Black or corrupted window**
 - Update graphics drivers
@@ -66,7 +83,8 @@ run_point_controller()
 
 **"Display system not available"**
 ```
-Solution: Ensure X11/Wayland is running or enable X11 forwarding for SSH
+Solution: Use CairoMakie or ensure display system is available
+For SSH: Enable X11 forwarding or use CairoMakie
 ```
 
 **"Out of memory error"**
@@ -80,6 +98,7 @@ Solution:
 1. Update graphics drivers
 2. Check OpenGL support: glxinfo | grep "OpenGL"
 3. Try software rendering: export LIBGL_ALWAYS_SOFTWARE=1
+4. Use CairoMakie as alternative: using CairoMakie; CairoMakie.activate!()
 ```
 
 ### Julia Package Errors
@@ -96,7 +115,7 @@ Pkg.instantiate()
 ```julia
 # Solution: Restart Julia session and reload packages
 # Exit Julia and restart, then:
-using GLMakie
+using GLMakie  # or your preferred backend
 GLMakie.activate!()
 using PointController
 ```
@@ -115,6 +134,8 @@ startx
 
 # For SSH, enable X11 forwarding
 ssh -X username@hostname
+
+# Alternative: Use CairoMakie for headless operation
 ```
 
 **Wayland Compatibility**
@@ -143,6 +164,32 @@ GLMakie.activate!(scalefactor = 2.0)
 - Update graphics drivers
 - Try OpenGL mode if DirectX fails
 
+## Backend-Specific Solutions
+
+### GLMakie Issues
+```julia
+# Try different GLMakie settings
+GLMakie.activate!(
+    debugging = true,
+    vsync = false,
+    render_on_demand = true
+)
+```
+
+### CairoMakie Issues
+```julia
+# CairoMakie is generally more reliable in headless environments
+using CairoMakie
+CairoMakie.activate!()
+```
+
+### WGLMakie Issues
+```julia
+# WGLMakie requires a web browser environment
+using WGLMakie
+WGLMakie.activate!()
+```
+
 ## Debug Mode
 
 Enable debugging for more detailed error information:
@@ -167,6 +214,7 @@ If you encounter issues not covered here:
    - Graphics card/driver information
    - Complete error message
    - Steps to reproduce
+   - Backend being used (GLMakie, CairoMakie, WGLMakie)
 
 3. **Include system information**:
    ```julia
@@ -176,4 +224,8 @@ If you encounter issues not covered here:
    
    # For graphics information (Linux)
    run(`glxinfo | grep "OpenGL"`)
+   
+   # Check which backend is active
+   using PointController
+   PointController.get_backend_name()
    ```
