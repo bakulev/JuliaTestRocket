@@ -1,6 +1,7 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
+Observables = "510215fc-4207-5dde-b226-833fc4488ee2"
 PointController = "eae52b99-c8d7-4aa0-bde8-6d33da01be07"
 
 [compat]

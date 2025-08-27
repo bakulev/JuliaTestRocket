@@ -69,7 +69,28 @@ using StaticArrays: SVector
 # Define Point2f as an alias for SVector{2, Float32}
 const Point2f = SVector{2, Float32}
 
-# Key mappings for movement control
+"""
+    KEY_MAPPINGS
+
+A dictionary mapping keyboard keys to their corresponding movement vectors.
+Each key maps to a 2-element array representing [x, y] movement direction.
+
+## Key Mappings
+
+- `'w'` or `'W'`: Move up [0, 1]
+- `'s'` or `'S'`: Move down [0, -1]  
+- `'a'` or `'A'`: Move left [-1, 0]
+- `'d'` or `'D'`: Move right [1, 0]
+
+## Usage
+
+```julia
+# Check if a key is a movement key
+if haskey(KEY_MAPPINGS, key)
+    movement = KEY_MAPPINGS[key]
+end
+```
+"""
 const KEY_MAPPINGS = Dict(
     'w' => [0, 1],    # Up
     's' => [0, -1],   # Down

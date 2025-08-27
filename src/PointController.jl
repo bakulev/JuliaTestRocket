@@ -87,7 +87,7 @@ export handle_key_press,
     handle_key_release, is_movement_key, get_pressed_keys, setup_keyboard_events!
 # Export visualization functions
 export create_visualization,
-    create_point_position, update_point_position!, get_current_position
+    create_point_position, get_current_position
 export apply_movement_to_position!, update_position_from_state!, setup_visualization_window
 export update_coordinate_display!, create_time_observable
 
@@ -204,7 +204,8 @@ function run_point_controller()
 
         # Create movement state
         log_component_initialization("movement state")
-        movement_state = MovementState(movement_speed = 0.1)  # Movement speed of 0.1 units per frame
+          # Movement speed in units per second
+        movement_state = MovementState(movement_speed = 1.5)
 
         # Set up Makie window with proper configuration and error handling
         log_component_initialization("window")
@@ -266,7 +267,7 @@ function run_point_controller()
                 last_update_time = current_time
             end
 
-            sleep(0.5)  # Very small sleep to prevent busy waiting but allow responsive updates
+            sleep(0.1)  # Very small sleep to prevent busy waiting but allow responsive updates
         end
 
         # Handle quit request

@@ -37,8 +37,6 @@ calculate_movement_vector
 reset_movement_state!
 request_quit!
 get_pressed_keys
-start_movement_timer!
-stop_movement_timer!
 update_movement_timing!
 ```
 
@@ -55,7 +53,6 @@ clear_all_keys_safely!
 
 ```@docs
 create_visualization
-update_point_position!
 create_point_position
 get_current_position
 update_position_from_state!

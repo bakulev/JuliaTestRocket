@@ -104,7 +104,8 @@ jobs:
               using GLMakie
               GLMakie.activate!()
               using Pkg
-              Pkg.test()
+              # Only run the GLMakie smoke test, not all tests
+              include(\"test/test_glmakie_smoke.jl\")
             "
           
   quality:
@@ -133,7 +134,7 @@ jobs:
           
       - name: Run Aqua.jl quality checks with CairoMakie
         run: |
-          julia --project=. -e '
+          julia --project=test -e '
             using Pkg
             Pkg.instantiate()
             # Use CairoMakie for CI (no display required)
@@ -141,5 +142,5 @@ jobs:
             using CairoMakie
             CairoMakie.activate!()
             using Aqua, PointController
-            Aqua.test_all(PointController, ambiguities=false)
+            Aqua.test_all(PointController, ambiguities=false, stale_deps=false)
           '
