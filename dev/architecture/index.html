@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Architecture · JuliaTestRocket</title><meta name="title" content="Architecture · JuliaTestRocket"/><meta property="og:title" content="Architecture · JuliaTestRocket"/><meta property="twitter:title" content="Architecture · JuliaTestRocket"/><meta name="description" content="Documentation for JuliaTestRocket."/><meta property="og:description" content="Documentation for JuliaTestRocket."/><meta property="twitter:description" content="Documentation for JuliaTestRocket."/><meta property="og:url" content="https://bakulev.github.io/JuliaTestRocket/architecture/"/><meta property="twitter:url" content="https://bakulev.github.io/JuliaTestRocket/architecture/"/><link rel="canonical" href="https://bakulev.github.io/JuliaTestRocket/architecture/"/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../getting-started/">Getting Started</a></li><li class="is-active"><a class="tocitem" href>Architecture</a><ul class="internal"><li><a class="tocitem" href="#Table-of-Contents"><span>Table of Contents</span></a></li><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#Visualization-Architecture"><span>Visualization Architecture</span></a></li><li><a class="tocitem" href="#Input-Processing-Architecture"><span>Input Processing Architecture</span></a></li><li><a class="tocitem" href="#Observable-System"><span>Observable System</span></a></li><li><a class="tocitem" href="#Event-Flow"><span>Event Flow</span></a></li><li><a class="tocitem" href="#Performance-Considerations"><span>Performance Considerations</span></a></li><li><a class="tocitem" href="#Error-Handling"><span>Error Handling</span></a></li><li><a class="tocitem" href="#Conclusion"><span>Conclusion</span></a></li></ul></li><li><a class="tocitem" href="../api/">API Reference</a></li><li><a class="tocitem" href="../examples/">Examples</a></li><li><a class="tocitem" href="../troubleshooting/">Troubleshooting</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Architecture</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Architecture</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/bakulev/JuliaTestRocket/blob/main/docs/src/architecture.md#" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="PointController-Architecture"><a class="docs-heading-anchor" href="#PointController-Architecture">PointController Architecture</a><a id="PointController-Architecture-1"></a><a class="docs-heading-anchor-permalink" href="#PointController-Architecture" title="Permalink"></a></h1><p>This document describes the core architectural patterns and design principles used in the PointController application, focusing on visualization and input processing systems.</p><h2 id="Table-of-Contents"><a class="docs-heading-anchor" href="#Table-of-Contents">Table of Contents</a><a id="Table-of-Contents-1"></a><a class="docs-heading-anchor-permalink" href="#Table-of-Contents" title="Permalink"></a></h2><ol><li><a href="#overview">Overview</a></li><li><a href="#visualization-architecture">Visualization Architecture</a></li><li><a href="#input-processing-architecture">Input Processing Architecture</a></li><li><a href="#observable-system">Observable System</a></li><li><a href="#event-flow">Event Flow</a></li><li><a href="#performance-considerations">Performance Considerations</a></li><li><a href="#error-handling">Error Handling</a></li></ol><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>PointController follows a <strong>reactive, event-driven architecture</strong> built on top of Makie&#39;s Observable system. The application is designed with clear separation of concerns, robust error handling, and performance optimizations.</p><h3 id="Key-Architectural-Principles"><a class="docs-heading-anchor" href="#Key-Architectural-Principles">Key Architectural Principles</a><a id="Key-Architectural-Principles-1"></a><a class="docs-heading-anchor-permalink" href="#Key-Architectural-Principles" title="Permalink"></a></h3><ul><li><strong>Reactive Programming</strong>: Uses Makie&#39;s Observable system for automatic UI updates</li><li><strong>Event-Driven</strong>: Asynchronous event processing, not polling</li><li><strong>Separation of Concerns</strong>: Each module handles a specific aspect</li><li><strong>State-Based</strong>: Movement calculated from current state, not individual events</li><li><strong>Error Recovery</strong>: Graceful handling of failures at each layer</li></ul><h2 id="Visualization-Architecture"><a class="docs-heading-anchor" href="#Visualization-Architecture">Visualization Architecture</a><a id="Visualization-Architecture-1"></a><a class="docs-heading-anchor-permalink" href="#Visualization-Architecture" title="Permalink"></a></h2><h3 id="Core-Components"><a class="docs-heading-anchor" href="#Core-Components">Core Components</a><a id="Core-Components-1"></a><a class="docs-heading-anchor-permalink" href="#Core-Components" title="Permalink"></a></h3><p>The visualization system is built around Makie&#39;s Observable pattern with the following components:</p><h4 id="1.-Observable-Position-Management"><a class="docs-heading-anchor" href="#1.-Observable-Position-Management">1. Observable Position Management</a><a id="1.-Observable-Position-Management-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Observable-Position-Management" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Create observable point position
+point_position = Observable(Point2f(0, 0))
+
+# Visual elements automatically update when position changes
+Main.scatter!(ax, point_position,
+    color = :red,
+    markersize = 20,
+    marker = :circle,
+    strokewidth = 0,
+)</code></pre><h4 id="2.-Reactive-Text-Display"><a class="docs-heading-anchor" href="#2.-Reactive-Text-Display">2. Reactive Text Display</a><a id="2.-Reactive-Text-Display-1"></a><a class="docs-heading-anchor-permalink" href="#2.-Reactive-Text-Display" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Coordinate text that updates automatically
+coordinate_text = Main.lift(point_position) do pos
+    x_rounded = round(pos[1], digits = 2)
+    y_rounded = round(pos[2], digits = 2)
+    return &quot;Position: ($x_rounded, $y_rounded)&quot;
+end
+
+# Time display
+time_text = Main.lift(current_time_obs) do time_val
+    return &quot;Time: $time_val&quot;
+end</code></pre><h4 id="3.-Visual-Layout"><a class="docs-heading-anchor" href="#3.-Visual-Layout">3. Visual Layout</a><a id="3.-Visual-Layout-1"></a><a class="docs-heading-anchor-permalink" href="#3.-Visual-Layout" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Create figure with optimized configuration
+fig = Main.Figure(
+    size = (800, 600),
+    title = &quot;Point Controller&quot;,
+    figure_padding = 10,
+    fontsize = 12,
+)
+
+# Create axis with coordinate system
+ax = Main.Axis(fig[1, 1],
+    xlabel = &quot;X Coordinate&quot;,
+    ylabel = &quot;Y Coordinate&quot;,
+    title = &quot;Interactive Point Control (Use WASD keys)&quot;,
+    aspect = Main.DataAspect(),
+    limits = (-10, 10, -10, 10),
+)</code></pre><h3 id="How-Visualization-Updates-Work"><a class="docs-heading-anchor" href="#How-Visualization-Updates-Work">How Visualization Updates Work</a><a id="How-Visualization-Updates-Work-1"></a><a class="docs-heading-anchor-permalink" href="#How-Visualization-Updates-Work" title="Permalink"></a></h3><ol><li><strong>Position Change</strong>: <code>point_position[] = new_value</code></li><li><strong>Observable Trigger</strong>: All connected visual elements are notified</li><li><strong>Automatic Re-render</strong>: Makie automatically updates the display</li><li><strong>No Manual Refresh</strong>: No explicit display calls needed</li></ol><h3 id="Performance-Optimizations"><a class="docs-heading-anchor" href="#Performance-Optimizations">Performance Optimizations</a><a id="Performance-Optimizations-1"></a><a class="docs-heading-anchor-permalink" href="#Performance-Optimizations" title="Permalink"></a></h3><ul><li><strong>Render on Demand</strong>: Only redraws when Observables change</li><li><strong>Efficient Markers</strong>: Optimized point rendering without overdraw</li><li><strong>Minimal Grid</strong>: Simplified grid system for better performance</li><li><strong>Frame Rate Control</strong>: 60 FPS update frequency for smooth animation</li></ul><h2 id="Input-Processing-Architecture"><a class="docs-heading-anchor" href="#Input-Processing-Architecture">Input Processing Architecture</a><a id="Input-Processing-Architecture-1"></a><a class="docs-heading-anchor-permalink" href="#Input-Processing-Architecture" title="Permalink"></a></h2><h3 id="4-Layer-Event-Processing-System"><a class="docs-heading-anchor" href="#4-Layer-Event-Processing-System">4-Layer Event Processing System</a><a id="4-Layer-Event-Processing-System-1"></a><a class="docs-heading-anchor-permalink" href="#4-Layer-Event-Processing-System" title="Permalink"></a></h3><p>The input processing follows a layered architecture that separates concerns and provides robust error handling.</p><h4 id="Layer-1:-Event-Capture-(Makie-Backend)"><a class="docs-heading-anchor" href="#Layer-1:-Event-Capture-(Makie-Backend)">Layer 1: Event Capture (Makie Backend)</a><a id="Layer-1:-Event-Capture-(Makie-Backend)-1"></a><a class="docs-heading-anchor-permalink" href="#Layer-1:-Event-Capture-(Makie-Backend)" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Makie captures raw keyboard events from the OS
+Main.on(Main.events(fig).keyboardbutton) do event
+    key_string = string(event.key)
+    key_char = first(key_string)
+    
+    if event.action == Main.Keyboard.press
+        handle_key_press(key_char, state)
+    elseif event.action == Main.Keyboard.release
+        handle_key_release(key_char, state)
+    end
+end</code></pre><p><strong>Responsibilities:</strong></p><ul><li>Capture raw keyboard events from the operating system</li><li>Convert events to structured format with key and action</li><li>Trigger callback functions for each event</li></ul><h4 id="Layer-2:-Event-Processing-(Input-Handler)"><a class="docs-heading-anchor" href="#Layer-2:-Event-Processing-(Input-Handler)">Layer 2: Event Processing (Input Handler)</a><a id="Layer-2:-Event-Processing-(Input-Handler)-1"></a><a class="docs-heading-anchor-permalink" href="#Layer-2:-Event-Processing-(Input-Handler)" title="Permalink"></a></h4><pre><code class="language-julia hljs">function handle_key_press(key::Char, state::MovementState)
+    # Handle quit key
+    if lowercase(key) == &#39;q&#39;
+        request_quit!(state)
+        return state
+    end
+
+    # Only process WASD keys for movement
+    if haskey(KEY_MAPPINGS, key)
+        add_key!(state, key)
+        log_user_action(&quot;Key pressed&quot;, string(key))
+    else
+        # Silently ignore non-movement keys
+        @debug &quot;Ignored key: $key&quot;
+    end
+end</code></pre><p><strong>Responsibilities:</strong></p><ul><li>Validate and filter keyboard input</li><li>Handle special keys (quit, movement keys)</li><li>Update movement state</li><li>Log user actions for debugging</li><li>Gracefully handle invalid inputs</li></ul><h4 id="Layer-3:-State-Management-(Movement-State)"><a class="docs-heading-anchor" href="#Layer-3:-State-Management-(Movement-State)">Layer 3: State Management (Movement State)</a><a id="Layer-3:-State-Management-(Movement-State)-1"></a><a class="docs-heading-anchor-permalink" href="#Layer-3:-State-Management-(Movement-State)" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Key mappings for movement
+const KEY_MAPPINGS = Dict(
+    &#39;w&#39; =&gt; [0, 1],    # Up
+    &#39;s&#39; =&gt; [0, -1],   # Down
+    &#39;a&#39; =&gt; [-1, 0],   # Left
+    &#39;d&#39; =&gt; [1, 0],    # Right
+    &#39;W&#39; =&gt; [0, 1],    # Up (shift)
+    &#39;S&#39; =&gt; [0, -1],   # Down (shift)
+    &#39;A&#39; =&gt; [-1, 0],   # Left (shift)
+    &#39;D&#39; =&gt; [1, 0],    # Right (shift)
+)
+
+function calculate_movement_vector(state::MovementState)
+    if isempty(state.pressed_keys)
+        return [0.0, 0.0]
+    end
+
+    # Calculate total movement vector from all pressed keys
+    total_movement = [0.0, 0.0]
+    for key in state.pressed_keys
+        if haskey(KEY_MAPPINGS, key)
+            movement = KEY_MAPPINGS[key]
+            total_movement[1] += movement[1]
+            total_movement[2] += movement[2]
+        end
+    end
+
+    # Normalize for consistent speed
+    magnitude = sqrt(total_movement[1]^2 + total_movement[2]^2)
+    if magnitude &gt; 0
+        return [total_movement[1] / magnitude, total_movement[2] / magnitude]
+    else
+        return [0.0, 0.0]
+    end
+end</code></pre><p><strong>Responsibilities:</strong></p><ul><li>Maintain set of currently pressed keys</li><li>Map keys to movement vectors</li><li>Calculate combined movement from multiple keys</li><li>Normalize diagonal movement for consistent speed</li><li>Handle movement timing and speed control</li></ul><h4 id="Layer-4:-Application-Loop-(Main-Loop)"><a class="docs-heading-anchor" href="#Layer-4:-Application-Loop-(Main-Loop)">Layer 4: Application Loop (Main Loop)</a><a id="Layer-4:-Application-Loop-(Main-Loop)-1"></a><a class="docs-heading-anchor-permalink" href="#Layer-4:-Application-Loop-(Main-Loop)" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Main application loop at 60 FPS
+while Main.events(fig).window_open[] &amp;&amp; !movement_state.should_quit
+    current_time = time()
+    
+    if current_time - last_update_time &gt;= update_interval  # 60 FPS
+        # Update time display
+        time_obs[] = format_current_time()
+        
+        # Update timing
+        update_movement_timing!(movement_state, current_time)
+        
+        # Update position based on current key states
+        apply_movement_to_position!(point_position, movement_state)
+        
+        @debug &quot;Main loop update: position = $(point_position[]), keys = $(movement_state.pressed_keys)&quot;
+    end
+    
+    sleep(0.1)  # Small sleep to prevent busy waiting
+end</code></pre><p><strong>Responsibilities:</strong></p><ul><li>Run at consistent 60 FPS for smooth movement</li><li>Read current state of pressed keys</li><li>Apply movement calculations to position</li><li>Update Observables to trigger visual changes</li><li>Handle application lifecycle (quit, window close)</li></ul><h2 id="Observable-System"><a class="docs-heading-anchor" href="#Observable-System">Observable System</a><a id="Observable-System-1"></a><a class="docs-heading-anchor-permalink" href="#Observable-System" title="Permalink"></a></h2><h3 id="What-are-Observables?"><a class="docs-heading-anchor" href="#What-are-Observables?">What are Observables?</a><a id="What-are-Observables?-1"></a><a class="docs-heading-anchor-permalink" href="#What-are-Observables?" title="Permalink"></a></h3><p>Observables are reactive variables that automatically trigger updates when their values change. They form the backbone of the reactive visualization system.</p><h3 id="Observable-Patterns-in-PointController"><a class="docs-heading-anchor" href="#Observable-Patterns-in-PointController">Observable Patterns in PointController</a><a id="Observable-Patterns-in-PointController-1"></a><a class="docs-heading-anchor-permalink" href="#Observable-Patterns-in-PointController" title="Permalink"></a></h3><h4 id="1.-Observable-Creation"><a class="docs-heading-anchor" href="#1.-Observable-Creation">1. Observable Creation</a><a id="1.-Observable-Creation-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Observable-Creation" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Create observable with initial value
+point_position = Observable(Point2f(0, 0))
+time_obs = Observable(format_current_time())</code></pre><h4 id="2.-Observable-Access"><a class="docs-heading-anchor" href="#2.-Observable-Access">2. Observable Access</a><a id="2.-Observable-Access-1"></a><a class="docs-heading-anchor-permalink" href="#2.-Observable-Access" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Reading from Observable
+current_pos = point_position[]                    # Get current value
+@debug &quot;position = $(point_position[])&quot;           # Access in debug
+
+# Writing to Observable
+position[] = Point2f(new_x, new_y)               # Set new value
+time_obs[] = format_current_time()               # Update time</code></pre><h4 id="3.-Observable-Connection"><a class="docs-heading-anchor" href="#3.-Observable-Connection">3. Observable Connection</a><a id="3.-Observable-Connection-1"></a><a class="docs-heading-anchor-permalink" href="#3.-Observable-Connection" title="Permalink"></a></h4><pre><code class="language-julia hljs"># Connect Observable to visual element
+Main.scatter!(ax, point_position, ...)           # Point follows Observable
+
+# Create reactive text that updates with Observable
+coordinate_text = Main.lift(point_position) do pos
+    return &quot;Position: ($(pos[1]), $(pos[2]))&quot;
+end</code></pre><h3 id="How-to-Identify-Observables"><a class="docs-heading-anchor" href="#How-to-Identify-Observables">How to Identify Observables</a><a id="How-to-Identify-Observables-1"></a><a class="docs-heading-anchor-permalink" href="#How-to-Identify-Observables" title="Permalink"></a></h3><table><tr><th style="text-align: right">Pattern</th><th style="text-align: right">Observable</th><th style="text-align: right">Regular Variable</th></tr><tr><td style="text-align: right"><strong>Creation</strong></td><td style="text-align: right"><code>obs = Observable(value)</code></td><td style="text-align: right"><code>var = value</code></td></tr><tr><td style="text-align: right"><strong>Reading</strong></td><td style="text-align: right"><code>value = obs[]</code></td><td style="text-align: right"><code>value = var</code></td></tr><tr><td style="text-align: right"><strong>Writing</strong></td><td style="text-align: right"><code>obs[] = new_value</code></td><td style="text-align: right"><code>var = new_value</code></td></tr><tr><td style="text-align: right"><strong>Type</strong></td><td style="text-align: right"><code>Observable{T}</code></td><td style="text-align: right"><code>T</code></td></tr><tr><td style="text-align: right"><strong>Behavior</strong></td><td style="text-align: right">Triggers updates when changed</td><td style="text-align: right">No automatic updates</td></tr></table><h2 id="Event-Flow"><a class="docs-heading-anchor" href="#Event-Flow">Event Flow</a><a id="Event-Flow-1"></a><a class="docs-heading-anchor-permalink" href="#Event-Flow" title="Permalink"></a></h2><h3 id="Complete-Input-to-Display-Flow"><a class="docs-heading-anchor" href="#Complete-Input-to-Display-Flow">Complete Input-to-Display Flow</a><a id="Complete-Input-to-Display-Flow-1"></a><a class="docs-heading-anchor-permalink" href="#Complete-Input-to-Display-Flow" title="Permalink"></a></h3><pre><code class="nohighlight hljs">User presses &#39;W&#39; key
+        ↓
+┌─────────────────────────────────────┐
+│ 1. OS → Makie Backend (GLMakie)     │ ← Raw keyboard event capture
+│    event.key = :w, action = :press  │
+└─────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────┐
+│ 2. Input Handler                    │ ← Event validation &amp; processing
+│    handle_key_press(&#39;w&#39;, state)     │
+│    → add_key!(state, &#39;w&#39;)           │
+└─────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────┐
+│ 3. Movement State                   │ ← State management
+│    state.pressed_keys = Set([&#39;w&#39;])  │
+│    calculate_movement_vector()      │
+│    → [0.0, 1.0] (upward vector)    │
+└─────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────┐
+│ 4. Main Loop (60 FPS)              │ ← Application loop
+│    apply_movement_to_position!()    │
+│    → point_position[] = new_pos     │
+└─────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────┐
+│ 5. Observable System                │ ← Reactive updates
+│    point_position[] triggers        │
+│    → scatter plot updates           │
+│    → coordinate text updates        │
+└─────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────┐
+│ 6. Display                          │ ← Visual rendering
+│    Red point moves upward           │
+│    Coordinates show new position    │
+└─────────────────────────────────────┘</code></pre><h3 id="Key-Benefits-of-This-Flow"><a class="docs-heading-anchor" href="#Key-Benefits-of-This-Flow">Key Benefits of This Flow</a><a id="Key-Benefits-of-This-Flow-1"></a><a class="docs-heading-anchor-permalink" href="#Key-Benefits-of-This-Flow" title="Permalink"></a></h3><ol><li><strong>Asynchronous</strong>: Input processing doesn&#39;t block visualization</li><li><strong>State-Based</strong>: Movement calculated from current state, not individual events</li><li><strong>Reactive</strong>: Display updates automatically when state changes</li><li><strong>Efficient</strong>: Only updates when necessary, not every frame</li><li><strong>Robust</strong>: Error handling at each layer</li></ol><h2 id="Performance-Considerations"><a class="docs-heading-anchor" href="#Performance-Considerations">Performance Considerations</a><a id="Performance-Considerations-1"></a><a class="docs-heading-anchor-permalink" href="#Performance-Considerations" title="Permalink"></a></h2><h3 id="Optimization-Strategies"><a class="docs-heading-anchor" href="#Optimization-Strategies">Optimization Strategies</a><a id="Optimization-Strategies-1"></a><a class="docs-heading-anchor-permalink" href="#Optimization-Strategies" title="Permalink"></a></h3><ol><li><strong>Render on Demand</strong>: Only redraw when Observables change</li><li><strong>Efficient State Management</strong>: Use Set for pressed keys (O(1) operations)</li><li><strong>Frame Rate Control</strong>: 60 FPS main loop for smooth animation</li><li><strong>Minimal Allocations</strong>: Reuse objects where possible</li><li><strong>Lazy Updates</strong>: Update timing only when needed</li></ol><h3 id="Memory-Management"><a class="docs-heading-anchor" href="#Memory-Management">Memory Management</a><a id="Memory-Management-1"></a><a class="docs-heading-anchor-permalink" href="#Memory-Management" title="Permalink"></a></h3><ul><li><strong>Observable Cleanup</strong>: Makie handles Observable lifecycle</li><li><strong>State Reset</strong>: Clear pressed keys when window loses focus</li><li><strong>Error Recovery</strong>: Graceful cleanup on failures</li></ul><h2 id="Error-Handling"><a class="docs-heading-anchor" href="#Error-Handling">Error Handling</a><a id="Error-Handling-1"></a><a class="docs-heading-anchor-permalink" href="#Error-Handling" title="Permalink"></a></h2><h3 id="Multi-Layer-Error-Recovery"><a class="docs-heading-anchor" href="#Multi-Layer-Error-Recovery">Multi-Layer Error Recovery</a><a id="Multi-Layer-Error-Recovery-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-Layer-Error-Recovery" title="Permalink"></a></h3><h4 id="1.-Input-Layer-Errors"><a class="docs-heading-anchor" href="#1.-Input-Layer-Errors">1. Input Layer Errors</a><a id="1.-Input-Layer-Errors-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Input-Layer-Errors" title="Permalink"></a></h4><pre><code class="language-julia hljs">function handle_key_press(key::Char, state::MovementState)
+    try
+        # Process key press
+        if haskey(KEY_MAPPINGS, key)
+            add_key!(state, key)
+        end
+    catch e
+        @warn &quot;Error processing key press&quot; exception=string(e)
+        return state  # Return unchanged state
+    end
+end</code></pre><h4 id="2.-State-Management-Errors"><a class="docs-heading-anchor" href="#2.-State-Management-Errors">2. State Management Errors</a><a id="2.-State-Management-Errors-1"></a><a class="docs-heading-anchor-permalink" href="#2.-State-Management-Errors" title="Permalink"></a></h4><pre><code class="language-julia hljs">function apply_movement_to_position!(position::Observable{Point2f}, state::MovementState)
+    try
+        # Calculate and apply movement
+        position[] = new_position
+    catch e
+        @error &quot;Error applying movement&quot; exception=string(e)
+        # Position remains unchanged
+    end
+end</code></pre><h4 id="3.-Visualization-Errors"><a class="docs-heading-anchor" href="#3.-Visualization-Errors">3. Visualization Errors</a><a id="3.-Visualization-Errors-1"></a><a class="docs-heading-anchor-permalink" href="#3.-Visualization-Errors" title="Permalink"></a></h4><pre><code class="language-julia hljs">coordinate_text = Main.lift(point_position) do pos
+    try
+        return &quot;Position: ($(pos[1]), $(pos[2]))&quot;
+    catch e
+        @warn &quot;Error updating coordinate text&quot; exception=string(e)
+        return &quot;Position: (Error, Error)&quot;
+    end
+end</code></pre><h3 id="Error-Recovery-Strategies"><a class="docs-heading-anchor" href="#Error-Recovery-Strategies">Error Recovery Strategies</a><a id="Error-Recovery-Strategies-1"></a><a class="docs-heading-anchor-permalink" href="#Error-Recovery-Strategies" title="Permalink"></a></h3><ol><li><strong>Graceful Degradation</strong>: Continue operation with reduced functionality</li><li><strong>State Preservation</strong>: Don&#39;t corrupt state on errors</li><li><strong>User Feedback</strong>: Log errors for debugging</li><li><strong>Automatic Recovery</strong>: Clear stuck states (e.g., keys on focus loss)</li></ol><h2 id="Conclusion"><a class="docs-heading-anchor" href="#Conclusion">Conclusion</a><a id="Conclusion-1"></a><a class="docs-heading-anchor-permalink" href="#Conclusion" title="Permalink"></a></h2><p>The PointController architecture demonstrates modern reactive programming patterns with:</p><ul><li><strong>Clear separation of concerns</strong> across multiple layers</li><li><strong>Reactive visualization</strong> using Makie&#39;s Observable system</li><li><strong>Robust input processing</strong> with comprehensive error handling</li><li><strong>Performance optimizations</strong> for smooth real-time interaction</li><li><strong>Maintainable code structure</strong> with well-defined interfaces</li></ul><p>This architecture provides a solid foundation for interactive applications that require real-time input processing and responsive visualization.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../getting-started/">« Getting Started</a><a class="docs-footer-nextpage" href="../api/">API Reference »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Wednesday 27 August 2025 06:54">Wednesday 27 August 2025</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
