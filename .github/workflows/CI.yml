@@ -59,7 +59,8 @@ jobs:
             Pkg.add(\"CairoMakie\")
             using CairoMakie
             CairoMakie.activate!()
-            Pkg.test(coverage=true)
+            # Run tests manually to avoid GLMakie precompilation
+            include(\"test/runtests.jl\")
           "
           
       - uses: julia-actions/julia-processcoverage@v1
