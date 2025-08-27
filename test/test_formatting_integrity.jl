@@ -6,11 +6,11 @@ using Test
         # This specifically tests the files that had formatting changes (blank lines added)
 
         modified_files = [
-            "src/PointController.jl",
-            "src/input_handler.jl",
-            "src/logging_config.jl",
-            "src/movement_state.jl",
-            "src/visualization.jl",
+            "../src/PointController.jl",
+            "../src/input_handler.jl",
+            "../src/logging_config.jl",
+            "../src/movement_state.jl",
+            "../src/visualization.jl",
         ]
 
         for file in modified_files
@@ -32,11 +32,11 @@ using Test
     @testset "File Ending Validation" begin
         # Test that files end with proper newlines after formatting changes
         modified_files = [
-            "src/PointController.jl",
-            "src/input_handler.jl",
-            "src/logging_config.jl",
-            "src/movement_state.jl",
-            "src/visualization.jl",
+            "../src/PointController.jl",
+            "../src/input_handler.jl",
+            "../src/logging_config.jl",
+            "../src/movement_state.jl",
+            "../src/visualization.jl",
         ]
 
         for file in modified_files
