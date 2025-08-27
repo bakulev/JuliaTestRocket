@@ -50,14 +50,12 @@ jobs:
             # Print coverage summary
             println(\"\\n📊 COVERAGE SUMMARY:\")
             println(\"=\"^50)
-            local total_lines = 0
-            local total_covered = 0
+            total_lines = sum([length(fc.coverage) for fc in coverage])
+            total_covered = sum([sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage]) for fc in coverage])
             for fc in coverage
               covered = sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage])
               total = length(fc.coverage)
               percentage = round(covered/total*100, digits=2)
-              total_lines += total
-              total_covered += covered
               println(\"  \$(fc.filename): \$(covered)/\$(total) (\$(percentage)%)\")
             end
             overall_percentage = round(total_covered/total_lines*100, digits=2)
