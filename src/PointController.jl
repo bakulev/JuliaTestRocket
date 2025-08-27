@@ -542,3 +542,4 @@ function update_backend_detection()
 end
 
 end # module PointController
+
