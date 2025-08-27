@@ -1,0 +1,92 @@
+name: Coverage
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+jobs:
+  coverage:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '1.10'
+          
+      - uses: julia-actions/cache@v1
+      
+      - name: Install dependencies
+        run: |
+          julia --project=. -e "
+            using Pkg
+            Pkg.instantiate()
+            Pkg.add(\"CairoMakie\")
+          "
+          
+      - name: Clean previous coverage files
+        shell: bash
+        run: |
+          find . -name "*.cov" -delete
+          
+      - name: Run tests with coverage
+        run: |
+          julia --project=. --code-coverage=user -e "
+            using CairoMakie
+            CairoMakie.activate!()
+            include(\"test/runtests.jl\")
+          "
+          
+      - name: Process coverage
+        run: |
+          julia --project=. -e "
+            using CoverageTools
+            coverage = process_folder()
+            LCOV.writefile(\"lcov.info\", coverage)
+            
+            # Print coverage summary
+            println(\"\\n📊 COVERAGE SUMMARY:\")
+            println(\"=\"^50)
+            total_lines = sum([length(fc.coverage) for fc in coverage])
+            total_covered = sum([sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage]) for fc in coverage])
+            for fc in coverage
+              covered = sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage])
+              total = length(fc.coverage)
+              percentage = round(covered/total*100, digits=2)
+              println(\"  \$(fc.filename): \$(covered)/\$(total) (\$(percentage)%)\")
+            end
+            overall_percentage = round(total_covered/total_lines*100, digits=2)
+            println(\"\\n📈 OVERALL: \$(total_covered)/\$(total_lines) (\$(overall_percentage)%)\")
+          "
+          
+      - uses: julia-actions/julia-processcoverage@v1
+        
+      - uses: codecov/codecov-action@v3
+        with:
+          files: lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          
+      - name: Coverage threshold check
+        run: |
+          julia --project=. -e "
+            using CoverageTools
+            coverage = process_folder()
+            total_lines = sum([length(fc.coverage) for fc in coverage])
+            covered_lines = sum([sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage]) for fc in coverage])
+            coverage_percentage = round(covered_lines/total_lines*100, digits=2)
+            
+            println(\"\\n🎯 COVERAGE THRESHOLD CHECK:\")
+            println(\"Current coverage: \$(coverage_percentage)%\")
+            println(\"Threshold: 13%\")
+            
+            if coverage_percentage < 13.0
+              println(\"❌ Coverage below threshold!\")
+              exit(1)
+            else
+              println(\"✅ Coverage above threshold!\")
+            end
+          "

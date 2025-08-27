@@ -48,12 +48,17 @@ jobs:
             Pkg.precompile()
           "
           
+      - name: Clean previous coverage files
+        shell: bash
+        run: |
+          find . -name "*.cov" -delete
+          
       - name: Run tests with CairoMakie
         env:
           JULIA_NUM_THREADS: 2
         shell: bash
         run: |
-          julia --project=. -e "
+          julia --project=. --code-coverage=user -e "
             using Pkg
             # Use CairoMakie for CI (no display required)
             Pkg.add(\"CairoMakie\")
@@ -63,6 +68,22 @@ jobs:
             include(\"test/runtests.jl\")
           "
           
+      - name: Process coverage
+        if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
+        run: |
+          julia --project=. -e "
+            using CoverageTools
+            coverage = process_folder()
+            LCOV.writefile(\"lcov.info\", coverage)
+            println(\"Coverage summary:\")
+            for fc in coverage
+              covered = sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage])
+              total = length(fc.coverage)
+              percentage = round(covered/total*100, digits=2)
+              println(\"  \$(fc.filename): \$(covered)/\$(total) (\$(percentage)%)\")
+            end
+          "
+        
       - uses: julia-actions/julia-processcoverage@v1
         if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
         
@@ -71,6 +92,24 @@ jobs:
         with:
           files: lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
+          
+      - name: Check coverage threshold
+        if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
+        run: |
+          julia --project=. -e "
+            using CoverageTools
+            coverage = process_folder()
+            total_lines = sum([length(fc.coverage) for fc in coverage])
+            covered_lines = sum([sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage]) for fc in coverage])
+            coverage_percentage = round(covered_lines/total_lines*100, digits=2)
+            println(\"Overall coverage: \$(coverage_percentage)%\")
+            if coverage_percentage < 13.0
+              @error \"Coverage below threshold of 13%. Current coverage: \$(coverage_percentage)%\"
+              exit(1)
+            else
+              println(\"✓ Coverage above threshold of 13%\")
+            end
+          "
           
   # Optional GLMakie smoke test (only for interactive features)
   smoke-glmakie:
