@@ -5,12 +5,15 @@ using Test
         # Test that all modified files have valid Julia syntax
         # This specifically tests the files that had formatting changes (blank lines added)
 
+        # Get the project root directory (parent of test directory)
+        project_root = dirname(@__DIR__)
+        
         modified_files = [
-            "../src/PointController.jl",
-            "../src/input_handler.jl",
-            "../src/logging_config.jl",
-            "../src/movement_state.jl",
-            "../src/visualization.jl",
+            joinpath(project_root, "src", "PointController.jl"),
+            joinpath(project_root, "src", "input_handler.jl"),
+            joinpath(project_root, "src", "logging_config.jl"),
+            joinpath(project_root, "src", "movement_state.jl"),
+            joinpath(project_root, "src", "visualization.jl"),
         ]
 
         for file in modified_files
@@ -31,12 +34,15 @@ using Test
 
     @testset "File Ending Validation" begin
         # Test that files end with proper newlines after formatting changes
+        # Get the project root directory (parent of test directory)
+        project_root = dirname(@__DIR__)
+        
         modified_files = [
-            "../src/PointController.jl",
-            "../src/input_handler.jl",
-            "../src/logging_config.jl",
-            "../src/movement_state.jl",
-            "../src/visualization.jl",
+            joinpath(project_root, "src", "PointController.jl"),
+            joinpath(project_root, "src", "input_handler.jl"),
+            joinpath(project_root, "src", "logging_config.jl"),
+            joinpath(project_root, "src", "movement_state.jl"),
+            joinpath(project_root, "src", "visualization.jl"),
         ]
 
         for file in modified_files
