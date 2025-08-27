@@ -28,6 +28,7 @@ jobs:
           "
           
       - name: Clean previous coverage files
+        shell: bash
         run: |
           find . -name "*.cov" -delete
           
@@ -49,8 +50,8 @@ jobs:
             # Print coverage summary
             println(\"\\n📊 COVERAGE SUMMARY:\")
             println(\"=\"^50)
-            total_lines = 0
-            total_covered = 0
+            local total_lines = 0
+            local total_covered = 0
             for fc in coverage
               covered = sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage])
               total = length(fc.coverage)

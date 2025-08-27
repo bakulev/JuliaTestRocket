@@ -48,7 +48,8 @@ const Point2f = SVector{2, Float32}
         initial_time = state.last_update_time
         initial_elapsed = state.elapsed_time
 
-        # Test timing update
+        # Test timing update with a small delay to ensure time difference
+        sleep(0.001)  # Small delay to ensure time difference
         current_time = time()
         @test_nowarn update_movement_timing!(state, current_time)
 
@@ -66,6 +67,7 @@ const Point2f = SVector{2, Float32}
 
         # Test timing update with movement
         add_key!(state, 'w')
+        sleep(0.001)  # Small delay to ensure time difference
         current_time = time()
         update_movement_timing!(state, current_time)
 
