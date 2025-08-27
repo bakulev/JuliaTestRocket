@@ -219,4 +219,3 @@ function update_coordinate_display!(position::Observable{Point2f})
     notify(position)
     return position
 end
-
