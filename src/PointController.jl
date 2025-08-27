@@ -79,7 +79,8 @@ const BACKEND_NAME = Ref{Union{Nothing, String}}(nothing)
 # Export public API - functions and types that users and tests need
 export run_point_controller, KEY_MAPPINGS
 # Export movement state types and functions
-export MovementState, add_key!,
+export MovementState,
+    add_key!,
     remove_key!, calculate_movement_vector, reset_movement_state!, request_quit!
 export clear_all_keys_safely!, update_movement_timing!
 export format_current_time
@@ -207,7 +208,7 @@ function run_point_controller()
         log_component_initialization("movement state")
         # Movement speed in units per second
         movement_state = MovementState(movement_speed = 1.5)
-        
+
         # Create key state for handling keyboard input
         key_state = KeyState()
 
@@ -278,7 +279,8 @@ function run_point_controller()
                 update_movement_timing!(movement_state, current_time)
 
                 # Update position based on current key states
-                movement_state = apply_movement_to_position(movement_state, movement_state.elapsed_time)
+                movement_state =
+                    apply_movement_to_position(movement_state, movement_state.elapsed_time)
                 point_position[] = movement_state.position
 
                 # Debug: log movement updates (occasionally)
@@ -294,7 +296,7 @@ function run_point_controller()
                 @info "Quit detected in main loop, breaking..."
                 break
             end
-            
+
             # Debug: occasionally log the quit state
             if rand() < 0.001  # Very rare logging to avoid spam
                 @debug "Main loop quit state: $(key_state.should_quit)" context = "main_loop"
@@ -401,14 +403,17 @@ end
 Copy the key state information from KeyState to MovementState.
 This is called at the beginning of each main loop cycle to sync the states.
 """
-function copy_key_state_to_movement_state!(movement_state::MovementState, key_state::KeyState)
+function copy_key_state_to_movement_state!(
+    movement_state::MovementState,
+    key_state::KeyState,
+)
     # Copy pressed keys
     empty!(movement_state.pressed_keys)
     union!(movement_state.pressed_keys, key_state.pressed_keys)
-    
+
     # Copy quit state
     movement_state.should_quit = key_state.should_quit
-    
+
     @debug "Copied key state to movement state: keys=$(key_state.pressed_keys), quit=$(key_state.should_quit)" context = "state_sync"
 end
 

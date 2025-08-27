@@ -32,11 +32,11 @@ using Test
         # Test backend detection - may or may not have backend loaded
         backend_loaded = PointController.check_backend_loaded()
         backend_name = PointController.get_backend_name()
-        
+
         # Test that functions don't throw errors
         @test_nowarn PointController.check_backend_loaded()
         @test_nowarn PointController.get_backend_name()
-        
+
         # If backend is loaded, it should have a name
         if backend_loaded
             @test backend_name !== nothing

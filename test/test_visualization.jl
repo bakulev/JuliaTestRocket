@@ -12,7 +12,7 @@ CairoMakie.activate!()
 PointController.update_backend_detection()
 
 # Import the functions we need to test
-using PointController: create_visualization, create_time_observable, 
+using PointController: create_visualization, create_time_observable,
     setup_visualization_window, update_coordinate_display!, format_current_time
 
 @testset "Visualization Tests" begin

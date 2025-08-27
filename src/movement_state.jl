@@ -126,7 +126,10 @@ mutable struct MovementState
     last_update_time::Float64
     elapsed_time::Float64
 
-    function MovementState(; position::Point2f = Point2f(0, 0), movement_speed::Float64 = 2.0)
+    function MovementState(;
+        position::Point2f = Point2f(0, 0),
+        movement_speed::Float64 = 2.0,
+    )
         return new(Set{Char}(), position, movement_speed, false, time(), 0.0)
     end
 end
@@ -227,9 +230,9 @@ function apply_movement_to_position(state::MovementState, elapsed_time::Float64)
         # Create new state with updated position
         new_state = MovementState(
             position = Point2f(new_x, new_y),
-            movement_speed = state.movement_speed
+            movement_speed = state.movement_speed,
         )
-        
+
         # Copy other fields
         new_state.pressed_keys = copy(state.pressed_keys)
         new_state.should_quit = state.should_quit

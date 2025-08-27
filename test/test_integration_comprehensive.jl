@@ -5,7 +5,8 @@
 using Test
 
 # Import the functions we need to test
-using PointController: create_visualization, MovementState, KeyState, setup_keyboard_events!,
+using PointController: create_visualization, MovementState, KeyState,
+    setup_keyboard_events!,
     apply_movement_to_position, add_key!, remove_key!, handle_key_press, handle_key_release
 
 @testset "Comprehensive Integration Tests" begin

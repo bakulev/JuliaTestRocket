@@ -64,11 +64,11 @@ using Observables: Observable
 
         # Test that timing works with movement
         PointController.add_key!(state, 'w')
-        
+
         # Update timing
         current_time = time()
         PointController.update_movement_timing!(state, current_time)
-        
+
         # Apply movement with timing
         new_state = PointController.apply_movement_to_position(state, state.elapsed_time)
         @test new_state.position != state.position  # Should have moved

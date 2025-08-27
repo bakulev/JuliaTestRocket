@@ -55,7 +55,8 @@ using Logging
 
     @testset "Error Context Logging" begin
         # Test error logging with context
-        @test PointController.log_error_with_context("test error", "test_context") === nothing
+        @test PointController.log_error_with_context("test error", "test_context") ===
+              nothing
 
         # Test error logging without context
         @test PointController.log_error_with_context("test error") === nothing
@@ -63,15 +64,21 @@ using Logging
 
         # Test error logging with exception
         test_exception = ErrorException("test exception")
-        @test PointController.log_error_with_context("test error", "test_context", test_exception) ===
+        @test PointController.log_error_with_context(
+            "test error",
+            "test_context",
+            test_exception,
+        ) ===
               nothing
-        @test PointController.log_error_with_context("test error", "", test_exception) === nothing
+        @test PointController.log_error_with_context("test error", "", test_exception) ===
+              nothing
         @test PointController.log_error_with_context("test error", "", nothing) === nothing
     end
 
     @testset "Warning Context Logging" begin
         # Test warning logging with context
-        @test PointController.log_warning_with_context("test warning", "test_context") === nothing
+        @test PointController.log_warning_with_context("test warning", "test_context") ===
+              nothing
 
         # Test warning logging without context
         @test PointController.log_warning_with_context("test warning") === nothing
@@ -85,7 +92,11 @@ using Logging
         @test PointController.log_warning_with_context("", "") === nothing
 
         # Test with special characters
-        @test PointController.log_user_action("test with spaces", "details with spaces") === nothing
-        @test PointController.log_error_with_context("error with spaces", "context with spaces") === nothing
+        @test PointController.log_user_action("test with spaces", "details with spaces") ===
+              nothing
+        @test PointController.log_error_with_context(
+            "error with spaces",
+            "context with spaces",
+        ) === nothing
     end
 end

@@ -95,7 +95,10 @@ const Point2f = SVector{2, Float32}
     end
 
     @testset "Movement State Boundary Conditions" begin
-        state = PointController.MovementState(position = Point2f(0.0, 0.0), movement_speed = 1.0)
+        state = PointController.MovementState(
+            position = Point2f(0.0, 0.0),
+            movement_speed = 1.0,
+        )
 
         # Test movement that would exceed boundaries
         PointController.add_key!(state, 'd')  # Move right
@@ -105,7 +108,10 @@ const Point2f = SVector{2, Float32}
         @test new_state.position == Point2f(10.0, 0.0)  # Clamped to +10
 
         # Test negative boundary - need to set position first, then apply movement
-        boundary_state = PointController.MovementState(position = Point2f(-15.0, 0.0), movement_speed = 1.0)
+        boundary_state = PointController.MovementState(
+            position = Point2f(-15.0, 0.0),
+            movement_speed = 1.0,
+        )
         # Clear previous movement and set up for left movement
         PointController.clear_all_keys_safely!(boundary_state)
         PointController.add_key!(boundary_state, 'a')  # Move left

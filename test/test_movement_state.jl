@@ -78,7 +78,10 @@ const Point2f = SVector{2, Float32}
     end
 
     @testset "Position Updates" begin
-        state = PointController.MovementState(position = Point2f(0.0, 0.0), movement_speed = 2.0)
+        state = PointController.MovementState(
+            position = Point2f(0.0, 0.0),
+            movement_speed = 2.0,
+        )
 
         # Test movement from origin with time-based movement
         PointController.add_key!(state, 'w')

@@ -53,9 +53,9 @@ This allows for clean separation between input handling and movement logic.
 mutable struct KeyState
     pressed_keys::Set{Char}
     should_quit::Bool
-    
+
     function KeyState()
-        new(Set{Char}(), false)
+        return new(Set{Char}(), false)
     end
 end
 
@@ -95,7 +95,7 @@ end
 Reset the quit flag (useful for restarting the application).
 """
 function reset_quit!(key_state::KeyState)
-    key_state.should_quit = false
+    return key_state.should_quit = false
 end
 
 """
