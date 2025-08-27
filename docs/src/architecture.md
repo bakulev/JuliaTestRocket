@@ -413,3 +413,383 @@ The PointController architecture demonstrates modern reactive programming patter
 - **Maintainable code structure** with well-defined interfaces
 
 This architecture provides a solid foundation for interactive applications that require real-time input processing and responsive visualization.
+
+## Advanced Architecture Patterns
+
+### Makie Separation and Portability
+
+The current architecture can be refactored to separate Makie-specific code from core simulation logic, enabling use with other visualization systems like Pluto, PlutoUI, or Plots.
+
+#### Proposed Architecture Layers
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Application Layer                        │
+│  (Pluto, Jupyter, Standalone, etc.)                        │
+└─────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────┐
+│                  Visualization Adapter                      │
+│  (MakieAdapter, PlutoAdapter, PlotsAdapter)                │
+└─────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────┐
+│                   Simulation Engine                         │
+│  (StateManager, PhysicsEngine, BayesianEngine)             │
+└─────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────┘
+│                    Core State System                        │
+│  (ObservableState, EventSystem, InputHandler)              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Core State System (Makie-Independent)
+
+```julia
+# Core state management without Makie dependencies
+module CoreState
+
+using Observables: Observable
+using Dates
+
+export SimulationState, StateHistory, PhysicsEngine
+export update_state!, calculate_next_state, get_current_state
+
+"""
+    SimulationState
+
+Core simulation state without visualization dependencies.
+"""
+mutable struct SimulationState
+    position::Observable{Point2f}
+    velocity::Observable{Point2f}
+    time::Observable{Float64}
+    pressed_keys::Observable{Set{Char}}
+    mass::Float64
+    damping::Float64
+end
+
+"""
+    StateHistory
+
+History of states for Bayesian inference and physics calculations.
+"""
+struct StateHistory
+    states::Vector{SimulationState}
+    timestamps::Vector{Float64}
+    max_history::Int
+end
+
+"""
+    PhysicsEngine
+
+Handles physics calculations and state transitions.
+"""
+struct PhysicsEngine
+    gravity::Point2f
+    friction::Float64
+    time_step::Float64
+end
+
+# Core functions that work with any visualization system
+function update_state!(state::SimulationState, dt::Float64)
+    # Physics calculations
+    # State updates
+    # Observable notifications
+end
+
+function calculate_next_state(current::SimulationState, history::StateHistory, engine::PhysicsEngine)
+    # Bayesian inference for parameter estimation
+    # Physics prediction
+    # Return next state
+end
+
+end # module CoreState
+```
+
+#### Visualization Adapter Pattern
+
+```julia
+# Abstract visualization interface
+abstract type VisualizationAdapter end
+
+# Makie-specific implementation
+struct MakieAdapter <: VisualizationAdapter
+    fig::Figure
+    ax::Axis
+    point_plot::Any
+    text_plots::Vector{Any}
+end
+
+# Pluto-specific implementation
+struct PlutoAdapter <: VisualizationAdapter
+    plot_output::Any
+    text_output::Any
+end
+
+# Plots-specific implementation
+struct PlotsAdapter <: VisualizationAdapter
+    plot::Any
+    annotations::Vector{Any}
+end
+
+# Common interface
+function setup_visualization(adapter::VisualizationAdapter, state::SimulationState)
+    # Setup visualization based on adapter type
+end
+
+function update_visualization(adapter::VisualizationAdapter, state::SimulationState)
+    # Update visualization based on adapter type
+end
+```
+
+### Physical Simulation with Bayesian Extensibility
+
+The original vision of demonstrating physical laws with Bayesian inference can be implemented as follows:
+
+#### Enhanced State System
+
+```julia
+"""
+    BayesianSimulationState
+
+Extended state system with Bayesian inference capabilities.
+"""
+mutable struct BayesianSimulationState
+    # Core state
+    position::Observable{Point2f}
+    velocity::Observable{Point2f}
+    time::Observable{Float64}
+    pressed_keys::Observable{Set{Char}}
+    
+    # Physics parameters (with uncertainty)
+    mass::Observable{Normal{Float64}}  # Bayesian mass estimate
+    damping::Observable{Normal{Float64}}  # Bayesian damping estimate
+    
+    # State history for inference
+    history::StateHistory
+    
+    # Bayesian inference engine
+    inference_engine::BayesianInferenceEngine
+end
+
+"""
+    BayesianInferenceEngine
+
+Handles Bayesian parameter estimation and prediction.
+"""
+struct BayesianInferenceEngine
+    prior_mass::Normal{Float64}
+    prior_damping::Normal{Float64}
+    observation_noise::Float64
+    learning_rate::Float64
+end
+
+"""
+    StateEvaluationFunction
+
+Evaluates next state using Bayesian inference and physics.
+"""
+function evaluate_next_state(
+    current_state::BayesianSimulationState,
+    dt::Float64,
+    engine::BayesianInferenceEngine
+)
+    # 1. Update Bayesian parameter estimates from history
+    updated_mass = update_mass_estimate(current_state, engine)
+    updated_damping = update_damping_estimate(current_state, engine)
+    
+    # 2. Predict next state using current physics model
+    predicted_position = predict_position(current_state, dt, updated_mass, updated_damping)
+    predicted_velocity = predict_velocity(current_state, dt, updated_mass, updated_damping)
+    
+    # 3. Update state with predictions
+    current_state.position[] = predicted_position
+    current_state.velocity[] = predicted_velocity
+    current_state.time[] += dt
+    current_state.mass[] = updated_mass
+    current_state.damping[] = updated_damping
+    
+    # 4. Add to history for future inference
+    add_to_history!(current_state.history, current_state)
+    
+    return current_state
+end
+```
+
+#### Physics Integration
+
+```julia
+"""
+    PhysicsModel
+
+Defines the physical laws governing the system.
+"""
+struct PhysicsModel
+    gravity::Point2f
+    force_field::Function  # Custom force field
+    constraints::Vector{Constraint}
+end
+
+"""
+    Constraint
+
+Physical constraints (boundaries, etc.)
+"""
+abstract type Constraint end
+
+struct BoundaryConstraint <: Constraint
+    min_bounds::Point2f
+    max_bounds::Point2f
+end
+
+# Physics calculation with Bayesian parameters
+function apply_physics(
+    state::BayesianSimulationState,
+    dt::Float64,
+    model::PhysicsModel
+)
+    # Get current parameter estimates
+    mass = mean(state.mass[])
+    damping = mean(state.damping[])
+    
+    # Calculate forces
+    gravity_force = mass * model.gravity
+    damping_force = -damping * state.velocity[]
+    custom_force = model.force_field(state.position[], state.velocity[])
+    
+    total_force = gravity_force + damping_force + custom_force
+    
+    # Update velocity (F = ma)
+    acceleration = total_force / mass
+    new_velocity = state.velocity[] + acceleration * dt
+    
+    # Update position
+    new_position = state.position[] + new_velocity * dt
+    
+    # Apply constraints
+    new_position = apply_constraints(new_position, model.constraints)
+    
+    return new_position, new_velocity
+end
+```
+
+#### Bayesian Parameter Learning
+
+```julia
+"""
+    update_mass_estimate
+
+Update mass estimate using Bayesian inference from state history.
+"""
+function update_mass_estimate(state::BayesianSimulationState, engine::BayesianInferenceEngine)
+    if length(state.history.states) < 2
+        return engine.prior_mass
+    end
+    
+    # Extract observations from history
+    observations = extract_mass_observations(state.history)
+    
+    # Bayesian update
+    posterior = bayesian_update(engine.prior_mass, observations, engine.observation_noise)
+    
+    return posterior
+end
+
+"""
+    extract_mass_observations
+
+Extract mass-related observations from state history.
+"""
+function extract_mass_observations(history::StateHistory)
+    observations = Float64[]
+    
+    for i in 2:length(history.states)
+        prev_state = history.states[i-1]
+        curr_state = history.states[i]
+        dt = history.timestamps[i] - history.timestamps[i-1]
+        
+        # Calculate observed acceleration
+        velocity_change = curr_state.velocity[] - prev_state.velocity[]
+        observed_acceleration = velocity_change / dt
+        
+        # Calculate applied force
+        applied_force = calculate_applied_force(prev_state)
+        
+        # Estimate mass: F = ma → m = F/a
+        if norm(observed_acceleration) > 1e-6
+            estimated_mass = norm(applied_force) / norm(observed_acceleration)
+            push!(observations, estimated_mass)
+        end
+    end
+    
+    return observations
+end
+```
+
+### Implementation Strategy
+
+#### Phase 1: Core State Separation
+
+1. **Extract Core State**: Move state management to Makie-independent module
+2. **Create Adapter Interface**: Define abstract visualization interface
+3. **Implement Makie Adapter**: Refactor current Makie code as adapter
+4. **Test with Mock Adapter**: Verify core logic works without Makie
+
+#### Phase 2: Physics Integration
+
+1. **Add Physics Engine**: Implement basic physics calculations
+2. **Extend State Structure**: Add velocity, mass, damping parameters
+3. **Implement State Evaluation**: Create state transition function
+4. **Add History Management**: Track state history for inference
+
+#### Phase 3: Bayesian Extensibility
+
+1. **Add Bayesian Parameters**: Replace scalar parameters with distributions
+2. **Implement Inference Engine**: Add parameter learning from history
+3. **Create Observation Extraction**: Extract physics observations from history
+4. **Add Prediction Uncertainty**: Include uncertainty in state predictions
+
+#### Phase 4: Multi-Platform Support
+
+1. **Pluto Adapter**: Implement Pluto-specific visualization
+2. **Plots Adapter**: Implement Plots.jl visualization
+3. **Jupyter Adapter**: Implement Jupyter notebook support
+4. **Testing Framework**: Test with multiple visualization backends
+
+### Benefits of This Approach
+
+1. **Portability**: Core simulation works with any visualization system
+2. **Testability**: Core logic can be tested without graphics dependencies
+3. **Extensibility**: Easy to add new visualization backends
+4. **Scientific Rigor**: Proper physics simulation with uncertainty quantification
+5. **Educational Value**: Demonstrates Bayesian inference in physical systems
+6. **Reactive Architecture**: Preserves Observable benefits across all platforms
+
+### Example Usage
+
+```julia
+# Core simulation (works anywhere)
+using CoreState
+state = create_simulation_state()
+engine = create_physics_engine()
+
+# Makie visualization
+using MakieAdapter
+makie_adapter = MakieAdapter(fig, ax, point_plot, text_plots)
+setup_visualization(makie_adapter, state)
+
+# Pluto visualization
+using PlutoAdapter
+pluto_adapter = PlutoAdapter(plot_output, text_output)
+setup_visualization(pluto_adapter, state)
+
+# Same core logic, different visualization
+while simulation_running
+    evaluate_next_state!(state, dt, engine)
+    update_visualization(adapter, state)
+end
+```
+
+This architecture maintains the reactive benefits while providing the flexibility and scientific rigor you're looking for.
