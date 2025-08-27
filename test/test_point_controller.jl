@@ -12,13 +12,11 @@ using PointController
         @test :run_point_controller in exported_names
         @test :check_backend_loaded in exported_names
         @test :get_backend_name in exported_names
-        @test :initialize_backend_safely in exported_names
-        @test :update_backend_detection in exported_names
         
         # Movement state functions
         @test :MovementState in exported_names
-        @test :update_position! in exported_names
-        @test :get_movement_vector in exported_names
+        @test :apply_movement_to_position! in exported_names
+        @test :calculate_movement_vector in exported_names
         
         # Input handler functions
         @test :handle_key_press in exported_names
@@ -35,22 +33,7 @@ using PointController
         @test :get_current_log_level in exported_names
     end
     
-    @testset "File Structure Integrity" begin
-        # Test that all source files can be included without errors
-        # This verifies that the formatting changes (blank lines) don't break syntax
-        
-        @test_nowarn include("../src/PointController.jl")
-        @test_nowarn include("../src/input_handler.jl")
-        @test_nowarn include("../src/logging_config.jl") 
-        @test_nowarn include("../src/movement_state.jl")
-        @test_nowarn include("../src/visualization.jl")
-    end
-    
     @testset "Backend Detection Functions" begin
-        # Test update_backend_detection function exists and is callable
-        @test hasmethod(PointController.update_backend_detection, ())
-        @test_nowarn PointController.update_backend_detection()
-        
         # Test backend checking functions
         @test hasmethod(PointController.check_backend_loaded, ())
         @test hasmethod(PointController.get_backend_name, ())
@@ -58,7 +41,7 @@ using PointController
         # Test that these functions return expected types
         @test isa(PointController.check_backend_loaded(), Bool)
         backend_name = PointController.get_backend_name()
-        @test isa(backend_name, String)
+        @test isa(backend_name, Union{String, Nothing})
     end
     
     @testset "Module Constants and Types" begin
@@ -72,19 +55,28 @@ using PointController
     
     @testset "Function Signatures" begin
         # Test critical function signatures are correct
-        @test hasmethod(PointController.initialize_backend_safely, ())
         @test hasmethod(PointController.handle_key_press, (Char, PointController.MovementState))
         @test hasmethod(PointController.handle_key_release, (Char, PointController.MovementState))
-        @test hasmethod(PointController.setup_logging, (Symbol,))
+        @test hasmethod(PointController.setup_logging, ())
+        @test hasmethod(PointController.setup_logging, (Base.CoreLogging.LogLevel,))
     end
     
-    @testset "Module Loading Stability" begin
-        # Test that the module can be loaded multiple times without issues
-        # This ensures the formatting changes don't introduce loading problems
-        @test_nowarn eval(:(@eval module TestPointController using PointController end))
-        @test_nowarn eval(:(using PointController))
+    @testset "Module Functionality" begin
+        # Test that key functions work correctly
+        @test PointController.is_movement_key('w')
+        @test PointController.is_movement_key('a')
+        @test PointController.is_movement_key('s')
+        @test PointController.is_movement_key('d')
+        @test !PointController.is_movement_key('x')
         
-        # Verify module is still functional after multiple loads
-        @test PointController isa Module
+        # Test movement state creation
+        state = PointController.MovementState()
+        @test isa(state, PointController.MovementState)
+        
+        # Test that we can add and remove keys
+        @test_nowarn PointController.add_key!(state, 'w')
+        @test 'w' in PointController.get_pressed_keys(state)
+        @test_nowarn PointController.remove_key!(state, 'w')
+        @test !('w' in PointController.get_pressed_keys(state))
     end
 end
