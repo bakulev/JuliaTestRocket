@@ -43,16 +43,23 @@ end
     end
 
     # Test with GLMakie (interactive, requires display)
-    @testset "GLMakie Tests" begin
-        try
-            using GLMakie
-            GLMakie.activate!()
+    # Skip in CI environments where display is not available
+    if !haskey(ENV, "CI") || get(ENV, "CI", "false") != "true"
+        @testset "GLMakie Tests" begin
+            try
+                using GLMakie
+                GLMakie.activate!()
 
-            # Include GLMakie-specific tests
-            include("test_glmakie_smoke.jl")
+                # Include GLMakie-specific tests
+                include("test_glmakie_smoke.jl")
 
-        catch e
-            @warn "GLMakie not available, skipping GLMakie tests: $e"
+            catch e
+                @warn "GLMakie not available, skipping GLMakie tests: $e"
+            end
+        end
+    else
+        @testset "GLMakie Tests" begin
+            @test_skip "GLMakie tests skipped in CI environment"
         end
     end
 end
