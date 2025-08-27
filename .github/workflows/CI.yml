@@ -139,6 +139,7 @@ jobs:
         run: |
           julia --project=test -e '
             using Pkg
+            Pkg.develop(PackageSpec(path="."))
             Pkg.instantiate()
             # Use CairoMakie for CI (no display required)
             Pkg.add("CairoMakie")
