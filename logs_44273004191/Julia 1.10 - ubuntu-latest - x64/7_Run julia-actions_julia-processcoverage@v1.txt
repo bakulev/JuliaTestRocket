@@ -1,0 +1,33 @@
+﻿2025-08-27T07:29:11.4259555Z ##[group]Run julia-actions/julia-processcoverage@v1
+2025-08-27T07:29:11.4259888Z with:
+2025-08-27T07:29:11.4260059Z   directories: src,ext
+2025-08-27T07:29:11.4260254Z ##[endgroup]
+2025-08-27T07:29:11.4274186Z ##[group]Run julia --color=yes "$GITHUB_ACTION_PATH"/main.jl
+2025-08-27T07:29:11.4274723Z [36;1mjulia --color=yes "$GITHUB_ACTION_PATH"/main.jl[0m
+2025-08-27T07:29:11.4314242Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:29:11.4314662Z env:
+2025-08-27T07:29:11.4314841Z   INPUT_DIRECTORIES: src,ext
+2025-08-27T07:29:11.4315244Z ##[endgroup]
+2025-08-27T07:29:11.7361389Z [32m[1m  Activating[22m[39m new project at `~/.julia/environments/coveragetempenv`
+2025-08-27T07:29:12.9942200Z [32m[1m    Updating[22m[39m registry at `~/.julia/registries/General.toml`
+2025-08-27T07:29:13.0057702Z [32m[1m   Resolving[22m[39m package versions...
+2025-08-27T07:29:13.6664127Z [32m[1m   Installed[22m[39m CoverageTools ─ v1.3.2
+2025-08-27T07:29:14.6820704Z [32m[1m    Updating[22m[39m `~/.julia/environments/coveragetempenv/Project.toml`
+2025-08-27T07:29:14.6823185Z   [90m[c36e975a] [39m[92m+ CoverageTools v1.3.2[39m
+2025-08-27T07:29:14.6823920Z [32m[1m    Updating[22m[39m `~/.julia/environments/coveragetempenv/Manifest.toml`
+2025-08-27T07:29:14.6827077Z   [90m[c36e975a] [39m[92m+ CoverageTools v1.3.2[39m
+2025-08-27T07:29:15.8338414Z [32m[1mPrecompiling[22m[39m packages...
+2025-08-27T07:29:16.4330031Z     589.0 ms[32m  ✓ [39mCoverageTools
+2025-08-27T07:29:16.4330722Z   1 dependency successfully precompiled in 2 seconds
+2025-08-27T07:29:17.3352266Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_folder: Searching src for .jl files...
+2025-08-27T07:29:17.3353686Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_file: Detecting coverage for src/PointController.jl
+2025-08-27T07:29:17.3355481Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_cov: processing src/PointController.jl.6109.cov
+2025-08-27T07:29:17.3356935Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_cov: processing src/PointController.jl.6116.cov
+2025-08-27T07:29:17.3676148Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_file: Detecting coverage for src/input_handler.jl
+2025-08-27T07:29:17.3677576Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_cov: processing src/input_handler.jl.6116.cov
+2025-08-27T07:29:17.3714867Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_file: Detecting coverage for src/logging_config.jl
+2025-08-27T07:29:17.3716302Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_cov: processing src/logging_config.jl.6116.cov
+2025-08-27T07:29:17.3727240Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_file: Detecting coverage for src/movement_state.jl
+2025-08-27T07:29:17.3728626Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_cov: processing src/movement_state.jl.6116.cov
+2025-08-27T07:29:17.3745666Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_file: Detecting coverage for src/visualization.jl
+2025-08-27T07:29:17.3746995Z [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mCoverageTools.process_cov: processing src/visualization.jl.6116.cov

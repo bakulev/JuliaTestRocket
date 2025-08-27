@@ -1,0 +1,49 @@
+﻿2025-08-27T07:21:08.8454664Z Current runner version: '2.328.0'
+2025-08-27T07:21:08.8479511Z ##[group]Runner Image Provisioner
+2025-08-27T07:21:08.8480454Z Hosted Compute Agent
+2025-08-27T07:21:08.8481056Z Version: 20250818.377
+2025-08-27T07:21:08.8481627Z Commit: 3c593e9f75fe0b87e893bca80d6e12ba089c61fc
+2025-08-27T07:21:08.8482462Z Build Date: 2025-08-18T14:52:18Z
+2025-08-27T07:21:08.8483346Z ##[endgroup]
+2025-08-27T07:21:08.8483840Z ##[group]Operating System
+2025-08-27T07:21:08.8484837Z Ubuntu
+2025-08-27T07:21:08.8485284Z 24.04.2
+2025-08-27T07:21:08.8485728Z LTS
+2025-08-27T07:21:08.8486315Z ##[endgroup]
+2025-08-27T07:21:08.8486772Z ##[group]Runner Image
+2025-08-27T07:21:08.8487287Z Image: ubuntu-24.04
+2025-08-27T07:21:08.8487852Z Version: 20250818.1.0
+2025-08-27T07:21:08.8488856Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250818.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-08-27T07:21:08.8490236Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250818.1
+2025-08-27T07:21:08.8491524Z ##[endgroup]
+2025-08-27T07:21:08.8494341Z ##[group]GITHUB_TOKEN Permissions
+2025-08-27T07:21:08.8496272Z Actions: write
+2025-08-27T07:21:08.8496823Z Attestations: write
+2025-08-27T07:21:08.8497484Z Checks: write
+2025-08-27T07:21:08.8497982Z Contents: write
+2025-08-27T07:21:08.8498475Z Deployments: write
+2025-08-27T07:21:08.8499053Z Discussions: write
+2025-08-27T07:21:08.8499558Z Issues: write
+2025-08-27T07:21:08.8500006Z Metadata: read
+2025-08-27T07:21:08.8500604Z Models: read
+2025-08-27T07:21:08.8501096Z Packages: write
+2025-08-27T07:21:08.8501556Z Pages: write
+2025-08-27T07:21:08.8502133Z PullRequests: write
+2025-08-27T07:21:08.8502633Z RepositoryProjects: write
+2025-08-27T07:21:08.8503516Z SecurityEvents: write
+2025-08-27T07:21:08.8504295Z Statuses: write
+2025-08-27T07:21:08.8504763Z ##[endgroup]
+2025-08-27T07:21:08.8506708Z Secret source: Actions
+2025-08-27T07:21:08.8507533Z Prepare workflow directory
+2025-08-27T07:21:08.8829423Z Prepare all required actions
+2025-08-27T07:21:08.8866815Z Getting action download info
+2025-08-27T07:21:09.2580006Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-08-27T07:21:09.4749643Z Download action repository 'julia-actions/setup-julia@v1' (SHA:ac0d62164df5a47de404f4e96ce86a1a28a28d56)
+2025-08-27T07:21:09.8596627Z Download action repository 'julia-actions/cache@v1' (SHA:dc1a3cdeacb521b0ca93cfc66143fcadb15a5bd0)
+2025-08-27T07:21:10.2252183Z Download action repository 'julia-actions/julia-processcoverage@v1' (SHA:03114f09f119417c3242a9fb6e0b722676aedf38)
+2025-08-27T07:21:10.5149756Z Download action repository 'codecov/codecov-action@v3' (SHA:ab904c41d6ece82784817410c45d8b8c02684457)
+2025-08-27T07:21:11.0278281Z Getting action download info
+2025-08-27T07:21:11.2001537Z Download action repository 'dcarbone/install-jq-action@v2.1.0' (SHA:8867ddb4788346d7c22b72ea2e2ffe4d514c7bcb)
+2025-08-27T07:21:11.4532003Z Download action repository 'actions/cache@4d4ae6ae148a43d0fd1eda1800170683e9882738' (SHA:4d4ae6ae148a43d0fd1eda1800170683e9882738)
+2025-08-27T07:21:12.0865532Z Download action repository 'pyTooling/Actions@adef08d3bdef092282614f3b683897cefae82ee3' (SHA:adef08d3bdef092282614f3b683897cefae82ee3)
+2025-08-27T07:21:12.5105599Z Complete job name: Julia 1.11 - ubuntu-latest - x64

@@ -1,0 +1,33 @@
+﻿2025-08-27T07:29:17.4411733Z ##[group]Run codecov/codecov-action@v3
+2025-08-27T07:29:17.4412258Z with:
+2025-08-27T07:29:17.4412554Z   files: lcov.info
+2025-08-27T07:29:17.4413259Z   token: ***
+2025-08-27T07:29:17.4413591Z ##[endgroup]
+2025-08-27T07:29:17.5499880Z ==> linux OS detected
+2025-08-27T07:29:17.9601728Z https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+2025-08-27T07:29:18.0284098Z ==> SHASUM file signed by key id 806bb28aed779869
+2025-08-27T07:29:18.1035350Z ==> Uploader SHASUM verified (b37359013b48fbc3b0790d59fc474a52a260fb96e28e1b2c2ae001dc9b9cc996  codecov)
+2025-08-27T07:29:18.1036238Z ==> Running version latest
+2025-08-27T07:29:18.2004326Z ==> Running version v0.8.0
+2025-08-27T07:29:18.2020496Z [command]/home/runner/work/_actions/codecov/codecov-action/v3/dist/codecov -n  -Q github-action-3.1.6 -f lcov.info
+2025-08-27T07:29:18.4096670Z [2025-08-27T07:29:18.408Z] ['info'] 
+2025-08-27T07:29:18.4097181Z      _____          _
+2025-08-27T07:29:18.4097495Z     / ____|        | |
+2025-08-27T07:29:18.4097806Z    | |     ___   __| | ___  ___ _____   __
+2025-08-27T07:29:18.4098269Z    | |    / _ \ / _` |/ _ \/ __/ _ \ \ / /
+2025-08-27T07:29:18.4098653Z    | |___| (_) | (_| |  __/ (_| (_) \ V /
+2025-08-27T07:29:18.4099041Z     \_____\___/ \__,_|\___|\___\___/ \_/
+2025-08-27T07:29:18.4099666Z 
+2025-08-27T07:29:18.4099771Z   Codecov report uploader 0.8.0
+2025-08-27T07:29:18.4153487Z [2025-08-27T07:29:18.415Z] ['info'] => Project root located at: /home/runner/work/JuliaTestRocket/JuliaTestRocket
+2025-08-27T07:29:18.4181113Z [2025-08-27T07:29:18.417Z] ['info'] ->  Token found by environment variables
+2025-08-27T07:29:18.4250513Z [2025-08-27T07:29:18.424Z] ['info'] Searching for coverage files...
+2025-08-27T07:29:18.4720892Z [2025-08-27T07:29:18.471Z] ['info'] => Found 1 possible coverage files:
+2025-08-27T07:29:18.4721685Z   lcov.info
+2025-08-27T07:29:18.4722929Z [2025-08-27T07:29:18.471Z] ['info'] Processing /home/runner/work/JuliaTestRocket/JuliaTestRocket/lcov.info...
+2025-08-27T07:29:18.4744718Z [2025-08-27T07:29:18.474Z] ['info'] Detected GitHub Actions as the CI provider.
+2025-08-27T07:29:18.9401262Z [2025-08-27T07:29:18.939Z] ['info'] Pinging Codecov: https://codecov.io/upload/v4?package=github-action-3.1.6-uploader-0.8.0&token=*******&branch=main&build=17260080498&build_url=https%3A%2F%2Fgithub.com%2Fbakulev%2FJuliaTestRocket%2Factions%2Fruns%2F17260080498&commit=048c831dcbcc177572e3761b8279a61c28f21783&job=CI&pr=&service=github-actions&slug=bakulev%2FJuliaTestRocket&name=&tag=&flags=&parent=
+2025-08-27T07:29:19.1429810Z [2025-08-27T07:29:19.142Z] ['info'] https://app.codecov.io/github/bakulev/juliatestrocket/commit/048c831dcbcc177572e3761b8279a61c28f21783
+2025-08-27T07:29:19.1433791Z https://storage.googleapis.com/codecov-production/shelter/v4/github/bakulev/juliatestrocket/048c831dcbcc177572e3761b8279a61c28f21783/fd782401-f4c2-4f68-ad16-57d6384104ca.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=GOOG1EJWQHUGIBILH4J7Q6ZUSCIFNEOLYSNDS7L3B4N5SIBQ2J4YLYE5CRFCD%2F20250827%2Fus%2Fs3%2Faws4_request&X-Amz-Date=20250827T072919Z&X-Amz-Expires=120&X-Amz-SignedHeaders=host&X-Amz-Signature=5978954c188ab6251274e318e21ab8ffebbb5f60754d2786e315b0c7dd6a7b76
+2025-08-27T07:29:19.1436594Z [2025-08-27T07:29:19.142Z] ['info'] Uploading...
+2025-08-27T07:29:19.2619291Z [2025-08-27T07:29:19.261Z] ['info'] {"status":"processing","resultURL":"https://app.codecov.io/github/bakulev/juliatestrocket/commit/048c831dcbcc177572e3761b8279a61c28f21783"}

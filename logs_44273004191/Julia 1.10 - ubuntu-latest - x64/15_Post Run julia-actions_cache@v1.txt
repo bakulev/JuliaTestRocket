@@ -1,0 +1,10 @@
+﻿2025-08-27T07:29:19.2998838Z Post job cleanup.
+2025-08-27T07:29:19.3020120Z Post job cleanup.
+2025-08-27T07:29:20.0337106Z       Active manifest files: 2 found
+2025-08-27T07:29:20.0629968Z       Active artifact files: 73 found
+2025-08-27T07:29:20.0653177Z       Active scratchspaces: 0 found
+2025-08-27T07:29:20.0716716Z      Deleted no artifacts, repos, packages or scratchspaces
+2025-08-27T07:29:22.1837019Z No existing caches found on ref `refs/heads/main` matching restore key `julia-cache;workflow=CI;job=test;os=Linux;version=1.10;os=ubuntu-latest;arch=x64;`
+2025-08-27T07:29:22.2050597Z Post job cleanup.
+2025-08-27T07:29:22.3292732Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/JuliaTestRocket/JuliaTestRocket --files-from manifest.txt --use-compress-program zstdmt
+2025-08-27T07:29:26.3824065Z ##[warning]Failed to save: <h2>Our services aren't available right now</h2><p>We're working to restore all services as soon as possible. Please check back soon.</p>01rOuaAAAAAAYXL98JMTWQob4lgr/pvQiQkwyQUEyMDMwMTA2MDMzAEVkZ2U=

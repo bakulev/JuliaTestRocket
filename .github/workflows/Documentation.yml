@@ -23,16 +23,7 @@ jobs:
         with:
           version: '1.10'
           
-      - name: Setup display for GLMakie
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          export DISPLAY=:99
-          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          
       - name: Install dependencies
-        env:
-          DISPLAY: :99
         run: |
           julia --project=docs/ -e '
             using Pkg
@@ -44,5 +35,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
-          DISPLAY: :99
         run: julia --project=docs/ docs/make.jl

@@ -1,0 +1,121 @@
+﻿2025-08-27T07:21:34.6655020Z ##[group]Run julia-actions/cache@v1
+2025-08-27T07:21:34.6655370Z with:
+2025-08-27T07:21:34.6655591Z   cache-name: julia-cache;workflow=CI;job=test
+2025-08-27T07:21:34.6655878Z   include-matrix: true
+2025-08-27T07:21:34.6656076Z   cache-artifacts: true
+2025-08-27T07:21:34.6656255Z   cache-packages: true
+2025-08-27T07:21:34.6656442Z   cache-registries: true
+2025-08-27T07:21:34.6656633Z   cache-compiled: true
+2025-08-27T07:21:34.6656830Z   cache-scratchspaces: true
+2025-08-27T07:21:34.6657030Z   cache-logs: true
+2025-08-27T07:21:34.6657197Z   delete-old-caches: true
+2025-08-27T07:21:34.6657518Z   token: ***
+2025-08-27T07:21:34.6657685Z ##[endgroup]
+2025-08-27T07:21:34.6835858Z ##[group]Run if [ -n "" ]; then
+2025-08-27T07:21:34.6836154Z [36;1mif [ -n "" ]; then[0m
+2025-08-27T07:21:34.6836385Z [36;1m    depot=""[0m
+2025-08-27T07:21:34.6836601Z [36;1melif [ -n "$JULIA_DEPOT_PATH" ]; then[0m
+2025-08-27T07:21:34.6836863Z [36;1m    # Use the first depot path[0m
+2025-08-27T07:21:34.6837186Z [36;1m    depot=$(echo $JULIA_DEPOT_PATH | cut -d$PATH_DELIMITER -f1)[0m
+2025-08-27T07:21:34.6837513Z [36;1melse[0m
+2025-08-27T07:21:34.6837678Z [36;1m    depot="~/.julia"[0m
+2025-08-27T07:21:34.6837879Z [36;1mfi[0m
+2025-08-27T07:21:34.6838072Z [36;1mecho "depot=$depot" | tee -a "$GITHUB_OUTPUT"[0m
+2025-08-27T07:21:34.6838314Z [36;1m[0m
+2025-08-27T07:21:34.6838457Z [36;1mcache_paths=()[0m
+2025-08-27T07:21:34.6838665Z [36;1martifacts_path="${depot}/artifacts"[0m
+2025-08-27T07:21:34.6838947Z [36;1m[ "true" = "true" ] && cache_paths+=("$artifacts_path")[0m
+2025-08-27T07:21:34.6839227Z [36;1mpackages_path="${depot}/packages"[0m
+2025-08-27T07:21:34.6839497Z [36;1m[ "true" = "true" ] && cache_paths+=("$packages_path")[0m
+2025-08-27T07:21:34.6839781Z [36;1mregistries_path="${depot}/registries"[0m
+2025-08-27T07:21:34.6840019Z [36;1mif [ "true" = "true" ]; then[0m
+2025-08-27T07:21:34.6840271Z [36;1m    if [ ! -d "${registries_path/#\~/$HOME}" ]; then[0m
+2025-08-27T07:21:34.6840546Z [36;1m        cache_paths+=("$registries_path")[0m
+2025-08-27T07:21:34.6840776Z [36;1m    else[0m
+2025-08-27T07:21:34.6841557Z [36;1m        echo "::warning::Julia depot registries already exist. Skipping restoring of cached registries to avoid potential merge conflicts when updating. Please ensure that \`julia-actions/cache\` precedes any workflow steps which add registries."[0m
+2025-08-27T07:21:34.6842379Z [36;1m    fi[0m
+2025-08-27T07:21:34.6842522Z [36;1mfi[0m
+2025-08-27T07:21:34.6842693Z [36;1mcompiled_path="${depot}/compiled"[0m
+2025-08-27T07:21:34.6842960Z [36;1m[ "true" = "true" ] && cache_paths+=("$compiled_path")[0m
+2025-08-27T07:21:34.6843264Z [36;1mscratchspaces_path="${depot}/scratchspaces"[0m
+2025-08-27T07:21:34.6843566Z [36;1m[ "true" = "true" ] && cache_paths+=("$scratchspaces_path")[0m
+2025-08-27T07:21:34.6843834Z [36;1mlogs_path="${depot}/logs"[0m
+2025-08-27T07:21:34.6844082Z [36;1m[ "true" = "true" ] && cache_paths+=("$logs_path")[0m
+2025-08-27T07:21:34.6844322Z [36;1m{[0m
+2025-08-27T07:21:34.6844478Z [36;1m    echo "cache-paths<<EOF"[0m
+2025-08-27T07:21:34.6844707Z [36;1m    printf "%s\n" "${cache_paths[@]}"[0m
+2025-08-27T07:21:34.6845113Z [36;1m    echo "EOF"[0m
+2025-08-27T07:21:34.6845298Z [36;1m} | tee -a "$GITHUB_OUTPUT"[0m
+2025-08-27T07:21:34.6861316Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:34.6861667Z env:
+2025-08-27T07:21:34.6861825Z   PATH_DELIMITER: ;
+2025-08-27T07:21:34.6862003Z ##[endgroup]
+2025-08-27T07:21:34.8398589Z depot=~/.julia
+2025-08-27T07:21:34.8644418Z cache-paths<<EOF
+2025-08-27T07:21:34.8645024Z ~/.julia/artifacts
+2025-08-27T07:21:34.8645619Z ~/.julia/packages
+2025-08-27T07:21:34.8645834Z ~/.julia/registries
+2025-08-27T07:21:34.8646025Z ~/.julia/compiled
+2025-08-27T07:21:34.8646191Z ~/.julia/scratchspaces
+2025-08-27T07:21:34.8646436Z ~/.julia/logs
+2025-08-27T07:21:34.8646622Z EOF
+2025-08-27T07:21:34.8875794Z ##[group]Run # `matrix_key` joins all of matrix keys/values (including nested objects) to ensure that concurrent runs each use a unique cache key.
+2025-08-27T07:21:34.8879297Z [36;1m# `matrix_key` joins all of matrix keys/values (including nested objects) to ensure that concurrent runs each use a unique cache key.[0m
+2025-08-27T07:21:34.8880297Z [36;1m# When `matrix` isn't set for the job then `MATRIX_JSON=null`.[0m
+2025-08-27T07:21:34.8880874Z [36;1mif [ "true" == "true" ] && [ "$MATRIX_JSON" != "null" ]; then[0m
+2025-08-27T07:21:34.8881724Z [36;1m  matrix_key=$(echo "$MATRIX_JSON" | jq 'paths(type != "object") as $p | ($p | join("-")) + "=" + (getpath($p) | tostring)' | jq -rs 'join(";") | . + ";"')[0m
+2025-08-27T07:21:34.8882491Z [36;1mfi[0m
+2025-08-27T07:21:34.8882957Z [36;1mrestore_key="julia-cache;workflow=CI;job=test;os=Windows;${matrix_key}"[0m
+2025-08-27T07:21:34.8883565Z [36;1m# URL encode any restricted characters:[0m
+2025-08-27T07:21:34.8884504Z [36;1m# https://github.com/actions/toolkit/blob/5430c5d84832076372990c7c27f900878ff66dc9/packages/cache/src/cache.ts#L38-L43[0m
+2025-08-27T07:21:34.8885497Z [36;1mrestore_key=$(sed 's/,/%2C/g' <<<"${restore_key}")[0m
+2025-08-27T07:21:34.8886028Z [36;1mkey="${restore_key}run_id=17260080498;run_attempt=1"[0m
+2025-08-27T07:21:34.8886580Z [36;1mecho "restore-key=${restore_key}" >> $GITHUB_OUTPUT[0m
+2025-08-27T07:21:34.8887066Z [36;1mecho "key=${key}" >> $GITHUB_OUTPUT[0m
+2025-08-27T07:21:34.8902993Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:34.8903551Z env:
+2025-08-27T07:21:34.8903941Z   MATRIX_JSON: {
+  "version": "1.11",
+  "os": "windows-latest",
+  "arch": "x64"
+}
+2025-08-27T07:21:34.8904437Z ##[endgroup]
+2025-08-27T07:21:35.1323587Z ##[group]Run actions/cache@4d4ae6ae148a43d0fd1eda1800170683e9882738
+2025-08-27T07:21:35.1323904Z with:
+2025-08-27T07:21:35.1324335Z   path: ~/.julia/artifacts
+~/.julia/packages
+~/.julia/registries
+~/.julia/compiled
+~/.julia/scratchspaces
+~/.julia/logs
+
+2025-08-27T07:21:35.1325046Z   key: julia-cache;workflow=CI;job=test;os=Windows;version=1.11;os=windows-latest;arch=x64;run_id=17260080498;run_attempt=1
+2025-08-27T07:21:35.1325648Z   restore-keys: julia-cache;workflow=CI;job=test;os=Windows;version=1.11;os=windows-latest;arch=x64;
+2025-08-27T07:21:35.1326050Z   enableCrossOsArchive: false
+2025-08-27T07:21:35.1326260Z   fail-on-cache-miss: false
+2025-08-27T07:21:35.1326442Z   lookup-only: false
+2025-08-27T07:21:35.1326608Z ##[endgroup]
+2025-08-27T07:21:35.6055208Z ##[warning]Failed to restore: Cache service responded with 400
+2025-08-27T07:21:35.6056978Z Cache not found for input keys: julia-cache;workflow=CI;job=test;os=Windows;version=1.11;os=windows-latest;arch=x64;run_id=17260080498;run_attempt=1, julia-cache;workflow=CI;job=test;os=Windows;version=1.11;os=windows-latest;arch=x64;
+2025-08-27T07:21:35.6209728Z ##[group]Run mkdir -p ~/.julia
+2025-08-27T07:21:35.6209972Z [36;1mmkdir -p ~/.julia[0m
+2025-08-27T07:21:35.6210186Z [36;1mdu -shc ~/.julia/* || true[0m
+2025-08-27T07:21:35.6221544Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:35.6221908Z ##[endgroup]
+2025-08-27T07:21:35.7269376Z du: cannot access '/c/Users/runneradmin/.julia/*': No such file or directory
+2025-08-27T07:21:35.7270052Z 0	total
+2025-08-27T07:21:35.7422222Z ##[group]Run pyTooling/Actions/with-post-step@adef08d3bdef092282614f3b683897cefae82ee3
+2025-08-27T07:21:35.7422601Z with:
+2025-08-27T07:21:35.7422758Z   main: echo ""
+2025-08-27T07:21:35.7423368Z   post: cd %GITHUB_ACTION_PATH% && julia handle_caches.jl rm "bakulev/JuliaTestRocket" "julia-cache;workflow=CI;job=test;os=Windows;version=1.11;os=windows-latest;arch=x64;" "refs/heads/main" "true"
+2025-08-27T07:21:35.7424014Z   key: POST
+2025-08-27T07:21:35.7424161Z env:
+2025-08-27T07:21:35.7424759Z   GH_TOKEN: ***
+2025-08-27T07:21:35.7424946Z ##[endgroup]
+2025-08-27T07:21:35.7908190Z ""
+2025-08-27T07:21:35.8054721Z ##[group]Run echo "cache-hit=$CACHE_HIT" >> $GITHUB_OUTPUT
+2025-08-27T07:21:35.8055677Z [36;1mecho "cache-hit=$CACHE_HIT" >> $GITHUB_OUTPUT[0m
+2025-08-27T07:21:35.8066730Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:35.8067081Z env:
+2025-08-27T07:21:35.8067232Z   CACHE_HIT: 
+2025-08-27T07:21:35.8067386Z ##[endgroup]

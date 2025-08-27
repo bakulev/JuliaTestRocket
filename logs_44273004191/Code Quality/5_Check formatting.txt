@@ -1,0 +1,29 @@
+﻿2025-08-27T07:21:57.1420509Z ##[group]Run julia -e '
+2025-08-27T07:21:57.1420812Z [36;1mjulia -e '[0m
+2025-08-27T07:21:57.1421031Z [36;1m  using JuliaFormatter[0m
+2025-08-27T07:21:57.1421331Z [36;1m  if !format(".", verbose=true, overwrite=false)[0m
+2025-08-27T07:21:57.1421639Z [36;1m    @error "Code is not formatted correctly"[0m
+2025-08-27T07:21:57.1421887Z [36;1m    exit(1)[0m
+2025-08-27T07:21:57.1422068Z [36;1m  end[0m
+2025-08-27T07:21:57.1422229Z [36;1m'[0m
+2025-08-27T07:21:57.1463384Z shell: /usr/bin/bash -e {0}
+2025-08-27T07:21:57.1463630Z ##[endgroup]
+2025-08-27T07:21:57.6653597Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/docs/make.jl
+2025-08-27T07:21:57.7185007Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/run_cairomakie.jl
+2025-08-27T07:21:57.7189782Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/run_glmakie.jl
+2025-08-27T07:21:57.7194372Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/scripts/version_management.jl
+2025-08-27T07:21:57.7240787Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/PointController.jl
+2025-08-27T07:21:57.7280389Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/input_handler.jl
+2025-08-27T07:21:57.7293456Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/logging_config.jl
+2025-08-27T07:21:57.7305873Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/movement_state.jl
+2025-08-27T07:21:57.7328916Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/src/visualization.jl
+2025-08-27T07:21:57.7344797Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/start_interactive.jl
+2025-08-27T07:21:57.7351165Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/runtests.jl
+2025-08-27T07:21:57.7356950Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_error_handling.jl
+2025-08-27T07:21:57.7407391Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_glmakie_smoke.jl
+2025-08-27T07:21:57.7418529Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_input.jl
+2025-08-27T07:21:57.7434753Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_integration_comprehensive.jl
+2025-08-27T07:21:57.7448731Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_integration_runner.jl
+2025-08-27T07:21:57.7501223Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_movement_state.jl
+2025-08-27T07:21:57.7525063Z Formatting /home/runner/work/JuliaTestRocket/JuliaTestRocket/test/test_visualization.jl
+2025-08-27T07:21:57.7537308Z Well done! ✨ 🍰 ✨

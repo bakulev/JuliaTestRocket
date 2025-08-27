@@ -1,0 +1,47 @@
+﻿2025-08-27T07:21:16.9792459Z ##[group]Run julia --project=. -e "
+2025-08-27T07:21:16.9792794Z [36;1mjulia --project=. -e "[0m
+2025-08-27T07:21:16.9793032Z [36;1m  using Pkg[0m
+2025-08-27T07:21:16.9793234Z [36;1m  Pkg.instantiate()[0m
+2025-08-27T07:21:16.9793462Z [36;1m  Pkg.precompile()[0m
+2025-08-27T07:21:16.9793669Z [36;1m"[0m
+2025-08-27T07:21:16.9828687Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:16.9829011Z ##[endgroup]
+2025-08-27T07:21:17.3768555Z   Installing known registries into `~/.julia`
+2025-08-27T07:21:19.3298717Z        Added `General` registry to ~/.julia/registries
+2025-08-27T07:21:20.0841071Z     Updating registry at `~/.julia/registries/General.toml`
+2025-08-27T07:21:20.6217756Z    Installed StaticArraysCore ─ v1.4.3
+2025-08-27T07:21:20.6306869Z    Installed Observables ────── v0.5.5
+2025-08-27T07:21:20.6311662Z    Installed PrecompileTools ── v1.2.1
+2025-08-27T07:21:20.6321695Z    Installed Preferences ────── v1.5.0
+2025-08-27T07:21:20.6333495Z    Installed StaticArrays ───── v1.9.14
+2025-08-27T07:21:21.6773985Z     Updating `~/work/JuliaTestRocket/JuliaTestRocket/Project.toml`
+2025-08-27T07:21:21.6930666Z   [510215fc] + Observables v0.5.5
+2025-08-27T07:21:21.6931221Z   [90137ffa] + StaticArrays v1.9.14
+2025-08-27T07:21:21.7001277Z     Updating `~/work/JuliaTestRocket/JuliaTestRocket/Manifest.toml`
+2025-08-27T07:21:21.7061168Z   [510215fc] + Observables v0.5.5
+2025-08-27T07:21:21.7061910Z ⌅ [aea7be01] + PrecompileTools v1.2.1
+2025-08-27T07:21:21.7062363Z   [21216c6a] + Preferences v1.5.0
+2025-08-27T07:21:21.7062835Z   [90137ffa] + StaticArrays v1.9.14
+2025-08-27T07:21:21.7063276Z   [1e83bf80] + StaticArraysCore v1.4.3
+2025-08-27T07:21:21.7063747Z   [56f22d72] + Artifacts
+2025-08-27T07:21:21.7064095Z   [ade2ca70] + Dates
+2025-08-27T07:21:21.7064416Z   [8f399da3] + Libdl
+2025-08-27T07:21:21.7068997Z   [37e2e46d] + LinearAlgebra
+2025-08-27T07:21:21.7069393Z   [56ddb016] + Logging
+2025-08-27T07:21:21.7069735Z   [de0858da] + Printf
+2025-08-27T07:21:21.7070015Z   [9a3f8284] + Random
+2025-08-27T07:21:21.7070245Z   [ea8e919c] + SHA v0.7.0
+2025-08-27T07:21:21.7070482Z   [fa267f1f] + TOML v1.0.3
+2025-08-27T07:21:21.7070713Z   [4ec0a83e] + Unicode
+2025-08-27T07:21:21.7070996Z   [e66e0078] + CompilerSupportLibraries_jll v1.1.1+0
+2025-08-27T07:21:21.7071344Z   [4536629a] + OpenBLAS_jll v0.3.23+4
+2025-08-27T07:21:21.7071646Z   [8e850b90] + libblastrampoline_jll v5.11.0+0
+2025-08-27T07:21:21.7072662Z         Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`
+2025-08-27T07:21:22.7481749Z Precompiling packages...
+2025-08-27T07:21:23.3127622Z     550.8 ms  ✓ StaticArraysCore
+2025-08-27T07:21:23.4619283Z     509.0 ms  ✓ Observables
+2025-08-27T07:21:23.5873128Z     633.2 ms  ✓ Preferences
+2025-08-27T07:21:23.8896073Z     302.2 ms  ✓ PrecompileTools
+2025-08-27T07:21:30.0379929Z    6148.3 ms  ✓ StaticArrays
+2025-08-27T07:21:30.7662596Z     728.1 ms  ✓ PointController
+2025-08-27T07:21:30.7663197Z   6 dependencies successfully precompiled in 9 seconds

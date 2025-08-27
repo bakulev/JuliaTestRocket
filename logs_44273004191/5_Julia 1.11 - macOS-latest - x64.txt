@@ -1,0 +1,1795 @@
+﻿2025-08-27T07:21:08.8942820Z Current runner version: '2.328.0'
+2025-08-27T07:21:08.8957710Z ##[group]Runner Image Provisioner
+2025-08-27T07:21:08.8958190Z Hosted Compute Agent
+2025-08-27T07:21:08.8958540Z Version: 20250825.382
+2025-08-27T07:21:08.8958920Z Commit: 7109f2abf901479dac39397456e363ac0cca0730
+2025-08-27T07:21:08.8959340Z Build Date: 2025-08-25T22:55:50Z
+2025-08-27T07:21:08.8959710Z ##[endgroup]
+2025-08-27T07:21:08.8960040Z ##[group]Operating System
+2025-08-27T07:21:08.8960390Z macOS
+2025-08-27T07:21:08.8960660Z 15.5
+2025-08-27T07:21:08.8960940Z 24F74
+2025-08-27T07:21:08.8961220Z ##[endgroup]
+2025-08-27T07:21:08.8961520Z ##[group]Runner Image
+2025-08-27T07:21:08.8961840Z Image: macos-15-arm64
+2025-08-27T07:21:08.8962170Z Version: 20250818.2206
+2025-08-27T07:21:08.8962840Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20250818.2206/images/macos/macos-15-arm64-Readme.md
+2025-08-27T07:21:08.8963830Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20250818.2206
+2025-08-27T07:21:08.8964420Z ##[endgroup]
+2025-08-27T07:21:08.8965950Z ##[group]GITHUB_TOKEN Permissions
+2025-08-27T07:21:08.8966990Z Actions: write
+2025-08-27T07:21:08.8967310Z Attestations: write
+2025-08-27T07:21:08.8967770Z Checks: write
+2025-08-27T07:21:08.8968180Z Contents: write
+2025-08-27T07:21:08.8968550Z Deployments: write
+2025-08-27T07:21:08.8968860Z Discussions: write
+2025-08-27T07:21:08.8969180Z Issues: write
+2025-08-27T07:21:08.8969540Z Metadata: read
+2025-08-27T07:21:08.8969840Z Models: read
+2025-08-27T07:21:08.8970140Z Packages: write
+2025-08-27T07:21:08.8970440Z Pages: write
+2025-08-27T07:21:08.8970740Z PullRequests: write
+2025-08-27T07:21:08.8971070Z RepositoryProjects: write
+2025-08-27T07:21:08.8971420Z SecurityEvents: write
+2025-08-27T07:21:08.8971810Z Statuses: write
+2025-08-27T07:21:08.8972120Z ##[endgroup]
+2025-08-27T07:21:08.8973510Z Secret source: Actions
+2025-08-27T07:21:08.8973900Z Prepare workflow directory
+2025-08-27T07:21:08.9181830Z Prepare all required actions
+2025-08-27T07:21:08.9209730Z Getting action download info
+2025-08-27T07:21:09.4293970Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-08-27T07:21:10.2169710Z Download action repository 'julia-actions/setup-julia@v1' (SHA:ac0d62164df5a47de404f4e96ce86a1a28a28d56)
+2025-08-27T07:21:10.7642500Z Download action repository 'julia-actions/cache@v1' (SHA:dc1a3cdeacb521b0ca93cfc66143fcadb15a5bd0)
+2025-08-27T07:21:11.2008550Z Download action repository 'julia-actions/julia-processcoverage@v1' (SHA:03114f09f119417c3242a9fb6e0b722676aedf38)
+2025-08-27T07:21:11.7107620Z Download action repository 'codecov/codecov-action@v3' (SHA:ab904c41d6ece82784817410c45d8b8c02684457)
+2025-08-27T07:21:12.3251530Z Getting action download info
+2025-08-27T07:21:12.5323540Z Download action repository 'dcarbone/install-jq-action@v2.1.0' (SHA:8867ddb4788346d7c22b72ea2e2ffe4d514c7bcb)
+2025-08-27T07:21:12.9857950Z Download action repository 'actions/cache@4d4ae6ae148a43d0fd1eda1800170683e9882738' (SHA:4d4ae6ae148a43d0fd1eda1800170683e9882738)
+2025-08-27T07:21:13.6096870Z Download action repository 'pyTooling/Actions@adef08d3bdef092282614f3b683897cefae82ee3' (SHA:adef08d3bdef092282614f3b683897cefae82ee3)
+2025-08-27T07:21:14.2523920Z Complete job name: Julia 1.11 - macOS-latest - x64
+2025-08-27T07:21:14.2868750Z ##[group]Run actions/checkout@v4
+2025-08-27T07:21:14.2869150Z with:
+2025-08-27T07:21:14.2869290Z   repository: bakulev/JuliaTestRocket
+2025-08-27T07:21:14.2869620Z   token: ***
+2025-08-27T07:21:14.2869760Z   ssh-strict: true
+2025-08-27T07:21:14.2869890Z   ssh-user: git
+2025-08-27T07:21:14.2870030Z   persist-credentials: true
+2025-08-27T07:21:14.2870180Z   clean: true
+2025-08-27T07:21:14.2870330Z   sparse-checkout-cone-mode: true
+2025-08-27T07:21:14.2870500Z   fetch-depth: 1
+2025-08-27T07:21:14.2870630Z   fetch-tags: false
+2025-08-27T07:21:14.2870770Z   show-progress: true
+2025-08-27T07:21:14.2870900Z   lfs: false
+2025-08-27T07:21:14.2871020Z   submodules: false
+2025-08-27T07:21:14.2871160Z   set-safe-directory: true
+2025-08-27T07:21:14.2872210Z ##[endgroup]
+2025-08-27T07:21:14.5440860Z Syncing repository: bakulev/JuliaTestRocket
+2025-08-27T07:21:14.5442090Z ##[group]Getting Git version info
+2025-08-27T07:21:14.5442540Z Working directory is '/Users/runner/work/JuliaTestRocket/JuliaTestRocket'
+2025-08-27T07:21:14.5443430Z [command]/opt/homebrew/bin/git version
+2025-08-27T07:21:14.5643130Z git version 2.50.1
+2025-08-27T07:21:14.5668360Z ##[endgroup]
+2025-08-27T07:21:14.5678900Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/156adb49-1bae-4666-9b53-b6f28d63e2f1/.gitconfig'
+2025-08-27T07:21:14.5685040Z Temporarily overriding HOME='/Users/runner/work/_temp/156adb49-1bae-4666-9b53-b6f28d63e2f1' before making global git config changes
+2025-08-27T07:21:14.5685630Z Adding repository directory to the temporary git global config as a safe directory
+2025-08-27T07:21:14.5689320Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/JuliaTestRocket/JuliaTestRocket
+2025-08-27T07:21:14.5780910Z Deleting the contents of '/Users/runner/work/JuliaTestRocket/JuliaTestRocket'
+2025-08-27T07:21:14.5782840Z ##[group]Initializing the repository
+2025-08-27T07:21:14.5787660Z [command]/opt/homebrew/bin/git init /Users/runner/work/JuliaTestRocket/JuliaTestRocket
+2025-08-27T07:21:14.5970020Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-08-27T07:21:14.5970740Z hint: is subject to change. To configure the initial branch name to use in all
+2025-08-27T07:21:14.5971260Z hint: of your new repositories, which will suppress this warning, call:
+2025-08-27T07:21:14.5971540Z hint:
+2025-08-27T07:21:14.5976470Z hint: 	git config --global init.defaultBranch <name>
+2025-08-27T07:21:14.5982520Z hint:
+2025-08-27T07:21:14.5986400Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-08-27T07:21:14.5988240Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-08-27T07:21:14.5988650Z hint:
+2025-08-27T07:21:14.5988810Z hint: 	git branch -m <name>
+2025-08-27T07:21:14.5988990Z hint:
+2025-08-27T07:21:14.5989250Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-08-27T07:21:14.5989790Z Initialized empty Git repository in /Users/runner/work/JuliaTestRocket/JuliaTestRocket/.git/
+2025-08-27T07:21:14.5990730Z [command]/opt/homebrew/bin/git remote add origin https://github.com/bakulev/JuliaTestRocket
+2025-08-27T07:21:14.6050820Z ##[endgroup]
+2025-08-27T07:21:14.6051170Z ##[group]Disabling automatic garbage collection
+2025-08-27T07:21:14.6053190Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2025-08-27T07:21:14.6124670Z ##[endgroup]
+2025-08-27T07:21:14.6124950Z ##[group]Setting up auth
+2025-08-27T07:21:14.6129680Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-08-27T07:21:14.6189920Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-08-27T07:21:14.7253140Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-08-27T07:21:14.7310320Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-08-27T07:21:14.8022910Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-08-27T07:21:14.8097980Z ##[endgroup]
+2025-08-27T07:21:14.8098500Z ##[group]Fetching the repository
+2025-08-27T07:21:14.8105000Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +048c831dcbcc177572e3761b8279a61c28f21783:refs/remotes/origin/main
+2025-08-27T07:21:15.3248580Z From https://github.com/bakulev/JuliaTestRocket
+2025-08-27T07:21:15.3258990Z  * [new ref]         048c831dcbcc177572e3761b8279a61c28f21783 -> origin/main
+2025-08-27T07:21:15.3386630Z ##[endgroup]
+2025-08-27T07:21:15.3387200Z ##[group]Determining the checkout info
+2025-08-27T07:21:15.3392780Z ##[endgroup]
+2025-08-27T07:21:15.3402170Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2025-08-27T07:21:15.3521440Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2025-08-27T07:21:15.3601640Z ##[group]Checking out the ref
+2025-08-27T07:21:15.3603220Z [command]/opt/homebrew/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-08-27T07:21:15.3847830Z Switched to a new branch 'main'
+2025-08-27T07:21:15.3867840Z branch 'main' set up to track 'origin/main'.
+2025-08-27T07:21:15.3876920Z ##[endgroup]
+2025-08-27T07:21:15.4050860Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2025-08-27T07:21:15.4128660Z 048c831dcbcc177572e3761b8279a61c28f21783
+2025-08-27T07:21:15.4372400Z ##[group]Run julia-actions/setup-julia@v1
+2025-08-27T07:21:15.4372670Z with:
+2025-08-27T07:21:15.4372820Z   version: 1.11
+2025-08-27T07:21:15.4372980Z   arch: x64
+2025-08-27T07:21:15.4373170Z   include-all-prereleases: false
+2025-08-27T07:21:15.4373360Z   show-versioninfo: false
+2025-08-27T07:21:15.4373550Z ##[endgroup]
+2025-08-27T07:21:23.1435380Z [command]/usr/bin/tar xf /Users/runner/work/_temp/088a6f76-bbd5-4897-a6d4-843718a5737c --strip-components=1 -C /Users/runner/hostedtoolcache/julia/1.11.6/x64
+2025-08-27T07:21:26.5742840Z [command]/Users/runner/hostedtoolcache/julia/1.11.6/x64/bin/julia --version
+2025-08-27T07:21:36.2075640Z julia version 1.11.6
+2025-08-27T07:21:36.2480220Z ##[group]Run julia-actions/cache@v1
+2025-08-27T07:21:36.2480440Z with:
+2025-08-27T07:21:36.2480590Z   cache-name: julia-cache;workflow=CI;job=test
+2025-08-27T07:21:36.2480800Z   include-matrix: true
+2025-08-27T07:21:36.2481010Z   cache-artifacts: true
+2025-08-27T07:21:36.2481300Z   cache-packages: true
+2025-08-27T07:21:36.2481550Z   cache-registries: true
+2025-08-27T07:21:36.2481710Z   cache-compiled: true
+2025-08-27T07:21:36.2482070Z   cache-scratchspaces: true
+2025-08-27T07:21:36.2482220Z   cache-logs: true
+2025-08-27T07:21:36.2482420Z   delete-old-caches: true
+2025-08-27T07:21:36.2482730Z   token: ***
+2025-08-27T07:21:36.2482910Z ##[endgroup]
+2025-08-27T07:21:36.2586230Z ##[group]Run if [ -n "" ]; then
+2025-08-27T07:21:36.2586610Z [36;1mif [ -n "" ]; then[0m
+2025-08-27T07:21:36.2586770Z [36;1m    depot=""[0m
+2025-08-27T07:21:36.2586950Z [36;1melif [ -n "$JULIA_DEPOT_PATH" ]; then[0m
+2025-08-27T07:21:36.2587260Z [36;1m    # Use the first depot path[0m
+2025-08-27T07:21:36.2587740Z [36;1m    depot=$(echo $JULIA_DEPOT_PATH | cut -d$PATH_DELIMITER -f1)[0m
+2025-08-27T07:21:36.2588040Z [36;1melse[0m
+2025-08-27T07:21:36.2588170Z [36;1m    depot="~/.julia"[0m
+2025-08-27T07:21:36.2588390Z [36;1mfi[0m
+2025-08-27T07:21:36.2588670Z [36;1mecho "depot=$depot" | tee -a "$GITHUB_OUTPUT"[0m
+2025-08-27T07:21:36.2588940Z [36;1m[0m
+2025-08-27T07:21:36.2589120Z [36;1mcache_paths=()[0m
+2025-08-27T07:21:36.2589350Z [36;1martifacts_path="${depot}/artifacts"[0m
+2025-08-27T07:21:36.2589670Z [36;1m[ "true" = "true" ] && cache_paths+=("$artifacts_path")[0m
+2025-08-27T07:21:36.2589970Z [36;1mpackages_path="${depot}/packages"[0m
+2025-08-27T07:21:36.2590350Z [36;1m[ "true" = "true" ] && cache_paths+=("$packages_path")[0m
+2025-08-27T07:21:36.2590650Z [36;1mregistries_path="${depot}/registries"[0m
+2025-08-27T07:21:36.2590910Z [36;1mif [ "true" = "true" ]; then[0m
+2025-08-27T07:21:36.2591230Z [36;1m    if [ ! -d "${registries_path/#\~/$HOME}" ]; then[0m
+2025-08-27T07:21:36.2591530Z [36;1m        cache_paths+=("$registries_path")[0m
+2025-08-27T07:21:36.2591720Z [36;1m    else[0m
+2025-08-27T07:21:36.2592360Z [36;1m        echo "::warning::Julia depot registries already exist. Skipping restoring of cached registries to avoid potential merge conflicts when updating. Please ensure that \`julia-actions/cache\` precedes any workflow steps which add registries."[0m
+2025-08-27T07:21:36.2593030Z [36;1m    fi[0m
+2025-08-27T07:21:36.2597230Z [36;1mfi[0m
+2025-08-27T07:21:36.2597530Z [36;1mcompiled_path="${depot}/compiled"[0m
+2025-08-27T07:21:36.2597780Z [36;1m[ "true" = "true" ] && cache_paths+=("$compiled_path")[0m
+2025-08-27T07:21:36.2598040Z [36;1mscratchspaces_path="${depot}/scratchspaces"[0m
+2025-08-27T07:21:36.2598360Z [36;1m[ "true" = "true" ] && cache_paths+=("$scratchspaces_path")[0m
+2025-08-27T07:21:36.2598650Z [36;1mlogs_path="${depot}/logs"[0m
+2025-08-27T07:21:36.2598920Z [36;1m[ "true" = "true" ] && cache_paths+=("$logs_path")[0m
+2025-08-27T07:21:36.2599380Z [36;1m{[0m
+2025-08-27T07:21:36.2599570Z [36;1m    echo "cache-paths<<EOF"[0m
+2025-08-27T07:21:36.2599770Z [36;1m    printf "%s\n" "${cache_paths[@]}"[0m
+2025-08-27T07:21:36.2600150Z [36;1m    echo "EOF"[0m
+2025-08-27T07:21:36.2600310Z [36;1m} | tee -a "$GITHUB_OUTPUT"[0m
+2025-08-27T07:21:36.2651990Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:36.2652330Z env:
+2025-08-27T07:21:36.2652470Z   PATH_DELIMITER: :
+2025-08-27T07:21:36.2652620Z ##[endgroup]
+2025-08-27T07:21:36.3125040Z depot=~/.julia
+2025-08-27T07:21:36.3160520Z cache-paths<<EOF
+2025-08-27T07:21:36.3160870Z ~/.julia/artifacts
+2025-08-27T07:21:36.3161020Z ~/.julia/packages
+2025-08-27T07:21:36.3161490Z ~/.julia/registries
+2025-08-27T07:21:36.3161680Z ~/.julia/compiled
+2025-08-27T07:21:36.3161890Z ~/.julia/scratchspaces
+2025-08-27T07:21:36.3162080Z ~/.julia/logs
+2025-08-27T07:21:36.3162300Z EOF
+2025-08-27T07:21:36.3347820Z ##[group]Run # `matrix_key` joins all of matrix keys/values (including nested objects) to ensure that concurrent runs each use a unique cache key.
+2025-08-27T07:21:36.3348550Z [36;1m# `matrix_key` joins all of matrix keys/values (including nested objects) to ensure that concurrent runs each use a unique cache key.[0m
+2025-08-27T07:21:36.3349050Z [36;1m# When `matrix` isn't set for the job then `MATRIX_JSON=null`.[0m
+2025-08-27T07:21:36.3349360Z [36;1mif [ "true" == "true" ] && [ "$MATRIX_JSON" != "null" ]; then[0m
+2025-08-27T07:21:36.3349840Z [36;1m  matrix_key=$(echo "$MATRIX_JSON" | jq 'paths(type != "object") as $p | ($p | join("-")) + "=" + (getpath($p) | tostring)' | jq -rs 'join(";") | . + ";"')[0m
+2025-08-27T07:21:36.3350220Z [36;1mfi[0m
+2025-08-27T07:21:36.3350450Z [36;1mrestore_key="julia-cache;workflow=CI;job=test;os=macOS;${matrix_key}"[0m
+2025-08-27T07:21:36.3350750Z [36;1m# URL encode any restricted characters:[0m
+2025-08-27T07:21:36.3351220Z [36;1m# https://github.com/actions/toolkit/blob/5430c5d84832076372990c7c27f900878ff66dc9/packages/cache/src/cache.ts#L38-L43[0m
+2025-08-27T07:21:36.3351700Z [36;1mrestore_key=$(sed 's/,/%2C/g' <<<"${restore_key}")[0m
+2025-08-27T07:21:36.3351980Z [36;1mkey="${restore_key}run_id=17260080498;run_attempt=1"[0m
+2025-08-27T07:21:36.3352270Z [36;1mecho "restore-key=${restore_key}" >> $GITHUB_OUTPUT[0m
+2025-08-27T07:21:36.3352540Z [36;1mecho "key=${key}" >> $GITHUB_OUTPUT[0m
+2025-08-27T07:21:36.3380650Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:36.3380890Z env:
+2025-08-27T07:21:36.3381100Z   MATRIX_JSON: {
+  "version": "1.11",
+  "os": "macOS-latest",
+  "arch": "x64"
+}
+2025-08-27T07:21:36.3381370Z ##[endgroup]
+2025-08-27T07:21:36.3986760Z ##[group]Run actions/cache@4d4ae6ae148a43d0fd1eda1800170683e9882738
+2025-08-27T07:21:36.3987040Z with:
+2025-08-27T07:21:36.3987430Z   path: ~/.julia/artifacts
+~/.julia/packages
+~/.julia/registries
+~/.julia/compiled
+~/.julia/scratchspaces
+~/.julia/logs
+
+2025-08-27T07:21:36.3988040Z   key: julia-cache;workflow=CI;job=test;os=macOS;version=1.11;os=macOS-latest;arch=x64;run_id=17260080498;run_attempt=1
+2025-08-27T07:21:36.3988620Z   restore-keys: julia-cache;workflow=CI;job=test;os=macOS;version=1.11;os=macOS-latest;arch=x64;
+2025-08-27T07:21:36.3988990Z   enableCrossOsArchive: false
+2025-08-27T07:21:36.3989170Z   fail-on-cache-miss: false
+2025-08-27T07:21:36.3989350Z   lookup-only: false
+2025-08-27T07:21:36.3989490Z ##[endgroup]
+2025-08-27T07:21:36.5787980Z ##[warning]Failed to restore: Cache service responded with 400
+2025-08-27T07:21:36.5790040Z Cache not found for input keys: julia-cache;workflow=CI;job=test;os=macOS;version=1.11;os=macOS-latest;arch=x64;run_id=17260080498;run_attempt=1, julia-cache;workflow=CI;job=test;os=macOS;version=1.11;os=macOS-latest;arch=x64;
+2025-08-27T07:21:36.5811700Z ##[group]Run mkdir -p ~/.julia
+2025-08-27T07:21:36.5811930Z [36;1mmkdir -p ~/.julia[0m
+2025-08-27T07:21:36.5812100Z [36;1mdu -shc ~/.julia/* || true[0m
+2025-08-27T07:21:36.5840040Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:36.5840290Z ##[endgroup]
+2025-08-27T07:21:36.6133520Z du: /Users/runner/.julia/*: No such file or directory
+2025-08-27T07:21:36.6133930Z   0B	total
+2025-08-27T07:21:36.6175930Z ##[group]Run pyTooling/Actions/with-post-step@adef08d3bdef092282614f3b683897cefae82ee3
+2025-08-27T07:21:36.6176260Z with:
+2025-08-27T07:21:36.6176390Z   main: echo ""
+2025-08-27T07:21:36.6176900Z   post: julia $GITHUB_ACTION_PATH/handle_caches.jl rm "bakulev/JuliaTestRocket" "julia-cache;workflow=CI;job=test;os=macOS;version=1.11;os=macOS-latest;arch=x64;" "refs/heads/main" "true"
+2025-08-27T07:21:36.6177450Z   key: POST
+2025-08-27T07:21:36.6177570Z env:
+2025-08-27T07:21:36.6177930Z   GH_TOKEN: ***
+2025-08-27T07:21:36.6178070Z ##[endgroup]
+2025-08-27T07:21:36.6603520Z 
+2025-08-27T07:21:36.6646730Z ##[group]Run echo "cache-hit=$CACHE_HIT" >> $GITHUB_OUTPUT
+2025-08-27T07:21:36.6647070Z [36;1mecho "cache-hit=$CACHE_HIT" >> $GITHUB_OUTPUT[0m
+2025-08-27T07:21:36.6698520Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:36.6698770Z env:
+2025-08-27T07:21:36.6699190Z   CACHE_HIT: 
+2025-08-27T07:21:36.6699320Z ##[endgroup]
+2025-08-27T07:21:36.6990560Z ##[group]Run julia --project=. -e "
+2025-08-27T07:21:36.6990810Z [36;1mjulia --project=. -e "[0m
+2025-08-27T07:21:36.6990980Z [36;1m  using Pkg[0m
+2025-08-27T07:21:36.6991130Z [36;1m  Pkg.instantiate()[0m
+2025-08-27T07:21:36.6991310Z [36;1m  Pkg.precompile()[0m
+2025-08-27T07:21:36.6991460Z [36;1m"[0m
+2025-08-27T07:21:36.7016930Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:21:36.7017190Z ##[endgroup]
+2025-08-27T07:22:03.1250720Z   Installing known registries into `~/.julia`
+2025-08-27T07:22:07.9132040Z        Added `General` registry to ~/.julia/registries
+2025-08-27T07:22:09.9178770Z     Updating registry at `~/.julia/registries/General.toml`
+2025-08-27T07:22:12.0539920Z    Installed Observables ────── v0.5.5
+2025-08-27T07:22:12.3491740Z    Installed StaticArraysCore ─ v1.4.3
+2025-08-27T07:22:12.3506340Z    Installed StaticArrays ───── v1.9.14
+2025-08-27T07:22:12.3584110Z    Installed Preferences ────── v1.5.0
+2025-08-27T07:22:12.3586570Z    Installed PrecompileTools ── v1.2.1
+2025-08-27T07:22:13.2224120Z     Updating `~/work/JuliaTestRocket/JuliaTestRocket/Project.toml`
+2025-08-27T07:22:13.2465170Z   [510215fc] + Observables v0.5.5
+2025-08-27T07:22:13.2470710Z   [90137ffa] + StaticArrays v1.9.14
+2025-08-27T07:22:13.2475590Z   [ade2ca70] ~ Dates ⇒ v1.11.0
+2025-08-27T07:22:13.2492630Z   [56ddb016] ~ Logging ⇒ v1.11.0
+2025-08-27T07:22:13.2499910Z     Updating `~/work/JuliaTestRocket/JuliaTestRocket/Manifest.toml`
+2025-08-27T07:22:13.2822730Z   [510215fc] + Observables v0.5.5
+2025-08-27T07:22:13.2830690Z ⌅ [aea7be01] + PrecompileTools v1.2.1
+2025-08-27T07:22:13.2835300Z   [21216c6a] + Preferences v1.5.0
+2025-08-27T07:22:13.2841380Z   [90137ffa] + StaticArrays v1.9.14
+2025-08-27T07:22:13.2848350Z   [1e83bf80] + StaticArraysCore v1.4.3
+2025-08-27T07:22:13.2853770Z   [56f22d72] + Artifacts v1.11.0
+2025-08-27T07:22:13.2860970Z   [ade2ca70] + Dates v1.11.0
+2025-08-27T07:22:13.2866760Z   [8f399da3] + Libdl v1.11.0
+2025-08-27T07:22:13.2872890Z   [37e2e46d] + LinearAlgebra v1.11.0
+2025-08-27T07:22:13.2878780Z   [56ddb016] + Logging v1.11.0
+2025-08-27T07:22:13.2886880Z   [de0858da] + Printf v1.11.0
+2025-08-27T07:22:13.2891960Z   [9a3f8284] + Random v1.11.0
+2025-08-27T07:22:13.2898070Z   [ea8e919c] + SHA v0.7.0
+2025-08-27T07:22:13.2903060Z   [fa267f1f] + TOML v1.0.3
+2025-08-27T07:22:13.2908410Z   [4ec0a83e] + Unicode v1.11.0
+2025-08-27T07:22:13.2915220Z   [e66e0078] + CompilerSupportLibraries_jll v1.1.1+0
+2025-08-27T07:22:13.2922460Z   [4536629a] + OpenBLAS_jll v0.3.27+1
+2025-08-27T07:22:13.2931700Z   [8e850b90] + libblastrampoline_jll v5.11.0+0
+2025-08-27T07:22:13.2935040Z         Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`
+2025-08-27T07:22:13.3594140Z Precompiling project...
+2025-08-27T07:22:15.8600030Z    2493.0 ms  ✓ StaticArraysCore
+2025-08-27T07:22:15.8628470Z    2424.4 ms  ✓ Preferences
+2025-08-27T07:22:15.8635140Z    2430.9 ms  ✓ Observables
+2025-08-27T07:22:17.4656480Z    1600.1 ms  ✓ PrecompileTools
+2025-08-27T07:22:30.3004700Z   12824.2 ms  ✓ StaticArrays
+2025-08-27T07:22:33.2550570Z    2949.4 ms  ✓ PointController
+2025-08-27T07:22:33.2664060Z   6 dependencies successfully precompiled in 20 seconds. 6 already precompiled.
+2025-08-27T07:22:33.6944800Z ##[group]Run julia --project=. -e "
+2025-08-27T07:22:33.6945190Z [36;1mjulia --project=. -e "[0m
+2025-08-27T07:22:33.6945660Z [36;1m  using Pkg[0m
+2025-08-27T07:22:33.6945970Z [36;1m  # Use CairoMakie for CI (no display required)[0m
+2025-08-27T07:22:33.6946360Z [36;1m  Pkg.add(\"CairoMakie\")[0m
+2025-08-27T07:22:33.6946670Z [36;1m  using CairoMakie[0m
+2025-08-27T07:22:33.6946890Z [36;1m  CairoMakie.activate!()[0m
+2025-08-27T07:22:33.6947180Z [36;1m  Pkg.test(coverage=true)[0m
+2025-08-27T07:22:33.6947480Z [36;1m"[0m
+2025-08-27T07:22:33.6997200Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-27T07:22:33.6997530Z env:
+2025-08-27T07:22:33.6997730Z   JULIA_NUM_THREADS: 2
+2025-08-27T07:22:33.6998020Z ##[endgroup]
+2025-08-27T07:22:38.1979550Z     Updating registry at `~/.julia/registries/General.toml`
+2025-08-27T07:22:38.2131630Z    Resolving package versions...
+2025-08-27T07:22:41.9612870Z    Installed JpegTurbo_jll ─────────────── v3.1.2+0
+2025-08-27T07:22:42.3330460Z    Installed x265_jll ──────────────────── v4.1.0+0
+2025-08-27T07:22:42.3432410Z    Installed AxisArrays ────────────────── v0.4.7
+2025-08-27T07:22:42.3533260Z    Installed OffsetArrays ──────────────── v1.17.0
+2025-08-27T07:22:42.3634890Z    Installed Libmount_jll ──────────────── v2.41.1+0
+2025-08-27T07:22:42.3738020Z    Installed ImageIO ───────────────────── v0.6.9
+2025-08-27T07:22:42.4246540Z    Installed libfdk_aac_jll ────────────── v2.0.4+0
+2025-08-27T07:22:42.4348150Z    Installed JpegTurbo ─────────────────── v0.1.6
+2025-08-27T07:22:42.4353590Z    Installed TiffImages ────────────────── v0.11.6
+2025-08-27T07:22:42.8823980Z    Installed LERC_jll ──────────────────── v4.0.1+0
+2025-08-27T07:22:42.9235500Z    Installed HypergeometricFunctions ───── v0.3.28
+2025-08-27T07:22:42.9382540Z    Installed StatsFuns ─────────────────── v1.5.0
+2025-08-27T07:22:42.9689870Z    Installed PNGFiles ──────────────────── v0.4.4
+2025-08-27T07:22:42.9791600Z    Installed FFTW ──────────────────────── v1.9.0
+2025-08-27T07:22:42.9892630Z    Installed Opus_jll ──────────────────── v1.5.2+0
+2025-08-27T07:22:42.9992590Z    Installed Multisets ─────────────────── v0.4.5
+2025-08-27T07:22:43.0443020Z    Installed Permutations ──────────────── v0.4.23
+2025-08-27T07:22:43.4969850Z    Installed RelocatableFolders ────────── v1.0.1
+2025-08-27T07:22:43.5070560Z    Installed PDMats ────────────────────── v0.11.35
+2025-08-27T07:22:43.5372230Z    Installed EarCut_jll ────────────────── v2.2.4+0
+2025-08-27T07:22:43.5704640Z    Installed StableHashTraits ──────────── v1.3.4
+2025-08-27T07:22:43.5806990Z    Installed Sixel ─────────────────────── v0.1.5
+2025-08-27T07:22:43.5915820Z    Installed Contour ───────────────────── v0.6.3
+2025-08-27T07:22:43.6024840Z    Installed ProgressMeter ─────────────── v1.11.0
+2025-08-27T07:22:43.9888560Z    Installed OpenEXR ───────────────────── v0.3.3
+2025-08-27T07:22:44.1297280Z    Installed Grisu ─────────────────────── v1.0.2
+2025-08-27T07:22:44.1400440Z    Installed EnumX ─────────────────────── v1.0.5
+2025-08-27T07:22:44.1501210Z    Installed PlotUtils ─────────────────── v1.4.3
+2025-08-27T07:22:44.1602930Z    Installed Formatting ────────────────── v0.4.3
+2025-08-27T07:22:44.1852580Z    Installed BaseDirs ──────────────────── v1.3.2
+2025-08-27T07:22:44.2284910Z    Installed FileIO ────────────────────── v1.17.0
+2025-08-27T07:22:44.2405800Z    Installed CEnum ─────────────────────── v0.5.0
+2025-08-27T07:22:45.3200630Z    Installed Cairo_jll ─────────────────── v1.18.5+0
+2025-08-27T07:22:45.5365400Z    Installed IntelOpenMP_jll ───────────── v2025.2.0+0
+2025-08-27T07:22:45.6432450Z    Installed Statistics ────────────────── v1.11.1
+2025-08-27T07:22:45.6710220Z    Installed Mods ──────────────────────── v2.2.6
+2025-08-27T07:22:45.7027230Z    Installed Polynomials ───────────────── v4.0.21
+2025-08-27T07:22:45.7987200Z    Installed Netpbm ────────────────────── v1.1.1
+2025-08-27T07:22:46.3164900Z    Installed Xorg_libXau_jll ───────────── v1.0.13+0
+2025-08-27T07:22:46.3891170Z    Installed SignedDistanceFields ──────── v0.4.0
+2025-08-27T07:22:46.4156290Z    Installed Fontconfig_jll ────────────── v2.17.1+0
+2025-08-27T07:22:46.5870950Z    Installed RoundingEmulator ──────────── v0.2.1
+2025-08-27T07:22:46.5988950Z    Installed Missings ──────────────────── v1.2.0
+2025-08-27T07:22:46.6015380Z    Installed TupleTools ────────────────── v1.6.0
+2025-08-27T07:22:46.6532910Z    Installed FiniteDiff ────────────────── v2.28.1
+2025-08-27T07:22:46.6605450Z    Installed ColorSchemes ──────────────── v3.30.0
+2025-08-27T07:22:46.8674750Z    Installed SIMD ──────────────────────── v3.7.1
+2025-08-27T07:22:46.8776020Z    Installed TriplotBase ───────────────── v0.1.0
+2025-08-27T07:22:47.2051780Z    Installed IrrationalConstants ───────── v0.2.4
+2025-08-27T07:22:47.2169220Z    Installed Giflib_jll ────────────────── v5.2.3+0
+2025-08-27T07:22:47.2169910Z    Installed Showoff ───────────────────── v1.0.3
+2025-08-27T07:22:47.4856740Z    Installed SimpleRandom ──────────────── v0.3.2
+2025-08-27T07:22:47.5316990Z    Installed JSON ──────────────────────── v0.21.4
+2025-08-27T07:22:47.5485730Z    Installed OpenBLASConsistentFPCSR_jll ─ v0.3.29+0
+2025-08-27T07:22:47.5692210Z    Installed AbstractLattices ──────────── v0.3.1
+2025-08-27T07:22:47.5793990Z    Installed Pango_jll ─────────────────── v1.56.3+0
+2025-08-27T07:22:47.5852420Z    Installed PolygonOps ────────────────── v0.1.2
+2025-08-27T07:22:47.6816810Z    Installed MathTeXEngine ─────────────── v0.5.7
+2025-08-27T07:22:48.1843670Z    Installed PtrArrays ─────────────────── v1.3.0
+2025-08-27T07:22:48.1962100Z    Installed SimpleGraphs ──────────────── v0.8.7
+2025-08-27T07:22:48.1973180Z    Installed Bzip2_jll ─────────────────── v1.0.9+0
+2025-08-27T07:22:48.1988300Z    Installed HarfBuzz_jll ──────────────── v8.5.1+0
+2025-08-27T07:22:48.2005510Z    Installed XZ_jll ────────────────────── v5.8.1+0
+2025-08-27T07:22:48.2013580Z    Installed QOI ───────────────────────── v1.0.1
+2025-08-27T07:22:48.2025980Z    Installed ADTypes ───────────────────── v1.17.0
+2025-08-27T07:22:48.2035540Z    Installed SpecialFunctions ──────────── v2.5.1
+2025-08-27T07:22:48.4732720Z    Installed isoband_jll ───────────────── v0.2.3+0
+2025-08-27T07:22:48.4833130Z    Installed FriBidi_jll ───────────────── v1.0.17+0
+2025-08-27T07:22:48.4930050Z    Installed PikaParser ────────────────── v0.6.1
+2025-08-27T07:22:48.7438850Z    Installed LZO_jll ───────────────────── v2.10.3+0
+2025-08-27T07:22:48.7641610Z    Installed PkgVersion ────────────────── v0.3.3
+2025-08-27T07:22:48.7741970Z    Installed WebP ──────────────────────── v0.1.3
+2025-08-27T07:22:48.7844520Z    Installed TranscodingStreams ────────── v0.11.3
+2025-08-27T07:22:48.8260470Z    Installed NaNMath ───────────────────── v1.1.3
+2025-08-27T07:22:48.8435330Z    Installed NLSolversBase ─────────────── v7.10.0
+2025-08-27T07:22:48.8468720Z    Installed UnicodeFun ────────────────── v0.4.1
+2025-08-27T07:22:48.8478790Z    Installed Graphics ──────────────────── v1.1.3
+2025-08-27T07:22:49.3112200Z    Installed Rmath_jll ─────────────────── v0.5.1+0
+2025-08-27T07:22:49.3158740Z    Installed ImageMetadata ─────────────── v0.9.10
+2025-08-27T07:22:49.3189020Z    Installed Ratios ────────────────────── v0.4.5
+2025-08-27T07:22:49.3301210Z    Installed x264_jll ──────────────────── v10164.0.1+0
+2025-08-27T07:22:49.3328430Z    Installed FreeType ──────────────────── v4.1.1
+2025-08-27T07:22:49.3455390Z    Installed CommonSubexpressions ──────── v0.3.1
+2025-08-27T07:22:49.3480640Z    Installed DataStructures ────────────── v0.18.22
+2025-08-27T07:22:49.3485200Z    Installed Colors ────────────────────── v0.12.11
+2025-08-27T07:22:49.7969420Z    Installed FreeType2_jll ─────────────── v2.13.4+0
+2025-08-27T07:22:49.8289310Z    Installed StatsAPI ──────────────────── v1.7.1
+2025-08-27T07:22:49.8422530Z    Installed PaddedViews ───────────────── v0.5.12
+2025-08-27T07:22:49.8481370Z    Installed MappedArrays ──────────────── v0.4.2
+2025-08-27T07:22:49.8845470Z    Installed GridLayoutBase ────────────── v0.9.2
+2025-08-27T07:22:49.9330890Z    Installed Automa ────────────────────── v1.1.0
+2025-08-27T07:22:49.9393320Z    Installed Compat ────────────────────── v4.18.0
+2025-08-27T07:22:49.9442990Z    Installed LinearAlgebraX ────────────── v0.2.10
+2025-08-27T07:22:50.2741630Z    Installed MosaicViews ───────────────── v0.3.4
+2025-08-27T07:22:50.2762840Z    Installed Xorg_libxcb_jll ───────────── v1.17.1+0
+2025-08-27T07:22:50.3487140Z    Installed libaom_jll ────────────────── v3.12.1+0
+2025-08-27T07:22:50.3568980Z    Installed LazyModules ───────────────── v0.3.1
+2025-08-27T07:22:50.3637200Z    Installed StructTypes ───────────────── v1.11.0
+2025-08-27T07:22:50.3654690Z    Installed StatsBase ─────────────────── v0.34.6
+2025-08-27T07:22:50.3996070Z    Installed ImageCore ─────────────────── v0.10.5
+2025-08-27T07:22:50.4074000Z    Installed libpng_jll ────────────────── v1.6.50+0
+2025-08-27T07:22:50.7022760Z    Installed oneTBB_jll ────────────────── v2022.0.0+0
+2025-08-27T07:22:50.7325300Z    Installed Scratch ───────────────────── v1.3.0
+2025-08-27T07:22:50.7518120Z    Installed ColorTypes ────────────────── v0.11.5
+2025-08-27T07:22:50.7917210Z    Installed DiffRules ─────────────────── v1.15.1
+2025-08-27T07:22:50.8009470Z    Installed Zstd_jll ──────────────────── v1.5.7+1
+2025-08-27T07:22:50.8020170Z    Installed Xorg_libXext_jll ──────────── v1.3.7+0
+2025-08-27T07:22:50.8086770Z    Installed SimplePartitions ──────────── v0.3.3
+2025-08-27T07:22:50.8089550Z    Installed TensorCore ────────────────── v0.1.1
+2025-08-27T07:22:51.1187780Z    Installed Expat_jll ─────────────────── v2.7.1+0
+2025-08-27T07:22:51.1230230Z    Installed Isoband ───────────────────── v0.1.1
+2025-08-27T07:22:51.1284770Z    Installed TableTraits ───────────────── v1.0.1
+2025-08-27T07:22:51.1309790Z    Installed FreeTypeAbstraction ───────── v0.10.8
+2025-08-27T07:22:51.1343000Z    Installed PositiveFactorizations ────── v0.2.4
+2025-08-27T07:22:51.1387620Z    Installed DiffResults ───────────────── v1.1.0
+2025-08-27T07:22:51.1431020Z    Installed Inflate ───────────────────── v0.1.5
+2025-08-27T07:22:51.1694650Z    Installed WeakKeyIdDicts ────────────── v0.1.0
+2025-08-27T07:22:51.4541380Z    Installed Imath_jll ─────────────────── v3.1.11+0
+2025-08-27T07:22:51.4559880Z    Installed Libtiff_jll ───────────────── v4.7.1+0
+2025-08-27T07:22:51.4695480Z    Installed Parsers ───────────────────── v2.8.3
+2025-08-27T07:22:51.4842780Z    Installed Extents ───────────────────── v0.1.6
+2025-08-27T07:22:51.4856200Z    Installed MKL_jll ───────────────────── v2025.2.0+0
+2025-08-27T07:22:51.4974890Z    Installed Setfield ──────────────────── v1.1.2
+2025-08-27T07:22:51.6708970Z    Installed AbstractFFTs ──────────────── v1.5.0
+2025-08-27T07:22:51.8666460Z    Installed JLLWrappers ───────────────── v1.7.1
+2025-08-27T07:22:51.8743550Z    Installed Packing ───────────────────── v0.5.1
+2025-08-27T07:22:51.8788630Z    Installed DataValueInterfaces ───────── v1.0.0
+2025-08-27T07:22:51.8807940Z    Installed Libffi_jll ────────────────── v3.4.7+0
+2025-08-27T07:22:51.8851090Z    Installed ConstructionBase ──────────── v1.6.0
+2025-08-27T07:22:51.9695220Z    Installed ColorVectorSpace ──────────── v0.10.0
+2025-08-27T07:22:51.9825350Z    Installed Animations ────────────────── v0.4.2
+2025-08-27T07:22:52.3478460Z    Installed ExactPredicates ───────────── v2.2.8
+2025-08-27T07:22:52.3580990Z    Installed OrderedCollections ────────── v1.8.1
+2025-08-27T07:22:52.3683940Z    Installed AbstractTrees ─────────────── v0.4.5
+2025-08-27T07:22:52.3785470Z    Installed Xorg_libXrender_jll ───────── v0.9.12+0
+2025-08-27T07:22:52.3818330Z    Installed ChainRulesCore ────────────── v1.26.0
+2025-08-27T07:22:52.3819460Z    Installed Interpolations ────────────── v0.16.2
+2025-08-27T07:22:52.3924830Z    Installed Ogg_jll ───────────────────── v1.3.6+0
+2025-08-27T07:22:52.5918100Z    Installed KernelDensity ─────────────── v0.6.10
+2025-08-27T07:22:52.6019820Z    Installed Combinatorics ─────────────── v1.0.3
+2025-08-27T07:22:52.6398890Z    Installed ArrayInterface ────────────── v7.19.0
+2025-08-27T07:22:52.6601050Z    Installed LineSearches ──────────────── v7.4.0
+2025-08-27T07:22:52.6723400Z    Installed RingLists ─────────────────── v0.2.9
+2025-08-27T07:22:52.6755770Z    Installed LogExpFunctions ───────────── v0.3.29
+2025-08-27T07:22:52.7696540Z    Installed Reexport ──────────────────── v1.2.2
+2025-08-27T07:22:52.8774120Z    Installed IntervalArithmetic ────────── v0.22.36
+2025-08-27T07:22:52.9040330Z    Installed AliasTables ───────────────── v1.1.3
+2025-08-27T07:22:52.9060700Z    Installed RangeArrays ───────────────── v0.3.2
+2025-08-27T07:22:52.9076960Z    Installed FFTW_jll ──────────────────── v3.3.11+0
+2025-08-27T07:22:52.9102570Z    Installed StackViews ────────────────── v0.1.2
+2025-08-27T07:22:52.9112970Z    Installed OpenSpecFun_jll ───────────── v0.5.6+0
+2025-08-27T07:22:53.1320570Z    Installed MacroTools ────────────────── v0.5.16
+2025-08-27T07:22:53.1379230Z    Installed GeoFormatTypes ────────────── v0.4.4
+2025-08-27T07:22:53.1484910Z    Installed SimpleTraits ──────────────── v0.9.5
+2025-08-27T07:22:53.1587710Z    Installed UnPack ────────────────────── v1.0.2
+2025-08-27T07:22:53.2659350Z    Installed Libuuid_jll ───────────────── v2.41.1+0
+2025-08-27T07:22:53.3046750Z    Installed ColorBrewer ───────────────── v0.4.1
+2025-08-27T07:22:53.3664480Z    Installed OpenEXR_jll ───────────────── v3.2.4+0
+2025-08-27T07:22:53.3725030Z    Installed DocStringExtensions ───────── v0.9.5
+2025-08-27T07:22:53.3773540Z    Installed StableRNGs ────────────────── v1.0.3
+2025-08-27T07:22:53.3809070Z    Installed DifferentiationInterface ──── v0.7.7
+2025-08-27T07:22:53.3951380Z    Installed Adapt ─────────────────────── v4.3.0
+2025-08-27T07:22:53.5255740Z    Installed Graphite2_jll ─────────────── v1.3.15+0
+2025-08-27T07:22:53.5790140Z    Installed Pixman_jll ────────────────── v0.44.2+0
+2025-08-27T07:22:53.5891890Z    Installed Rmath ─────────────────────── v0.8.0
+2025-08-27T07:22:53.5992250Z    Installed XML2_jll ──────────────────── v2.14.4+0
+2025-08-27T07:22:53.6092860Z    Installed libass_jll ────────────────── v0.17.4+0
+2025-08-27T07:22:53.6595000Z    Installed IntegerMathUtils ──────────── v0.1.3
+2025-08-27T07:22:53.7812850Z    Installed ImageBase ─────────────────── v0.1.7
+2025-08-27T07:22:53.7921400Z    Installed IntervalSets ──────────────── v0.7.11
+2025-08-27T07:22:53.8125550Z    Installed DelaunayTriangulation ─────── v0.8.12
+2025-08-27T07:22:53.8670980Z    Installed Xorg_xtrans_jll ───────────── v1.6.0+0
+2025-08-27T07:22:54.0432100Z    Installed IterTools ─────────────────── v1.10.0
+2025-08-27T07:22:54.0656100Z    Installed IndirectArrays ────────────── v1.0.0
+2025-08-27T07:22:54.0678990Z    Installed FFMPEG_jll ────────────────── v7.1.1+0
+2025-08-27T07:22:54.0692730Z    Installed OpenSSL_jll ───────────────── v3.5.2+0
+2025-08-27T07:22:54.0749960Z    Installed GeometryBasics ────────────── v0.4.11
+2025-08-27T07:22:54.0816900Z    Installed Tables ────────────────────── v1.12.1
+2025-08-27T07:22:54.1368110Z    Installed Cairo ─────────────────────── v1.1.1
+2025-08-27T07:22:54.2431830Z    Installed MakieCore ─────────────────── v0.6.9
+2025-08-27T07:22:54.3255030Z    Installed DataAPI ───────────────────── v1.16.0
+2025-08-27T07:22:54.3264290Z    Installed CairoMakie ────────────────── v0.10.12
+2025-08-27T07:22:54.3291640Z    Installed LLVMOpenMP_jll ────────────── v18.1.8+0
+2025-08-27T07:22:54.4696460Z    Installed ShaderAbstractions ────────── v0.4.1
+2025-08-27T07:22:54.4808290Z    Installed FixedPointNumbers ─────────── v0.8.5
+2025-08-27T07:22:54.4926920Z    Installed Primes ────────────────────── v0.5.7
+2025-08-27T07:22:54.5319830Z    Installed Optim ─────────────────────── v1.13.2
+2025-08-27T07:22:54.5586350Z    Installed RecipesBase ───────────────── v1.3.4
+2025-08-27T07:22:54.5627670Z    Installed IteratorInterfaceExtensions ─ v1.0.0
+2025-08-27T07:22:54.5641490Z    Installed LAME_jll ──────────────────── v3.100.3+0
+2025-08-27T07:22:54.7688490Z    Installed Libiconv_jll ──────────────── v1.18.0+0
+2025-08-27T07:22:54.7794640Z    Installed GettextRuntime_jll ────────── v0.22.4+0
+2025-08-27T07:22:54.7874250Z    Installed StructArrays ──────────────── v0.6.21
+2025-08-27T07:22:54.7941560Z    Installed Glib_jll ──────────────────── v2.84.3+0
+2025-08-27T07:22:54.8073370Z    Installed LaTeXStrings ──────────────── v1.4.0
+2025-08-27T07:22:54.8151960Z    Installed libsixel_jll ──────────────── v1.10.5+0
+2025-08-27T07:22:54.8490810Z    Installed libvorbis_jll ─────────────── v1.3.8+0
+2025-08-27T07:22:54.9766370Z    Installed Libglvnd_jll ──────────────── v1.7.1+1
+2025-08-27T07:22:55.1788030Z    Installed AxisAlgorithms ────────────── v1.1.0
+2025-08-27T07:22:55.2038950Z    Installed CRlibm ────────────────────── v1.0.2
+2025-08-27T07:22:55.2075220Z    Installed ImageAxes ─────────────────── v0.6.12
+2025-08-27T07:22:55.2140400Z    Installed QuadGK ────────────────────── v2.11.2
+2025-08-27T07:22:55.2144000Z    Installed ForwardDiff ───────────────── v1.1.0
+2025-08-27T07:22:55.2162080Z    Installed FillArrays ────────────────── v1.13.0
+2025-08-27T07:22:55.2166270Z    Installed Requires ──────────────────── v1.3.1
+2025-08-27T07:22:55.5263790Z    Installed Xorg_libXdmcp_jll ─────────── v1.1.6+0
+2025-08-27T07:22:55.5273430Z    Installed Xorg_libX11_jll ───────────── v1.8.12+0
+2025-08-27T07:22:55.7119880Z    Installed LightXML ──────────────────── v0.9.2
+2025-08-27T07:22:55.7423350Z    Installed Parameters ────────────────── v0.12.3
+2025-08-27T07:22:55.7862030Z    Installed GeoInterface ──────────────── v1.4.1
+2025-08-27T07:22:55.8153040Z    Installed SimplePolynomials ─────────── v0.2.18
+2025-08-27T07:22:55.8255360Z    Installed Distributions ─────────────── v0.25.120
+2025-08-27T07:22:55.9829200Z    Installed CRlibm_jll ────────────────── v1.0.1+0
+2025-08-27T07:22:56.0476100Z    Installed WoodburyMatrices ──────────── v1.0.0
+2025-08-27T07:22:56.0581990Z    Installed libwebp_jll ───────────────── v1.6.0+0
+2025-08-27T07:22:56.0683690Z    Installed SortingAlgorithms ─────────── v1.2.2
+2025-08-27T07:22:57.7651640Z    Installed Makie ─────────────────────── v0.19.12
+2025-08-27T07:23:11.6520310Z       Compat entries added for 
+2025-08-27T07:23:12.6981510Z     Updating `~/work/JuliaTestRocket/JuliaTestRocket/Project.toml`
+2025-08-27T07:23:12.7486900Z ⌅ [13f3f980] + CairoMakie v0.10.12
+2025-08-27T07:23:12.7587330Z     Updating `~/work/JuliaTestRocket/JuliaTestRocket/Manifest.toml`
+2025-08-27T07:23:12.8630880Z   [47edcb42] + ADTypes v1.17.0
+2025-08-27T07:23:12.8732130Z   [621f4979] + AbstractFFTs v1.5.0
+2025-08-27T07:23:12.8834540Z   [398f06c4] + AbstractLattices v0.3.1
+2025-08-27T07:23:12.8934910Z   [1520ce14] + AbstractTrees v0.4.5
+2025-08-27T07:23:12.9035990Z   [79e6a3ab] + Adapt v4.3.0
+2025-08-27T07:23:12.9141600Z   [66dad0bd] + AliasTables v1.1.3
+2025-08-27T07:23:12.9238120Z   [27a7e980] + Animations v0.4.2
+2025-08-27T07:23:12.9340320Z   [4fba245c] + ArrayInterface v7.19.0
+2025-08-27T07:23:12.9442200Z   [67c07d97] + Automa v1.1.0
+2025-08-27T07:23:12.9544580Z   [13072b0f] + AxisAlgorithms v1.1.0
+2025-08-27T07:23:12.9645040Z   [39de3d68] + AxisArrays v0.4.7
+2025-08-27T07:23:12.9746660Z   [18cc8868] + BaseDirs v1.3.2
+2025-08-27T07:23:12.9847100Z   [fa961155] + CEnum v0.5.0
+2025-08-27T07:23:12.9948360Z   [96374032] + CRlibm v1.0.2
+2025-08-27T07:23:13.0048910Z   [159f3aea] + Cairo v1.1.1
+2025-08-27T07:23:13.0150360Z ⌅ [13f3f980] + CairoMakie v0.10.12
+2025-08-27T07:23:13.0251140Z   [d360d2e6] + ChainRulesCore v1.26.0
+2025-08-27T07:23:13.0351710Z   [a2cac450] + ColorBrewer v0.4.1
+2025-08-27T07:23:13.0452840Z   [35d6a980] + ColorSchemes v3.30.0
+2025-08-27T07:23:13.0553770Z ⌅ [3da002f7] + ColorTypes v0.11.5
+2025-08-27T07:23:13.0655470Z ⌃ [c3611d14] + ColorVectorSpace v0.10.0
+2025-08-27T07:23:13.0755670Z ⌅ [5ae59095] + Colors v0.12.11
+2025-08-27T07:23:13.0856770Z   [861a8166] + Combinatorics v1.0.3
+2025-08-27T07:23:13.0958990Z   [bbf7d656] + CommonSubexpressions v0.3.1
+2025-08-27T07:23:13.1060260Z   [34da2185] + Compat v4.18.0
+2025-08-27T07:23:13.1162480Z   [187b0558] + ConstructionBase v1.6.0
+2025-08-27T07:23:13.1263440Z   [d38c429a] + Contour v0.6.3
+2025-08-27T07:23:13.1364190Z   [9a962f9c] + DataAPI v1.16.0
+2025-08-27T07:23:13.1465060Z ⌅ [864edb3b] + DataStructures v0.18.22
+2025-08-27T07:23:13.1568260Z   [e2d170a0] + DataValueInterfaces v1.0.0
+2025-08-27T07:23:13.1604110Z ⌅ [927a84f5] + DelaunayTriangulation v0.8.12
+2025-08-27T07:23:13.1672210Z   [163ba53b] + DiffResults v1.1.0
+2025-08-27T07:23:13.1677290Z   [b552c78f] + DiffRules v1.15.1
+2025-08-27T07:23:13.1726690Z   [a0c0ee7d] + DifferentiationInterface v0.7.7
+2025-08-27T07:23:13.1727150Z   [31c24e10] + Distributions v0.25.120
+2025-08-27T07:23:13.1727610Z   [ffbed154] + DocStringExtensions v0.9.5
+2025-08-27T07:23:13.1727950Z   [4e289a0a] + EnumX v1.0.5
+2025-08-27T07:23:13.1728250Z   [429591f6] + ExactPredicates v2.2.8
+2025-08-27T07:23:13.1728630Z   [411431e0] + Extents v0.1.6
+2025-08-27T07:23:13.1729790Z   [7a1cc6ca] + FFTW v1.9.0
+2025-08-27T07:23:13.1730140Z   [5789e2e9] + FileIO v1.17.0
+2025-08-27T07:23:13.1730550Z   [1a297f60] + FillArrays v1.13.0
+2025-08-27T07:23:13.1733810Z   [6a86dc24] + FiniteDiff v2.28.1
+2025-08-27T07:23:13.1734310Z   [53c48c17] + FixedPointNumbers v0.8.5
+2025-08-27T07:23:13.1734680Z   [59287772] + Formatting v0.4.3
+2025-08-27T07:23:13.1735970Z   [f6369f11] + ForwardDiff v1.1.0
+2025-08-27T07:23:13.1840010Z   [b38be410] + FreeType v4.1.1
+2025-08-27T07:23:13.1878470Z   [663a7486] + FreeTypeAbstraction v0.10.8
+2025-08-27T07:23:13.1879090Z   [68eda718] + GeoFormatTypes v0.4.4
+2025-08-27T07:23:13.1881310Z ⌃ [cf35fbd7] + GeoInterface v1.4.1
+2025-08-27T07:23:13.1949410Z ⌅ [5c1252a2] + GeometryBasics v0.4.11
+2025-08-27T07:23:13.1951730Z   [a2bd30eb] + Graphics v1.1.3
+2025-08-27T07:23:13.1955380Z ⌅ [3955a311] + GridLayoutBase v0.9.2
+2025-08-27T07:23:13.1959340Z   [42e2da0e] + Grisu v1.0.2
+2025-08-27T07:23:13.1960140Z   [34004b35] + HypergeometricFunctions v0.3.28
+2025-08-27T07:23:13.1960970Z   [2803e5a7] + ImageAxes v0.6.12
+2025-08-27T07:23:13.1963210Z   [c817782e] + ImageBase v0.1.7
+2025-08-27T07:23:13.1964230Z   [a09fc81d] + ImageCore v0.10.5
+2025-08-27T07:23:13.1970070Z   [82e4d734] + ImageIO v0.6.9
+2025-08-27T07:23:13.1971270Z   [bc367c6b] + ImageMetadata v0.9.10
+2025-08-27T07:23:13.1972310Z   [9b13fd28] + IndirectArrays v1.0.0
+2025-08-27T07:23:13.1973280Z   [d25df0c9] + Inflate v0.1.5
+2025-08-27T07:23:13.1974430Z   [18e54dd8] + IntegerMathUtils v0.1.3
+2025-08-27T07:23:13.1980370Z   [a98d9a8b] + Interpolations v0.16.2
+2025-08-27T07:23:13.1981050Z ⌅ [d1acc4aa] + IntervalArithmetic v0.22.36
+2025-08-27T07:23:13.1981730Z   [8197267c] + IntervalSets v0.7.11
+2025-08-27T07:23:13.1982130Z   [92d709cd] + IrrationalConstants v0.2.4
+2025-08-27T07:23:13.1982550Z   [f1662d9f] + Isoband v0.1.1
+2025-08-27T07:23:13.1982910Z   [c8e1da08] + IterTools v1.10.0
+2025-08-27T07:23:13.1983340Z   [82899510] + IteratorInterfaceExtensions v1.0.0
+2025-08-27T07:23:13.1983790Z   [692b3bcd] + JLLWrappers v1.7.1
+2025-08-27T07:23:13.1984050Z   [682c06a0] + JSON v0.21.4
+2025-08-27T07:23:13.1984410Z   [b835a17e] + JpegTurbo v0.1.6
+2025-08-27T07:23:13.1984840Z   [5ab0869b] + KernelDensity v0.6.10
+2025-08-27T07:23:13.1985180Z   [b964fa9f] + LaTeXStrings v1.4.0
+2025-08-27T07:23:13.1985570Z   [8cdb02fc] + LazyModules v0.3.1
+2025-08-27T07:23:13.1986000Z   [9c8b4983] + LightXML v0.9.2
+2025-08-27T07:23:13.1986340Z   [d3d80556] + LineSearches v7.4.0
+2025-08-27T07:23:13.1986690Z   [9b3f67b0] + LinearAlgebraX v0.2.10
+2025-08-27T07:23:13.1987170Z   [2ab3a3ac] + LogExpFunctions v0.3.29
+2025-08-27T07:23:13.1987520Z   [1914dd2f] + MacroTools v0.5.16
+2025-08-27T07:23:13.1987950Z ⌅ [ee78f7c6] + Makie v0.19.12
+2025-08-27T07:23:13.2020940Z ⌅ [20f20a25] + MakieCore v0.6.9
+2025-08-27T07:23:13.2026730Z   [dbb5928d] + MappedArrays v0.4.2
+2025-08-27T07:23:13.2027230Z ⌅ [0a4f8689] + MathTeXEngine v0.5.7
+2025-08-27T07:23:13.2031370Z   [e1d29d7a] + Missings v1.2.0
+2025-08-27T07:23:13.2031810Z   [7475f97c] + Mods v2.2.6
+2025-08-27T07:23:13.2032140Z   [e94cdb99] + MosaicViews v0.3.4
+2025-08-27T07:23:13.2032470Z   [3b2b4ff1] + Multisets v0.4.5
+2025-08-27T07:23:13.2032890Z   [d41bc354] + NLSolversBase v7.10.0
+2025-08-27T07:23:13.2033240Z   [77ba4419] + NaNMath v1.1.3
+2025-08-27T07:23:13.2036170Z   [f09324ee] + Netpbm v1.1.1
+2025-08-27T07:23:13.2036620Z   [6fe1bfb0] + OffsetArrays v1.17.0
+2025-08-27T07:23:13.2037830Z   [52e1d378] + OpenEXR v0.3.3
+2025-08-27T07:23:13.2041520Z   [429524aa] + Optim v1.13.2
+2025-08-27T07:23:13.2042370Z   [bac558e1] + OrderedCollections v1.8.1
+2025-08-27T07:23:13.2042720Z   [90014a1f] + PDMats v0.11.35
+2025-08-27T07:23:13.2043150Z   [f57f5aa1] + PNGFiles v0.4.4
+2025-08-27T07:23:13.2043850Z   [19eb6ba3] + Packing v0.5.1
+2025-08-27T07:23:13.2048160Z   [5432bcbf] + PaddedViews v0.5.12
+2025-08-27T07:23:13.2048620Z   [d96e819e] + Parameters v0.12.3
+2025-08-27T07:23:13.2049810Z   [69de0a69] + Parsers v2.8.3
+2025-08-27T07:23:13.2050330Z   [2ae35dd2] + Permutations v0.4.23
+2025-08-27T07:23:13.2050740Z   [3bbf5609] + PikaParser v0.6.1
+2025-08-27T07:23:13.2051120Z   [eebad327] + PkgVersion v0.3.3
+2025-08-27T07:23:13.2052140Z   [995b91a9] + PlotUtils v1.4.3
+2025-08-27T07:23:13.2052530Z   [647866c9] + PolygonOps v0.1.2
+2025-08-27T07:23:13.2053260Z ⌃ [f27b6e38] + Polynomials v4.0.21
+2025-08-27T07:23:13.2057520Z   [85a6dd25] + PositiveFactorizations v0.2.4
+2025-08-27T07:23:13.2062340Z   [27ebfcd6] + Primes v0.5.7
+2025-08-27T07:23:13.2063120Z   [92933f4c] + ProgressMeter v1.11.0
+2025-08-27T07:23:13.2066620Z   [43287f4e] + PtrArrays v1.3.0
+2025-08-27T07:23:13.2066990Z   [4b34888f] + QOI v1.0.1
+2025-08-27T07:23:13.2067330Z   [1fd47b50] + QuadGK v2.11.2
+2025-08-27T07:23:13.2067680Z   [b3c3ace0] + RangeArrays v0.3.2
+2025-08-27T07:23:13.2068140Z   [c84ed2f1] + Ratios v0.4.5
+2025-08-27T07:23:13.2068620Z   [3cdcf5f2] + RecipesBase v1.3.4
+2025-08-27T07:23:13.2070720Z   [189a3867] + Reexport v1.2.2
+2025-08-27T07:23:13.2074960Z   [05181044] + RelocatableFolders v1.0.1
+2025-08-27T07:23:13.2075310Z   [ae029012] + Requires v1.3.1
+2025-08-27T07:23:13.2075660Z   [286e9d63] + RingLists v0.2.9
+2025-08-27T07:23:13.2076030Z   [79098fc4] + Rmath v0.8.0
+2025-08-27T07:23:13.2076350Z   [5eaf0fd0] + RoundingEmulator v0.2.1
+2025-08-27T07:23:13.2079570Z   [fdea26ae] + SIMD v3.7.1
+2025-08-27T07:23:13.2079990Z   [6c6a2e73] + Scratch v1.3.0
+2025-08-27T07:23:13.2080310Z   [efcf1570] + Setfield v1.1.2
+2025-08-27T07:23:13.2080840Z ⌅ [65257c39] + ShaderAbstractions v0.4.1
+2025-08-27T07:23:13.2085220Z   [992d4aef] + Showoff v1.0.3
+2025-08-27T07:23:13.2085540Z   [73760f76] + SignedDistanceFields v0.4.0
+2025-08-27T07:23:13.2085830Z   [55797a34] + SimpleGraphs v0.8.7
+2025-08-27T07:23:13.2086280Z   [ec83eff0] + SimplePartitions v0.3.3
+2025-08-27T07:23:13.2086650Z   [cc47b68c] + SimplePolynomials v0.2.18
+2025-08-27T07:23:13.2087060Z   [a6525b86] + SimpleRandom v0.3.2
+2025-08-27T07:23:13.2087520Z   [699a6c99] + SimpleTraits v0.9.5
+2025-08-27T07:23:13.2087840Z   [45858cf5] + Sixel v0.1.5
+2025-08-27T07:23:13.2090540Z   [a2af1166] + SortingAlgorithms v1.2.2
+2025-08-27T07:23:13.2091040Z   [276daf66] + SpecialFunctions v2.5.1
+2025-08-27T07:23:13.2091550Z ⌅ [c5dd0088] + StableHashTraits v1.3.4
+2025-08-27T07:23:13.2091930Z   [860ef19b] + StableRNGs v1.0.3
+2025-08-27T07:23:13.2092530Z   [cae243ae] + StackViews v0.1.2
+2025-08-27T07:23:13.2093170Z   [10745b16] + Statistics v1.11.1
+2025-08-27T07:23:13.2093500Z   [82ae8749] + StatsAPI v1.7.1
+2025-08-27T07:23:13.2093920Z   [2913bbd2] + StatsBase v0.34.6
+2025-08-27T07:23:13.2096500Z   [4c63d2b9] + StatsFuns v1.5.0
+2025-08-27T07:23:13.2097310Z ⌅ [09ab397b] + StructArrays v0.6.21
+2025-08-27T07:23:13.2097730Z   [856f2bd8] + StructTypes v1.11.0
+2025-08-27T07:23:13.2098170Z   [3783bdb8] + TableTraits v1.0.1
+2025-08-27T07:23:13.2100590Z   [bd369af6] + Tables v1.12.1
+2025-08-27T07:23:13.2100940Z   [62fd8b95] + TensorCore v0.1.1
+2025-08-27T07:23:13.2101320Z   [731e570b] + TiffImages v0.11.6
+2025-08-27T07:23:13.2101730Z   [3bb67fe8] + TranscodingStreams v0.11.3
+2025-08-27T07:23:13.2105200Z   [981d1d27] + TriplotBase v0.1.0
+2025-08-27T07:23:13.2105560Z   [9d95972d] + TupleTools v1.6.0
+2025-08-27T07:23:13.2105960Z   [3a884ed6] + UnPack v1.0.2
+2025-08-27T07:23:13.2106420Z   [1cfade01] + UnicodeFun v0.4.1
+2025-08-27T07:23:13.2106760Z   [ecbed89c] + WeakKeyIdDicts v0.1.0
+2025-08-27T07:23:13.2119110Z   [e3aaa7dc] + WebP v0.1.3
+2025-08-27T07:23:13.2119540Z   [efce3f68] + WoodburyMatrices v1.0.0
+2025-08-27T07:23:13.2120180Z   [6e34b625] + Bzip2_jll v1.0.9+0
+2025-08-27T07:23:13.2134270Z   [4e9b3aee] + CRlibm_jll v1.0.1+0
+2025-08-27T07:23:13.2136670Z   [83423d85] + Cairo_jll v1.18.5+0
+2025-08-27T07:23:13.2142210Z   [5ae413db] + EarCut_jll v2.2.4+0
+2025-08-27T07:23:13.2150970Z   [2e619515] + Expat_jll v2.7.1+0
+2025-08-27T07:23:13.2155350Z   [b22a6f82] + FFMPEG_jll v7.1.1+0
+2025-08-27T07:23:13.2158800Z   [f5851436] + FFTW_jll v3.3.11+0
+2025-08-27T07:23:13.2159200Z   [a3f928ae] + Fontconfig_jll v2.17.1+0
+2025-08-27T07:23:13.2159630Z   [d7e528f0] + FreeType2_jll v2.13.4+0
+2025-08-27T07:23:13.2160070Z   [559328eb] + FriBidi_jll v1.0.17+0
+2025-08-27T07:23:13.2160430Z   [b0724c58] + GettextRuntime_jll v0.22.4+0
+2025-08-27T07:23:13.2160810Z   [59f7168a] + Giflib_jll v5.2.3+0
+2025-08-27T07:23:13.2161190Z   [7746bdde] + Glib_jll v2.84.3+0
+2025-08-27T07:23:13.2161520Z   [3b182d85] + Graphite2_jll v1.3.15+0
+2025-08-27T07:23:13.2161860Z   [2e76f6c2] + HarfBuzz_jll v8.5.1+0
+2025-08-27T07:23:13.2162470Z   [905a6f67] + Imath_jll v3.1.11+0
+2025-08-27T07:23:13.2168160Z   [1d5cc7b8] + IntelOpenMP_jll v2025.2.0+0
+2025-08-27T07:23:13.2168560Z   [aacddb02] + JpegTurbo_jll v3.1.2+0
+2025-08-27T07:23:13.2169050Z   [c1c5ebd0] + LAME_jll v3.100.3+0
+2025-08-27T07:23:13.2169380Z   [88015f11] + LERC_jll v4.0.1+0
+2025-08-27T07:23:13.2169700Z   [1d63c593] + LLVMOpenMP_jll v18.1.8+0
+2025-08-27T07:23:13.2178490Z   [dd4b983a] + LZO_jll v2.10.3+0
+2025-08-27T07:23:13.2179340Z   [e9f186c6] + Libffi_jll v3.4.7+0
+2025-08-27T07:23:13.2183640Z   [7e76a0d4] + Libglvnd_jll v1.7.1+1
+2025-08-27T07:23:13.2190540Z   [94ce4f54] + Libiconv_jll v1.18.0+0
+2025-08-27T07:23:13.2191140Z   [4b2f31a3] + Libmount_jll v2.41.1+0
+2025-08-27T07:23:13.2192180Z   [89763e89] + Libtiff_jll v4.7.1+0
+2025-08-27T07:23:13.2192520Z   [38a345b3] + Libuuid_jll v2.41.1+0
+2025-08-27T07:23:13.2193140Z   [856f044c] + MKL_jll v2025.2.0+0
+2025-08-27T07:23:13.2195580Z   [e7412a2a] + Ogg_jll v1.3.6+0
+2025-08-27T07:23:13.2196150Z   [6cdc7f73] + OpenBLASConsistentFPCSR_jll v0.3.29+0
+2025-08-27T07:23:13.2196600Z   [18a262bb] + OpenEXR_jll v3.2.4+0
+2025-08-27T07:23:13.2197010Z   [458c3c95] + OpenSSL_jll v3.5.2+0
+2025-08-27T07:23:13.2201210Z   [efe28fd5] + OpenSpecFun_jll v0.5.6+0
+2025-08-27T07:23:13.2205700Z   [91d4177d] + Opus_jll v1.5.2+0
+2025-08-27T07:23:13.2206040Z   [36c8627f] + Pango_jll v1.56.3+0
+2025-08-27T07:23:13.2206590Z ⌅ [30392449] + Pixman_jll v0.44.2+0
+2025-08-27T07:23:13.2207020Z   [f50d1b31] + Rmath_jll v0.5.1+0
+2025-08-27T07:23:13.2213030Z   [02c8fc9c] + XML2_jll v2.14.4+0
+2025-08-27T07:23:13.2213670Z   [ffd25f8a] + XZ_jll v5.8.1+0
+2025-08-27T07:23:13.2214060Z   [4f6342f7] + Xorg_libX11_jll v1.8.12+0
+2025-08-27T07:23:13.2214550Z   [0c0b7dd1] + Xorg_libXau_jll v1.0.13+0
+2025-08-27T07:23:13.2215120Z   [a3789734] + Xorg_libXdmcp_jll v1.1.6+0
+2025-08-27T07:23:13.2222460Z   [1082639a] + Xorg_libXext_jll v1.3.7+0
+2025-08-27T07:23:13.2223510Z   [ea2f1a96] + Xorg_libXrender_jll v0.9.12+0
+2025-08-27T07:23:13.2234960Z   [c7cfdc94] + Xorg_libxcb_jll v1.17.1+0
+2025-08-27T07:23:13.2236540Z   [c5fb5394] + Xorg_xtrans_jll v1.6.0+0
+2025-08-27T07:23:13.2238730Z   [3161d3a3] + Zstd_jll v1.5.7+1
+2025-08-27T07:23:13.2241580Z   [9a68df92] + isoband_jll v0.2.3+0
+2025-08-27T07:23:13.2242270Z   [a4ae2306] + libaom_jll v3.12.1+0
+2025-08-27T07:23:13.2242610Z   [0ac62f75] + libass_jll v0.17.4+0
+2025-08-27T07:23:13.2243200Z   [f638f0a6] + libfdk_aac_jll v2.0.4+0
+2025-08-27T07:23:13.2243630Z   [b53b4c65] + libpng_jll v1.6.50+0
+2025-08-27T07:23:13.2243960Z   [075b6546] + libsixel_jll v1.10.5+0
+2025-08-27T07:23:13.2244340Z   [f27f6e37] + libvorbis_jll v1.3.8+0
+2025-08-27T07:23:13.2246620Z   [c5f90fcd] + libwebp_jll v1.6.0+0
+2025-08-27T07:23:13.2248770Z   [1317d2d5] + oneTBB_jll v2022.0.0+0
+2025-08-27T07:23:13.2250440Z   [1270edf5] + x264_jll v10164.0.1+0
+2025-08-27T07:23:13.2250770Z   [dfaa095f] + x265_jll v4.1.0+0
+2025-08-27T07:23:13.2251110Z   [0dad84c5] + ArgTools v1.1.2
+2025-08-27T07:23:13.2251490Z   [2a0f44e3] + Base64 v1.11.0
+2025-08-27T07:23:13.2251820Z   [8bf52ea8] + CRC32c v1.11.0
+2025-08-27T07:23:13.2252120Z   [8ba89e20] + Distributed v1.11.0
+2025-08-27T07:23:13.2252570Z   [f43a241f] + Downloads v1.6.0
+2025-08-27T07:23:13.2252880Z   [7b1f6079] + FileWatching v1.11.0
+2025-08-27T07:23:13.2261570Z   [9fa8497b] + Future v1.11.0
+2025-08-27T07:23:13.2261960Z   [b77e0a4c] + InteractiveUtils v1.11.0
+2025-08-27T07:23:13.2262330Z   [4af54fe1] + LazyArtifacts v1.11.0
+2025-08-27T07:23:13.2262730Z   [b27032c2] + LibCURL v0.6.4
+2025-08-27T07:23:13.2263050Z   [76f85450] + LibGit2 v1.11.0
+2025-08-27T07:23:13.2267220Z   [d6f4376e] + Markdown v1.11.0
+2025-08-27T07:23:13.2267690Z   [a63ad114] + Mmap v1.11.0
+2025-08-27T07:23:13.2268390Z   [ca575930] + NetworkOptions v1.2.0
+2025-08-27T07:23:13.2278820Z   [44cfe95a] + Pkg v1.11.0
+2025-08-27T07:23:13.2279520Z   [3fa0cd96] + REPL v1.11.0
+2025-08-27T07:23:13.2286430Z   [9e88b42a] + Serialization v1.11.0
+2025-08-27T07:23:13.2287350Z   [1a1011a3] + SharedArrays v1.11.0
+2025-08-27T07:23:13.2290800Z   [6462fe0b] + Sockets v1.11.0
+2025-08-27T07:23:13.2291260Z   [2f01184e] + SparseArrays v1.11.0
+2025-08-27T07:23:13.2292060Z   [f489334b] + StyledStrings v1.11.0
+2025-08-27T07:23:13.2292410Z   [4607b0f0] + SuiteSparse
+2025-08-27T07:23:13.2292770Z   [a4e569a6] + Tar v1.10.0
+2025-08-27T07:23:13.2293080Z   [8dfed614] + Test v1.11.0
+2025-08-27T07:23:13.2296770Z   [cf7118a7] + UUIDs v1.11.0
+2025-08-27T07:23:13.2297760Z   [deac9b47] + LibCURL_jll v8.6.0+0
+2025-08-27T07:23:13.2298120Z   [e37daf67] + LibGit2_jll v1.7.2+0
+2025-08-27T07:23:13.2298570Z   [29816b5a] + LibSSH2_jll v1.11.0+1
+2025-08-27T07:23:13.2299050Z   [c8ffd9c3] + MbedTLS_jll v2.28.6+0
+2025-08-27T07:23:13.2299500Z   [14a3606d] + MozillaCACerts_jll v2023.12.12
+2025-08-27T07:23:13.2302330Z   [05823500] + OpenLibm_jll v0.8.5+0
+2025-08-27T07:23:13.2302750Z   [efcefdf7] + PCRE2_jll v10.42.0+1
+2025-08-27T07:23:13.2303090Z   [bea87d4a] + SuiteSparse_jll v7.7.0+0
+2025-08-27T07:23:13.2303520Z   [83775a58] + Zlib_jll v1.2.13+1
+2025-08-27T07:23:13.2303860Z   [8e850ede] + nghttp2_jll v1.59.0+0
+2025-08-27T07:23:13.2304290Z   [3f19e933] + p7zip_jll v17.4.0+2
+2025-08-27T07:23:13.2305480Z         Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`
+2025-08-27T07:23:14.0181540Z Precompiling project...
+2025-08-27T07:23:16.8606030Z    2587.0 ms  ✓ RangeArrays
+2025-08-27T07:23:17.2195020Z    2937.3 ms  ✓ AbstractFFTs
+2025-08-27T07:23:18.2415340Z    4158.2 ms  ✓ Combinatorics
+2025-08-27T07:23:19.0702540Z    2207.2 ms  ✓ LaTeXStrings
+2025-08-27T07:23:19.7070250Z    2485.5 ms  ✓ PositiveFactorizations
+2025-08-27T07:23:20.4317680Z    2184.1 ms  ✓ IndirectArrays
+2025-08-27T07:23:21.0733530Z    2000.5 ms  ✓ PolygonOps
+2025-08-27T07:23:21.5018010Z    1791.9 ms  ✓ IteratorInterfaceExtensions
+2025-08-27T07:23:22.5663470Z    2132.6 ms  ✓ TensorCore
+2025-08-27T07:23:23.1330620Z    2051.5 ms  ✓ GeoFormatTypes
+2025-08-27T07:23:23.6594620Z    2154.6 ms  ✓ StatsAPI
+2025-08-27T07:23:24.7677100Z    2205.1 ms  ✓ AbstractLattices
+2025-08-27T07:23:26.9534890Z    3284.0 ms  ✓ Contour
+2025-08-27T07:23:26.9640800Z    3817.7 ms  ✓ ADTypes
+2025-08-27T07:23:27.9443620Z    3173.8 ms  ✓ CEnum
+2025-08-27T07:23:28.8368450Z   14555.3 ms  ✓ BaseDirs
+2025-08-27T07:23:29.9413680Z    2979.2 ms  ✓ TriplotBase
+2025-08-27T07:23:30.2714150Z    2326.2 ms  ✓ UnPack
+2025-08-27T07:23:31.5954210Z    4646.4 ms  ✓ OffsetArrays
+2025-08-27T07:23:31.6623260Z    1720.8 ms  ✓ IntegerMathUtils
+2025-08-27T07:23:32.0274510Z    3184.8 ms  ✓ FillArrays
+2025-08-27T07:23:32.4600790Z    2184.0 ms  ✓ Statistics
+2025-08-27T07:23:33.5869500Z    1986.3 ms  ✓ IterTools
+2025-08-27T07:23:34.5776410Z    2121.8 ms  ✓ OrderedCollections
+2025-08-27T07:23:34.6738960Z    2652.6 ms  ✓ Grisu
+2025-08-27T07:23:35.6149710Z    2031.7 ms  ✓ Requires
+2025-08-27T07:23:36.1927570Z    1614.4 ms  ✓ DataValueInterfaces
+2025-08-27T07:23:36.3811200Z    1703.8 ms  ✓ EnumX
+2025-08-27T07:23:37.3765630Z    1761.3 ms  ✓ StableRNGs
+2025-08-27T07:23:37.7892900Z    1590.1 ms  ✓ Reexport
+2025-08-27T07:23:38.5846720Z    2206.3 ms  ✓ DocStringExtensions
+2025-08-27T07:23:39.2046470Z    7540.2 ms  ✓ MacroTools
+2025-08-27T07:23:40.2574280Z    2875.8 ms  ✓ AbstractTrees
+2025-08-27T07:23:41.6270220Z    3041.0 ms  ✓ IntervalSets
+2025-08-27T07:23:42.2744390Z    3071.4 ms  ✓ RoundingEmulator
+2025-08-27T07:23:43.1651250Z    5378.4 ms  ✓ IrrationalConstants
+2025-08-27T07:23:43.2397790Z    2983.2 ms  ✓ Extents
+2025-08-27T07:23:43.9570790Z    2321.6 ms  ✓ PtrArrays
+2025-08-27T07:23:44.7829400Z    2504.6 ms  ✓ TranscodingStreams
+2025-08-27T07:23:45.0063800Z    1755.2 ms  ✓ LazyModules
+2025-08-27T07:23:45.2045520Z    2034.8 ms  ✓ NaNMath
+2025-08-27T07:23:45.7526050Z    1803.4 ms  ✓ Multisets
+2025-08-27T07:23:46.3826410Z    1597.5 ms  ✓ RingLists
+2025-08-27T07:23:46.9084720Z    1892.8 ms  ✓ Inflate
+2025-08-27T07:23:46.9586450Z    1748.9 ms  ✓ ConstructionBase
+2025-08-27T07:23:47.3349330Z    1581.7 ms  ✓ Mods
+2025-08-27T07:23:47.8779820Z    1497.9 ms  ✓ DataAPI
+2025-08-27T07:23:48.5730860Z    1666.6 ms  ✓ TupleTools
+2025-08-27T07:23:48.6032570Z    1649.0 ms  ✓ MappedArrays
+2025-08-27T07:23:49.0405970Z    1679.9 ms  ✓ WeakKeyIdDicts
+2025-08-27T07:23:51.2667280Z    2694.8 ms  ✓ ProgressMeter
+2025-08-27T07:23:51.4624140Z    2858.0 ms  ✓ Formatting
+2025-08-27T07:23:52.6882080Z    1416.5 ms  ✓ DiffResults
+2025-08-27T07:23:52.7698780Z    4890.9 ms  ✓ SuiteSparse
+2025-08-27T07:23:53.0012220Z    3952.3 ms  ✓ WoodburyMatrices
+2025-08-27T07:23:54.2274180Z    2761.9 ms  ✓ StructTypes
+2025-08-27T07:23:55.0606600Z    2375.2 ms  ✓ Scratch
+2025-08-27T07:23:55.6564560Z    2887.3 ms  ✓ Compat
+2025-08-27T07:23:55.8309810Z    2831.0 ms  ✓ JLLWrappers
+2025-08-27T07:23:59.4314780Z    4365.2 ms  ✓ MakieCore
+2025-08-27T07:24:00.2335830Z    6004.5 ms  ✓ UnicodeFun
+2025-08-27T07:24:00.2538220Z    4589.7 ms  ✓ RecipesBase
+2025-08-27T07:24:03.7475920Z    3514.2 ms  ✓ PkgVersion
+2025-08-27T07:24:04.2388240Z    3985.5 ms  ✓ AbstractFFTs → AbstractFFTsTestExt
+2025-08-27T07:24:05.9277900Z    2183.8 ms  ✓ Permutations
+2025-08-27T07:24:05.9578330Z    1715.6 ms  ✓ TableTraits
+2025-08-27T07:24:08.7556150Z    2804.5 ms  ✓ StackViews
+2025-08-27T07:24:10.8135320Z    4884.9 ms  ✓ DifferentiationInterface
+2025-08-27T07:24:11.5916680Z    2832.8 ms  ✓ PaddedViews
+2025-08-27T07:24:13.9336950Z    3097.0 ms  ✓ Primes
+2025-08-27T07:24:14.3252100Z    2734.9 ms  ✓ FillArrays → FillArraysSparseArraysExt
+2025-08-27T07:24:16.0001020Z    2058.4 ms  ✓ SignedDistanceFields
+2025-08-27T07:24:18.4605950Z    2460.6 ms  ✓ Statistics → SparseArraysExt
+2025-08-27T07:24:19.7999920Z   23965.7 ms  ✓ SIMD
+2025-08-27T07:24:20.8082460Z    2340.0 ms  ✓ StaticArrays → StaticArraysStatisticsExt
+2025-08-27T07:24:21.3545890Z    1556.9 ms  ✓ FillArrays → FillArraysStatisticsExt
+2025-08-27T07:24:21.4149350Z    7088.8 ms  ✓ FixedPointNumbers
+2025-08-27T07:24:23.0586650Z    2254.2 ms  ✓ Parameters
+2025-08-27T07:24:23.6524820Z    2236.2 ms  ✓ Ratios
+2025-08-27T07:24:23.8932510Z    2537.6 ms  ✓ Showoff
+2025-08-27T07:24:25.5027960Z    2444.7 ms  ✓ Adapt
+2025-08-27T07:24:26.8410200Z    2941.1 ms  ✓ PikaParser
+2025-08-27T07:24:27.6729500Z    2161.0 ms  ✓ CommonSubexpressions
+2025-08-27T07:24:29.2521870Z    2412.3 ms  ✓ SimpleTraits
+2025-08-27T07:24:29.4139170Z    1741.5 ms  ✓ IntervalSets → IntervalSetsRandomExt
+2025-08-27T07:24:30.9965910Z    1749.6 ms  ✓ IntervalSets → IntervalSetsStatisticsExt
+2025-08-27T07:24:31.9952160Z    2562.5 ms  ✓ LogExpFunctions
+2025-08-27T07:24:33.0255030Z    2028.7 ms  ✓ AliasTables
+2025-08-27T07:24:33.8841890Z    1862.7 ms  ✓ ConstructionBase → ConstructionBaseIntervalSetsExt
+2025-08-27T07:24:34.7452070Z    1711.9 ms  ✓ ConstructionBase → ConstructionBaseLinearAlgebraExt
+2025-08-27T07:24:35.8469240Z   12194.0 ms  ✓ FileIO
+2025-08-27T07:24:37.1085480Z    3219.9 ms  ✓ ConstructionBase → ConstructionBaseStaticArraysExt
+2025-08-27T07:24:37.5059190Z    2756.3 ms  ✓ ADTypes → ADTypesConstructionBaseExt
+2025-08-27T07:24:38.3554650Z   38925.9 ms  ✓ Parsers
+2025-08-27T07:24:40.0765440Z    2972.4 ms  ✓ Missings
+2025-08-27T07:24:40.6206910Z    4770.7 ms  ✓ GeoInterface
+2025-08-27T07:24:41.0411870Z    2684.0 ms  ✓ AxisAlgorithms
+2025-08-27T07:24:41.4686260Z    3964.1 ms  ✓ PDMats
+2025-08-27T07:24:42.2081170Z    2123.9 ms  ✓ RelocatableFolders
+2025-08-27T07:24:42.6661240Z    2037.5 ms  ✓ Compat → CompatLinearAlgebraExt
+2025-08-27T07:24:43.3323090Z    2285.1 ms  ✓ OpenSSL_jll
+2025-08-27T07:24:43.5193380Z    2041.9 ms  ✓ Graphite2_jll
+2025-08-27T07:24:44.2468030Z    2043.1 ms  ✓ Libmount_jll
+2025-08-27T07:24:44.6905590Z    2025.8 ms  ✓ LLVMOpenMP_jll
+2025-08-27T07:24:45.2648540Z    1940.3 ms  ✓ Bzip2_jll
+2025-08-27T07:24:45.6789090Z    2154.8 ms  ✓ Rmath_jll
+2025-08-27T07:24:46.1348840Z    1888.2 ms  ✓ Xorg_libXau_jll
+2025-08-27T07:24:46.6769800Z    1987.2 ms  ✓ libpng_jll
+2025-08-27T07:24:47.1434630Z    1871.5 ms  ✓ libfdk_aac_jll
+2025-08-27T07:24:47.7313380Z    2054.1 ms  ✓ Imath_jll
+2025-08-27T07:24:48.5253730Z    1846.9 ms  ✓ Giflib_jll
+2025-08-27T07:24:48.9363130Z    1789.5 ms  ✓ LAME_jll
+2025-08-27T07:24:49.4245370Z    3287.4 ms  ✓ IntelOpenMP_jll
+2025-08-27T07:24:49.5752990Z    1838.1 ms  ✓ LERC_jll
+2025-08-27T07:24:50.9183740Z    2389.6 ms  ✓ EarCut_jll
+2025-08-27T07:24:51.5902570Z    2651.6 ms  ✓ CRlibm_jll
+2025-08-27T07:24:52.4255870Z    2997.4 ms  ✓ JpegTurbo_jll
+2025-08-27T07:24:52.5969550Z    3021.3 ms  ✓ XZ_jll
+2025-08-27T07:24:53.5166880Z    2604.0 ms  ✓ Ogg_jll
+2025-08-27T07:24:53.8754630Z    2292.6 ms  ✓ oneTBB_jll
+2025-08-27T07:24:54.2065190Z    1781.9 ms  ✓ Xorg_libXdmcp_jll
+2025-08-27T07:24:54.4822720Z    1885.4 ms  ✓ x265_jll
+2025-08-27T07:24:55.8172450Z    2300.3 ms  ✓ x264_jll
+2025-08-27T07:24:56.0963980Z    2221.1 ms  ✓ libaom_jll
+2025-08-27T07:24:56.5510870Z    2344.5 ms  ✓ Zstd_jll
+2025-08-27T07:24:56.9057410Z    2418.3 ms  ✓ Expat_jll
+2025-08-27T07:24:58.2109110Z    2393.2 ms  ✓ LZO_jll
+2025-08-27T07:24:58.5079730Z    2410.1 ms  ✓ Opus_jll
+2025-08-27T07:24:58.7896540Z    2237.4 ms  ✓ Xorg_xtrans_jll
+2025-08-27T07:24:59.4917200Z    2589.9 ms  ✓ Libiconv_jll
+2025-08-27T07:25:00.6402800Z    2428.3 ms  ✓ Libffi_jll
+2025-08-27T07:25:00.7729860Z    2262.6 ms  ✓ isoband_jll
+2025-08-27T07:25:01.3615370Z    2566.4 ms  ✓ FFTW_jll
+2025-08-27T07:25:02.7741720Z    2128.8 ms  ✓ Libuuid_jll
+2025-08-27T07:25:02.8547330Z    3363.3 ms  ✓ OpenSpecFun_jll
+2025-08-27T07:25:03.4196140Z    2646.5 ms  ✓ FriBidi_jll
+2025-08-27T07:25:04.3225790Z    2951.1 ms  ✓ OpenBLASConsistentFPCSR_jll
+2025-08-27T07:25:06.5807400Z    3804.7 ms  ✓ IntervalSets → IntervalSetsRecipesBaseExt
+2025-08-27T07:25:07.7544000Z    4896.1 ms  ✓ Tables
+2025-08-27T07:25:08.3102150Z    4889.0 ms  ✓ DifferentiationInterface → DifferentiationInterfaceStaticArraysExt
+2025-08-27T07:25:08.6903020Z    4361.8 ms  ✓ DifferentiationInterface → DifferentiationInterfaceSparseArraysExt
+2025-08-27T07:25:10.3318080Z    3754.1 ms  ✓ MosaicViews
+2025-08-27T07:25:11.3117260Z    2624.3 ms  ✓ Ratios → RatiosFixedPointNumbersExt
+2025-08-27T07:25:13.3840090Z    3035.2 ms  ✓ Adapt → AdaptStaticArraysExt
+2025-08-27T07:25:13.6492150Z    2331.6 ms  ✓ Adapt → AdaptSparseArraysExt
+2025-08-27T07:25:15.9296750Z    2278.7 ms  ✓ OffsetArrays → OffsetArraysAdaptExt
+2025-08-27T07:25:16.0407250Z    7721.2 ms  ✓ ColorTypes
+2025-08-27T07:25:16.1537540Z    2764.4 ms  ✓ ArrayInterface
+2025-08-27T07:25:21.1484740Z    5220.8 ms  ✓ AxisArrays
+2025-08-27T07:25:22.8905590Z    6848.5 ms  ✓ Setfield
+2025-08-27T07:25:24.7572400Z    3603.7 ms  ✓ FillArrays → FillArraysPDMatsExt
+2025-08-27T07:25:24.9727710Z    8810.3 ms  ✓ JSON
+2025-08-27T07:25:27.9915430Z    3021.1 ms  ✓ Pixman_jll
+2025-08-27T07:25:28.6589870Z    5772.2 ms  ✓ DataStructures
+2025-08-27T07:25:29.1727330Z    4419.0 ms  ✓ ChainRulesCore
+2025-08-27T07:25:30.3724180Z    2378.8 ms  ✓ FreeType2_jll
+2025-08-27T07:25:31.6478530Z    2983.2 ms  ✓ Rmath
+2025-08-27T07:25:31.9173590Z    2730.6 ms  ✓ OpenEXR_jll
+2025-08-27T07:25:32.9414080Z    2573.0 ms  ✓ CRlibm
+2025-08-27T07:25:35.6331150Z    3982.8 ms  ✓ libsixel_jll
+2025-08-27T07:25:35.6431490Z    3701.7 ms  ✓ libvorbis_jll
+2025-08-27T07:25:40.0961230Z    4453.7 ms  ✓ Xorg_libxcb_jll
+2025-08-27T07:25:40.2569770Z    7300.0 ms  ✓ MKL_jll
+2025-08-27T07:25:41.1922720Z    5557.2 ms  ✓ Libtiff_jll
+2025-08-27T07:25:42.6253380Z    2537.4 ms  ✓ XML2_jll
+2025-08-27T07:25:42.8069990Z    2536.3 ms  ✓ GettextRuntime_jll
+2025-08-27T07:25:43.3826050Z    2193.1 ms  ✓ Isoband
+2025-08-27T07:25:45.3847780Z    2583.6 ms  ✓ StructArrays
+2025-08-27T07:25:48.8104540Z    6186.4 ms  ✓ SpecialFunctions
+2025-08-27T07:25:50.0230490Z    4634.7 ms  ✓ QOI
+2025-08-27T07:25:52.1820740Z   44430.3 ms  ✓ Automa
+2025-08-27T07:25:53.7843950Z   10388.8 ms  ✓ StableHashTraits
+2025-08-27T07:25:54.8783210Z    2690.5 ms  ✓ ArrayInterface → ArrayInterfaceSparseArraysExt
+2025-08-27T07:25:55.4274690Z    1627.2 ms  ✓ ArrayInterface → ArrayInterfaceStaticArraysCoreExt
+2025-08-27T07:25:56.2925730Z    7473.1 ms  ✓ ColorVectorSpace
+2025-08-27T07:25:57.3048510Z    1872.1 ms  ✓ SortingAlgorithms
+2025-08-27T07:25:58.7863230Z    2480.9 ms  ✓ QuadGK
+2025-08-27T07:25:59.3369800Z    2033.8 ms  ✓ SimplePartitions
+2025-08-27T07:26:01.8383770Z    2488.3 ms  ✓ ChainRulesCore → ChainRulesCoreSparseArraysExt
+2025-08-27T07:26:01.9291740Z   11907.9 ms  ✓ Colors
+2025-08-27T07:26:04.1258230Z    2189.5 ms  ✓ AbstractFFTs → AbstractFFTsChainRulesCoreExt
+2025-08-27T07:26:05.4819660Z    3638.1 ms  ✓ StaticArrays → StaticArraysChainRulesCoreExt
+2025-08-27T07:26:07.9023530Z    3774.8 ms  ✓ ADTypes → ADTypesChainRulesCoreExt
+2025-08-27T07:26:08.9474520Z    3460.3 ms  ✓ DifferentiationInterface → DifferentiationInterfaceChainRulesCoreExt
+2025-08-27T07:26:11.0160500Z    2069.7 ms  ✓ ArrayInterface → ArrayInterfaceChainRulesCoreExt
+2025-08-27T07:26:12.2158660Z    4313.3 ms  ✓ LogExpFunctions → LogExpFunctionsChainRulesCoreExt
+2025-08-27T07:26:14.9531380Z    3935.0 ms  ✓ FreeType
+2025-08-27T07:26:15.6705280Z    3452.3 ms  ✓ Fontconfig_jll
+2025-08-27T07:26:17.9431790Z    2270.0 ms  ✓ Xorg_libX11_jll
+2025-08-27T07:26:23.2071910Z    8252.4 ms  ✓ IntervalArithmetic
+2025-08-27T07:26:26.9766560Z    3763.3 ms  ✓ LightXML
+2025-08-27T07:26:31.1755650Z    4205.4 ms  ✓ Glib_jll
+2025-08-27T07:26:33.2305200Z    2047.5 ms  ✓ StructArrays → StructArraysAdaptExt
+2025-08-27T07:26:36.0420890Z    2813.2 ms  ✓ StructArrays → StructArraysSparseArraysExt
+2025-08-27T07:26:39.6238600Z    3583.0 ms  ✓ StructArrays → StructArraysStaticArraysExt
+2025-08-27T07:26:41.8018600Z    2172.3 ms  ✓ StructArrays → StructArraysLinearAlgebraExt
+2025-08-27T07:26:46.1032700Z    4303.9 ms  ✓ SpecialFunctions → SpecialFunctionsChainRulesCoreExt
+2025-08-27T07:26:49.3792670Z    3269.5 ms  ✓ HypergeometricFunctions
+2025-08-27T07:26:52.3429160Z    2961.2 ms  ✓ DiffRules
+2025-08-27T07:26:53.1212340Z   35183.3 ms  ✓ FFTW
+2025-08-27T07:26:56.0145670Z    3672.4 ms  ✓ FiniteDiff
+2025-08-27T07:26:56.5705660Z    3445.5 ms  ✓ ColorVectorSpace → SpecialFunctionsExt
+2025-08-27T07:26:59.0634050Z    2487.4 ms  ✓ Graphics
+2025-08-27T07:26:59.8877350Z   65012.5 ms  ✓ Polynomials
+2025-08-27T07:27:01.6319150Z    2566.1 ms  ✓ Animations
+2025-08-27T07:27:02.9271180Z    6916.2 ms  ✓ StatsBase
+2025-08-27T07:27:04.9077030Z    3247.6 ms  ✓ ColorBrewer
+2025-08-27T07:27:07.2947580Z    7401.5 ms  ✓ OpenEXR
+2025-08-27T07:27:15.5005600Z    8201.8 ms  ✓ Interpolations
+2025-08-27T07:27:16.8556050Z   11932.0 ms  ✓ ColorSchemes
+2025-08-27T07:27:17.3177130Z    1817.5 ms  ✓ Xorg_libXrender_jll
+2025-08-27T07:27:18.9801240Z    2111.4 ms  ✓ Xorg_libXext_jll
+2025-08-27T07:27:19.8820900Z    2566.7 ms  ✓ IntervalArithmetic → IntervalArithmeticSparseArraysExt
+2025-08-27T07:27:20.8823680Z    1900.4 ms  ✓ IntervalArithmetic → IntervalArithmeticIntervalSetsExt
+2025-08-27T07:27:21.9266500Z    2046.0 ms  ✓ IntervalArithmetic → IntervalArithmeticRecipesBaseExt
+2025-08-27T07:27:29.2974070Z   90502.5 ms  ✓ TiffImages
+2025-08-27T07:27:31.3547640Z   10475.0 ms  ✓ IntervalArithmetic → IntervalArithmeticLinearAlgebraExt
+2025-08-27T07:27:37.0140800Z    7720.1 ms  ✓ StatsFuns
+2025-08-27T07:27:39.8397250Z    2811.9 ms  ✓ IntervalArithmetic → IntervalArithmeticDiffRulesExt
+2025-08-27T07:27:43.8988940Z    4055.9 ms  ✓ FiniteDiff → FiniteDiffSparseArraysExt
+2025-08-27T07:27:45.5211310Z   14165.0 ms  ✓ ForwardDiff
+2025-08-27T07:27:46.1474000Z   24219.0 ms  ✓ GeometryBasics
+2025-08-27T07:27:46.9584770Z    3059.1 ms  ✓ FiniteDiff → FiniteDiffStaticArraysExt
+2025-08-27T07:27:47.6359030Z    2106.1 ms  ✓ DifferentiationInterface → DifferentiationInterfaceFiniteDiffExt
+2025-08-27T07:27:50.1031790Z    3144.2 ms  ✓ Polynomials → PolynomialsChainRulesCoreExt
+2025-08-27T07:27:50.8850230Z    4729.5 ms  ✓ Polynomials → PolynomialsMakieCoreExt
+2025-08-27T07:27:51.6785480Z    4047.0 ms  ✓ Polynomials → PolynomialsFFTWExt
+2025-08-27T07:27:53.6442110Z    1964.1 ms  ✓ Libglvnd_jll
+2025-08-27T07:27:54.1865390Z    4081.4 ms  ✓ SimplePolynomials
+2025-08-27T07:27:59.5600090Z    5912.8 ms  ✓ Cairo_jll
+2025-08-27T07:28:03.8292610Z    4270.7 ms  ✓ StatsFuns → StatsFunsChainRulesCoreExt
+2025-08-27T07:28:04.6705710Z   61745.4 ms  ✓ ImageCore
+2025-08-27T07:28:06.3024110Z   12113.2 ms  ✓ ExactPredicates
+2025-08-27T07:28:07.7464560Z    3068.2 ms  ✓ ForwardDiff → ForwardDiffStaticArraysExt
+2025-08-27T07:28:08.8558170Z    2555.2 ms  ✓ DifferentiationInterface → DifferentiationInterfaceForwardDiffExt
+2025-08-27T07:28:09.8159860Z    2059.4 ms  ✓ IntervalArithmetic → IntervalArithmeticForwardDiffExt
+2025-08-27T07:28:12.4394160Z    3585.5 ms  ✓ Interpolations → InterpolationsForwardDiffExt
+2025-08-27T07:28:16.3516190Z   12522.3 ms  ✓ Distributions
+2025-08-27T07:28:16.8856510Z    4442.6 ms  ✓ Packing
+2025-08-27T07:28:20.5431930Z   29660.8 ms  ✓ PlotUtils
+2025-08-27T07:28:20.8680880Z    4513.1 ms  ✓ ShaderAbstractions
+2025-08-27T07:28:24.4134340Z    7522.0 ms  ✓ FreeTypeAbstraction
+2025-08-27T07:28:24.6032460Z    4058.8 ms  ✓ libwebp_jll
+2025-08-27T07:28:25.2487820Z    4374.8 ms  ✓ LinearAlgebraX
+2025-08-27T07:28:29.1731300Z    4765.1 ms  ✓ HarfBuzz_jll
+2025-08-27T07:28:30.2908500Z   20480.5 ms  ✓ GridLayoutBase
+2025-08-27T07:28:33.0044730Z    8400.6 ms  ✓ ImageBase
+2025-08-27T07:28:36.5331890Z    3526.8 ms  ✓ NLSolversBase
+2025-08-27T07:28:38.2638870Z    9086.1 ms  ✓ Sixel
+2025-08-27T07:28:38.3087520Z   13065.2 ms  ✓ PNGFiles
+2025-08-27T07:28:38.6980860Z    8402.9 ms  ✓ JpegTurbo
+2025-08-27T07:28:40.4795360Z    3948.7 ms  ✓ Distributions → DistributionsTestExt
+2025-08-27T07:28:41.9898780Z    3724.0 ms  ✓ Distributions → DistributionsChainRulesCoreExt
+2025-08-27T07:28:42.0276830Z    3717.3 ms  ✓ SimpleRandom
+2025-08-27T07:28:48.2891210Z    6293.7 ms  ✓ libass_jll
+2025-08-27T07:28:48.4491640Z    6413.0 ms  ✓ Pango_jll
+2025-08-27T07:28:51.6528440Z   11162.8 ms  ✓ WebP
+2025-08-27T07:28:55.5723710Z    7122.9 ms  ✓ LineSearches
+2025-08-27T07:28:56.5112410Z    8224.7 ms  ✓ ImageAxes
+2025-08-27T07:28:58.3174640Z   19623.2 ms  ✓ MathTeXEngine
+2025-08-27T07:28:59.4877690Z    7531.2 ms  ✓ KernelDensity
+2025-08-27T07:29:05.1939610Z    8679.6 ms  ✓ Cairo
+2025-08-27T07:29:06.4354200Z    6946.3 ms  ✓ ImageMetadata
+2025-08-27T07:29:07.4265570Z   11856.8 ms  ✓ FFMPEG_jll
+2025-08-27T07:29:08.9079000Z   10584.5 ms  ✓ Optim
+2025-08-27T07:29:10.4418680Z    4009.0 ms  ✓ Netpbm
+2025-08-27T07:29:13.2382010Z    2795.1 ms  ✓ ImageIO
+2025-08-27T07:29:13.9261600Z    5022.1 ms  ✓ SimpleGraphs
+2025-08-27T07:29:22.1706590Z    8237.8 ms  ✓ DelaunayTriangulation
+2025-08-27T07:31:59.4204760Z  157249.8 ms  ✓ Makie
+2025-08-27T07:32:59.1716730Z   59744.7 ms  ✓ CairoMakie
+2025-08-27T07:32:59.2138960Z   271 dependencies successfully precompiled in 586 seconds. 46 already precompiled.
+2025-08-27T07:32:59.2242430Z   1 dependency had output during precompilation:
+2025-08-27T07:32:59.2284550Z ┌ Formatting
+2025-08-27T07:32:59.2286210Z │  ┌ Warning: DEPRECATION NOTICE
+2025-08-27T07:32:59.2286570Z │  │ 
+2025-08-27T07:32:59.2287440Z │  │ Formatting.jl has been unmaintained for a while, with some serious
+2025-08-27T07:32:59.2288080Z │  │ correctness bugs compromising the original purpose of the package. As a result,
+2025-08-27T07:32:59.2288760Z │  │ it has been deprecated - consider using an alternative, such as
+2025-08-27T07:32:59.2289570Z │  │ `Format.jl` (https://github.com/JuliaString/Format.jl) or the `Printf` stdlib directly.
+2025-08-27T07:32:59.2290020Z │  │ 
+2025-08-27T07:32:59.2290500Z │  │ If you are not using Formatting.jl as a direct dependency, please consider
+2025-08-27T07:32:59.2291330Z │  │ opening an issue on any packages you are using that do use it as a dependency.
+2025-08-27T07:32:59.2292010Z │  │ From Julia 1.9 onwards, you can query `]why Formatting` to figure out which
+2025-08-27T07:32:59.2303180Z │  │ package originally brings it in as a dependency.
+2025-08-27T07:32:59.2304550Z │  └ @ Formatting ~/.julia/packages/Formatting/3VxOt/src/Formatting.jl:12
+2025-08-27T07:32:59.2305790Z └  
+2025-08-27T07:33:15.2199790Z      Testing PointController
+2025-08-27T07:33:20.6339840Z       Status `/private/var/folders/x7/ch5v91h56_zbvbd1y2f600dm0000gn/T/jl_5lPIW0/Project.toml`
+2025-08-27T07:33:20.6923610Z   [4c88cf16] Aqua v0.8.14
+2025-08-27T07:33:20.6945510Z ⌃ [13f3f980] CairoMakie v0.10.12
+2025-08-27T07:33:20.6946440Z ⌃ [e9467ef8] GLMakie v0.8.12
+2025-08-27T07:33:20.6948660Z   [510215fc] Observables v0.5.5
+2025-08-27T07:33:20.6953930Z   [eae52b99] PointController v0.1.0 `~/work/JuliaTestRocket/JuliaTestRocket`
+2025-08-27T07:33:20.6960830Z   [90137ffa] StaticArrays v1.9.14
+2025-08-27T07:33:20.6976830Z   [56ddb016] Logging v1.11.0
+2025-08-27T07:33:20.6977990Z   [8dfed614] Test v1.11.0
+2025-08-27T07:33:20.6982010Z       Status `/private/var/folders/x7/ch5v91h56_zbvbd1y2f600dm0000gn/T/jl_5lPIW0/Manifest.toml`
+2025-08-27T07:33:22.7809480Z   [47edcb42] ADTypes v1.17.0
+2025-08-27T07:33:22.7812510Z   [621f4979] AbstractFFTs v1.5.0
+2025-08-27T07:33:22.7817670Z   [398f06c4] AbstractLattices v0.3.1
+2025-08-27T07:33:22.7822110Z   [1520ce14] AbstractTrees v0.4.5
+2025-08-27T07:33:22.7826750Z   [79e6a3ab] Adapt v4.3.0
+2025-08-27T07:33:22.7831890Z   [66dad0bd] AliasTables v1.1.3
+2025-08-27T07:33:22.7835560Z   [27a7e980] Animations v0.4.2
+2025-08-27T07:33:22.7839590Z   [4c88cf16] Aqua v0.8.14
+2025-08-27T07:33:22.7844270Z   [4fba245c] ArrayInterface v7.19.0
+2025-08-27T07:33:22.7848970Z   [67c07d97] Automa v1.1.0
+2025-08-27T07:33:22.7853460Z   [13072b0f] AxisAlgorithms v1.1.0
+2025-08-27T07:33:22.7858080Z   [39de3d68] AxisArrays v0.4.7
+2025-08-27T07:33:22.7862370Z   [18cc8868] BaseDirs v1.3.2
+2025-08-27T07:33:22.7866990Z   [fa961155] CEnum v0.5.0
+2025-08-27T07:33:22.7872390Z   [96374032] CRlibm v1.0.2
+2025-08-27T07:33:22.7878430Z   [159f3aea] Cairo v1.1.1
+2025-08-27T07:33:22.7885730Z ⌃ [13f3f980] CairoMakie v0.10.12
+2025-08-27T07:33:22.7888130Z   [d360d2e6] ChainRulesCore v1.26.0
+2025-08-27T07:33:22.7893320Z   [a2cac450] ColorBrewer v0.4.1
+2025-08-27T07:33:22.7900680Z   [35d6a980] ColorSchemes v3.30.0
+2025-08-27T07:33:22.7906640Z ⌅ [3da002f7] ColorTypes v0.11.5
+2025-08-27T07:33:22.7912590Z ⌃ [c3611d14] ColorVectorSpace v0.10.0
+2025-08-27T07:33:22.7916750Z ⌅ [5ae59095] Colors v0.12.11
+2025-08-27T07:33:22.7921810Z   [861a8166] Combinatorics v1.0.3
+2025-08-27T07:33:22.7926890Z   [bbf7d656] CommonSubexpressions v0.3.1
+2025-08-27T07:33:22.7932440Z   [34da2185] Compat v4.18.0
+2025-08-27T07:33:22.7936660Z   [187b0558] ConstructionBase v1.6.0
+2025-08-27T07:33:22.8020670Z   [d38c429a] Contour v0.6.3
+2025-08-27T07:33:22.8020930Z   [9a962f9c] DataAPI v1.16.0
+2025-08-27T07:33:22.8021490Z ⌅ [864edb3b] DataStructures v0.18.22
+2025-08-27T07:33:22.8021870Z   [e2d170a0] DataValueInterfaces v1.0.0
+2025-08-27T07:33:22.8022240Z ⌅ [927a84f5] DelaunayTriangulation v0.8.12
+2025-08-27T07:33:22.8023030Z   [163ba53b] DiffResults v1.1.0
+2025-08-27T07:33:22.8023600Z   [b552c78f] DiffRules v1.15.1
+2025-08-27T07:33:22.8024780Z   [a0c0ee7d] DifferentiationInterface v0.7.7
+2025-08-27T07:33:22.8025340Z   [31c24e10] Distributions v0.25.120
+2025-08-27T07:33:22.8025690Z   [ffbed154] DocStringExtensions v0.9.5
+2025-08-27T07:33:22.8026150Z   [4e289a0a] EnumX v1.0.5
+2025-08-27T07:33:22.8026500Z   [429591f6] ExactPredicates v2.2.8
+2025-08-27T07:33:22.8027200Z   [411431e0] Extents v0.1.6
+2025-08-27T07:33:22.8027670Z   [7a1cc6ca] FFTW v1.9.0
+2025-08-27T07:33:22.8027990Z   [5789e2e9] FileIO v1.17.0
+2025-08-27T07:33:22.8028500Z   [1a297f60] FillArrays v1.13.0
+2025-08-27T07:33:22.8028890Z   [6a86dc24] FiniteDiff v2.28.1
+2025-08-27T07:33:22.8033130Z   [53c48c17] FixedPointNumbers v0.8.5
+2025-08-27T07:33:22.8037850Z   [59287772] Formatting v0.4.3
+2025-08-27T07:33:22.8042060Z   [f6369f11] ForwardDiff v1.1.0
+2025-08-27T07:33:22.8046370Z   [b38be410] FreeType v4.1.1
+2025-08-27T07:33:22.8056060Z   [663a7486] FreeTypeAbstraction v0.10.8
+2025-08-27T07:33:22.8057300Z   [f7f18e0c] GLFW v3.4.5
+2025-08-27T07:33:22.8064840Z ⌃ [e9467ef8] GLMakie v0.8.12
+2025-08-27T07:33:22.8069850Z   [68eda718] GeoFormatTypes v0.4.4
+2025-08-27T07:33:22.8076110Z ⌃ [cf35fbd7] GeoInterface v1.4.1
+2025-08-27T07:33:22.8083300Z ⌅ [5c1252a2] GeometryBasics v0.4.11
+2025-08-27T07:33:22.8087730Z   [a2bd30eb] Graphics v1.1.3
+2025-08-27T07:33:22.8092150Z ⌅ [3955a311] GridLayoutBase v0.9.2
+2025-08-27T07:33:22.8096600Z   [42e2da0e] Grisu v1.0.2
+2025-08-27T07:33:22.8101510Z   [34004b35] HypergeometricFunctions v0.3.28
+2025-08-27T07:33:22.8105750Z   [2803e5a7] ImageAxes v0.6.12
+2025-08-27T07:33:22.8110600Z   [c817782e] ImageBase v0.1.7
+2025-08-27T07:33:22.8115800Z   [a09fc81d] ImageCore v0.10.5
+2025-08-27T07:33:22.8120380Z   [82e4d734] ImageIO v0.6.9
+2025-08-27T07:33:22.8125700Z   [bc367c6b] ImageMetadata v0.9.10
+2025-08-27T07:33:22.8132200Z   [9b13fd28] IndirectArrays v1.0.0
+2025-08-27T07:33:22.8137290Z   [d25df0c9] Inflate v0.1.5
+2025-08-27T07:33:22.8143000Z   [18e54dd8] IntegerMathUtils v0.1.3
+2025-08-27T07:33:22.8148560Z   [a98d9a8b] Interpolations v0.16.2
+2025-08-27T07:33:22.8155610Z ⌅ [d1acc4aa] IntervalArithmetic v0.22.36
+2025-08-27T07:33:22.8162260Z   [8197267c] IntervalSets v0.7.11
+2025-08-27T07:33:22.8169120Z   [92d709cd] IrrationalConstants v0.2.4
+2025-08-27T07:33:22.8176640Z   [f1662d9f] Isoband v0.1.1
+2025-08-27T07:33:22.8183840Z   [c8e1da08] IterTools v1.10.0
+2025-08-27T07:33:22.8189830Z   [82899510] IteratorInterfaceExtensions v1.0.0
+2025-08-27T07:33:22.8195200Z   [692b3bcd] JLLWrappers v1.7.1
+2025-08-27T07:33:22.8200940Z   [682c06a0] JSON v0.21.4
+2025-08-27T07:33:22.8207860Z   [b835a17e] JpegTurbo v0.1.6
+2025-08-27T07:33:22.8215120Z   [5ab0869b] KernelDensity v0.6.10
+2025-08-27T07:33:22.8220970Z   [b964fa9f] LaTeXStrings v1.4.0
+2025-08-27T07:33:22.8230680Z   [8cdb02fc] LazyModules v0.3.1
+2025-08-27T07:33:22.8235630Z   [9c8b4983] LightXML v0.9.2
+2025-08-27T07:33:22.8242080Z   [d3d80556] LineSearches v7.4.0
+2025-08-27T07:33:22.8247730Z   [9b3f67b0] LinearAlgebraX v0.2.10
+2025-08-27T07:33:22.8254070Z   [2ab3a3ac] LogExpFunctions v0.3.29
+2025-08-27T07:33:22.8260210Z   [1914dd2f] MacroTools v0.5.16
+2025-08-27T07:33:22.8266140Z ⌅ [ee78f7c6] Makie v0.19.12
+2025-08-27T07:33:22.8272270Z ⌅ [20f20a25] MakieCore v0.6.9
+2025-08-27T07:33:22.8276750Z   [dbb5928d] MappedArrays v0.4.2
+2025-08-27T07:33:22.8282330Z ⌅ [0a4f8689] MathTeXEngine v0.5.7
+2025-08-27T07:33:22.8287850Z ⌅ [7269a6da] MeshIO v0.4.13
+2025-08-27T07:33:22.8292550Z   [e1d29d7a] Missings v1.2.0
+2025-08-27T07:33:22.8296890Z   [66fc600b] ModernGL v1.1.8
+2025-08-27T07:33:22.8302060Z   [7475f97c] Mods v2.2.6
+2025-08-27T07:33:22.8306950Z   [e94cdb99] MosaicViews v0.3.4
+2025-08-27T07:33:22.8311650Z   [3b2b4ff1] Multisets v0.4.5
+2025-08-27T07:33:22.8317140Z   [d41bc354] NLSolversBase v7.10.0
+2025-08-27T07:33:22.8321730Z   [77ba4419] NaNMath v1.1.3
+2025-08-27T07:33:22.8326490Z   [f09324ee] Netpbm v1.1.1
+2025-08-27T07:33:22.8331470Z   [510215fc] Observables v0.5.5
+2025-08-27T07:33:22.8335680Z   [6fe1bfb0] OffsetArrays v1.17.0
+2025-08-27T07:33:22.8340670Z   [52e1d378] OpenEXR v0.3.3
+2025-08-27T07:33:22.8345210Z   [429524aa] Optim v1.13.2
+2025-08-27T07:33:22.8349440Z   [bac558e1] OrderedCollections v1.8.1
+2025-08-27T07:33:22.8354770Z   [90014a1f] PDMats v0.11.35
+2025-08-27T07:33:22.8359440Z   [f57f5aa1] PNGFiles v0.4.4
+2025-08-27T07:33:22.8365060Z   [19eb6ba3] Packing v0.5.1
+2025-08-27T07:33:22.8369140Z   [5432bcbf] PaddedViews v0.5.12
+2025-08-27T07:33:22.8374640Z   [d96e819e] Parameters v0.12.3
+2025-08-27T07:33:22.8379510Z   [69de0a69] Parsers v2.8.3
+2025-08-27T07:33:22.8384730Z   [2ae35dd2] Permutations v0.4.23
+2025-08-27T07:33:22.8391330Z   [3bbf5609] PikaParser v0.6.1
+2025-08-27T07:33:22.8396600Z   [eebad327] PkgVersion v0.3.3
+2025-08-27T07:33:22.8401110Z   [995b91a9] PlotUtils v1.4.3
+2025-08-27T07:33:22.8406820Z   [eae52b99] PointController v0.1.0 `~/work/JuliaTestRocket/JuliaTestRocket`
+2025-08-27T07:33:22.8411560Z   [647866c9] PolygonOps v0.1.2
+2025-08-27T07:33:22.8416310Z ⌃ [f27b6e38] Polynomials v4.0.21
+2025-08-27T07:33:22.8420800Z   [85a6dd25] PositiveFactorizations v0.2.4
+2025-08-27T07:33:22.8425100Z ⌅ [aea7be01] PrecompileTools v1.2.1
+2025-08-27T07:33:22.8430710Z   [21216c6a] Preferences v1.5.0
+2025-08-27T07:33:22.8435850Z   [27ebfcd6] Primes v0.5.7
+2025-08-27T07:33:22.8440070Z   [92933f4c] ProgressMeter v1.11.0
+2025-08-27T07:33:22.8444920Z   [43287f4e] PtrArrays v1.3.0
+2025-08-27T07:33:22.8451200Z   [4b34888f] QOI v1.0.1
+2025-08-27T07:33:22.8455840Z   [1fd47b50] QuadGK v2.11.2
+2025-08-27T07:33:22.8460790Z   [b3c3ace0] RangeArrays v0.3.2
+2025-08-27T07:33:22.8465590Z   [c84ed2f1] Ratios v0.4.5
+2025-08-27T07:33:22.8472880Z   [3cdcf5f2] RecipesBase v1.3.4
+2025-08-27T07:33:22.8479480Z   [189a3867] Reexport v1.2.2
+2025-08-27T07:33:22.8484120Z   [05181044] RelocatableFolders v1.0.1
+2025-08-27T07:33:22.8489260Z   [ae029012] Requires v1.3.1
+2025-08-27T07:33:22.8494090Z   [286e9d63] RingLists v0.2.9
+2025-08-27T07:33:22.8499410Z   [79098fc4] Rmath v0.8.0
+2025-08-27T07:33:22.8503530Z   [5eaf0fd0] RoundingEmulator v0.2.1
+2025-08-27T07:33:22.8508070Z   [fdea26ae] SIMD v3.7.1
+2025-08-27T07:33:22.8511790Z   [6c6a2e73] Scratch v1.3.0
+2025-08-27T07:33:22.8515910Z   [efcf1570] Setfield v1.1.2
+2025-08-27T07:33:22.8524050Z ⌅ [65257c39] ShaderAbstractions v0.4.1
+2025-08-27T07:33:22.8527050Z   [992d4aef] Showoff v1.0.3
+2025-08-27T07:33:22.8531740Z   [73760f76] SignedDistanceFields v0.4.0
+2025-08-27T07:33:22.8537300Z   [55797a34] SimpleGraphs v0.8.7
+2025-08-27T07:33:22.8543700Z   [ec83eff0] SimplePartitions v0.3.3
+2025-08-27T07:33:22.8548670Z   [cc47b68c] SimplePolynomials v0.2.18
+2025-08-27T07:33:22.8554030Z   [a6525b86] SimpleRandom v0.3.2
+2025-08-27T07:33:22.8558870Z   [699a6c99] SimpleTraits v0.9.5
+2025-08-27T07:33:22.8564310Z   [45858cf5] Sixel v0.1.5
+2025-08-27T07:33:22.8569560Z   [a2af1166] SortingAlgorithms v1.2.2
+2025-08-27T07:33:22.8574590Z   [276daf66] SpecialFunctions v2.5.1
+2025-08-27T07:33:22.8579120Z ⌅ [c5dd0088] StableHashTraits v1.3.4
+2025-08-27T07:33:22.8583840Z   [860ef19b] StableRNGs v1.0.3
+2025-08-27T07:33:22.8588680Z   [cae243ae] StackViews v0.1.2
+2025-08-27T07:33:22.8593280Z   [90137ffa] StaticArrays v1.9.14
+2025-08-27T07:33:22.8597440Z   [1e83bf80] StaticArraysCore v1.4.3
+2025-08-27T07:33:22.8602400Z   [10745b16] Statistics v1.11.1
+2025-08-27T07:33:22.8606510Z   [82ae8749] StatsAPI v1.7.1
+2025-08-27T07:33:22.8610900Z   [2913bbd2] StatsBase v0.34.6
+2025-08-27T07:33:22.8615650Z   [4c63d2b9] StatsFuns v1.5.0
+2025-08-27T07:33:22.8619710Z ⌅ [09ab397b] StructArrays v0.6.21
+2025-08-27T07:33:22.8624150Z   [856f2bd8] StructTypes v1.11.0
+2025-08-27T07:33:22.8628450Z   [3783bdb8] TableTraits v1.0.1
+2025-08-27T07:33:22.8633350Z   [bd369af6] Tables v1.12.1
+2025-08-27T07:33:22.8637990Z   [62fd8b95] TensorCore v0.1.1
+2025-08-27T07:33:22.8642710Z   [731e570b] TiffImages v0.11.6
+2025-08-27T07:33:22.8647310Z   [3bb67fe8] TranscodingStreams v0.11.3
+2025-08-27T07:33:22.8652370Z   [981d1d27] TriplotBase v0.1.0
+2025-08-27T07:33:22.8657560Z   [9d95972d] TupleTools v1.6.0
+2025-08-27T07:33:22.8662430Z   [3a884ed6] UnPack v1.0.2
+2025-08-27T07:33:22.8666930Z   [1cfade01] UnicodeFun v0.4.1
+2025-08-27T07:33:22.8671280Z   [ecbed89c] WeakKeyIdDicts v0.1.0
+2025-08-27T07:33:22.8675710Z   [e3aaa7dc] WebP v0.1.3
+2025-08-27T07:33:22.8680780Z   [efce3f68] WoodburyMatrices v1.0.0
+2025-08-27T07:33:22.8684770Z   [6e34b625] Bzip2_jll v1.0.9+0
+2025-08-27T07:33:22.8689460Z   [4e9b3aee] CRlibm_jll v1.0.1+0
+2025-08-27T07:33:22.8694130Z   [83423d85] Cairo_jll v1.18.5+0
+2025-08-27T07:33:22.8698680Z   [ee1fde0b] Dbus_jll v1.16.2+0
+2025-08-27T07:33:22.8703110Z   [5ae413db] EarCut_jll v2.2.4+0
+2025-08-27T07:33:22.8707690Z   [2702e6a9] EpollShim_jll v0.0.20230411+1
+2025-08-27T07:33:22.8712030Z   [2e619515] Expat_jll v2.7.1+0
+2025-08-27T07:33:22.8716570Z   [b22a6f82] FFMPEG_jll v7.1.1+0
+2025-08-27T07:33:22.8722000Z   [f5851436] FFTW_jll v3.3.11+0
+2025-08-27T07:33:22.8726070Z   [a3f928ae] Fontconfig_jll v2.17.1+0
+2025-08-27T07:33:22.8731390Z   [d7e528f0] FreeType2_jll v2.13.4+0
+2025-08-27T07:33:22.8735790Z   [559328eb] FriBidi_jll v1.0.17+0
+2025-08-27T07:33:22.8740430Z   [0656b61e] GLFW_jll v3.4.0+2
+2025-08-27T07:33:22.8744890Z   [b0724c58] GettextRuntime_jll v0.22.4+0
+2025-08-27T07:33:22.8749120Z   [59f7168a] Giflib_jll v5.2.3+0
+2025-08-27T07:33:22.8753490Z   [7746bdde] Glib_jll v2.84.3+0
+2025-08-27T07:33:22.8758400Z   [3b182d85] Graphite2_jll v1.3.15+0
+2025-08-27T07:33:22.8763530Z   [2e76f6c2] HarfBuzz_jll v8.5.1+0
+2025-08-27T07:33:22.8768310Z   [905a6f67] Imath_jll v3.1.11+0
+2025-08-27T07:33:22.8773960Z   [1d5cc7b8] IntelOpenMP_jll v2025.2.0+0
+2025-08-27T07:33:22.8779870Z   [aacddb02] JpegTurbo_jll v3.1.2+0
+2025-08-27T07:33:22.8786670Z   [c1c5ebd0] LAME_jll v3.100.3+0
+2025-08-27T07:33:22.8791600Z   [88015f11] LERC_jll v4.0.1+0
+2025-08-27T07:33:22.8796460Z   [1d63c593] LLVMOpenMP_jll v18.1.8+0
+2025-08-27T07:33:22.8801300Z   [dd4b983a] LZO_jll v2.10.3+0
+2025-08-27T07:33:22.8806540Z   [e9f186c6] Libffi_jll v3.4.7+0
+2025-08-27T07:33:22.8812230Z   [7e76a0d4] Libglvnd_jll v1.7.1+1
+2025-08-27T07:33:22.8817320Z   [94ce4f54] Libiconv_jll v1.18.0+0
+2025-08-27T07:33:22.8822800Z   [4b2f31a3] Libmount_jll v2.41.1+0
+2025-08-27T07:33:22.8827380Z   [89763e89] Libtiff_jll v4.7.1+0
+2025-08-27T07:33:22.8832220Z   [38a345b3] Libuuid_jll v2.41.1+0
+2025-08-27T07:33:22.8836720Z   [856f044c] MKL_jll v2025.2.0+0
+2025-08-27T07:33:22.8841360Z   [e7412a2a] Ogg_jll v1.3.6+0
+2025-08-27T07:33:22.8846000Z   [6cdc7f73] OpenBLASConsistentFPCSR_jll v0.3.29+0
+2025-08-27T07:33:22.8851060Z   [18a262bb] OpenEXR_jll v3.2.4+0
+2025-08-27T07:33:22.8856380Z   [458c3c95] OpenSSL_jll v3.5.2+0
+2025-08-27T07:33:22.8861290Z   [efe28fd5] OpenSpecFun_jll v0.5.6+0
+2025-08-27T07:33:22.8866350Z   [91d4177d] Opus_jll v1.5.2+0
+2025-08-27T07:33:22.8870870Z   [36c8627f] Pango_jll v1.56.3+0
+2025-08-27T07:33:22.8875660Z ⌅ [30392449] Pixman_jll v0.44.2+0
+2025-08-27T07:33:22.8880480Z   [f50d1b31] Rmath_jll v0.5.1+0
+2025-08-27T07:33:22.8886800Z   [a2964d1f] Wayland_jll v1.24.0+0
+2025-08-27T07:33:22.8892230Z   [02c8fc9c] XML2_jll v2.14.4+0
+2025-08-27T07:33:22.8897540Z   [ffd25f8a] XZ_jll v5.8.1+0
+2025-08-27T07:33:22.8902820Z   [4f6342f7] Xorg_libX11_jll v1.8.12+0
+2025-08-27T07:33:22.8908350Z   [0c0b7dd1] Xorg_libXau_jll v1.0.13+0
+2025-08-27T07:33:22.8913430Z   [935fb764] Xorg_libXcursor_jll v1.2.4+0
+2025-08-27T07:33:22.8919030Z   [a3789734] Xorg_libXdmcp_jll v1.1.6+0
+2025-08-27T07:33:22.8922870Z   [1082639a] Xorg_libXext_jll v1.3.7+0
+2025-08-27T07:33:22.8927890Z   [d091e8ba] Xorg_libXfixes_jll v6.0.1+0
+2025-08-27T07:33:22.8933210Z   [a51aa0fd] Xorg_libXi_jll v1.8.3+0
+2025-08-27T07:33:22.8939630Z   [d1454406] Xorg_libXinerama_jll v1.1.6+0
+2025-08-27T07:33:22.8945450Z   [ec84b674] Xorg_libXrandr_jll v1.5.5+0
+2025-08-27T07:33:22.8951410Z   [ea2f1a96] Xorg_libXrender_jll v0.9.12+0
+2025-08-27T07:33:22.8957860Z   [c7cfdc94] Xorg_libxcb_jll v1.17.1+0
+2025-08-27T07:33:22.8963360Z   [cc61e674] Xorg_libxkbfile_jll v1.1.3+0
+2025-08-27T07:33:22.8968010Z   [35661453] Xorg_xkbcomp_jll v1.4.7+0
+2025-08-27T07:33:22.8974110Z   [33bec58e] Xorg_xkeyboard_config_jll v2.44.0+0
+2025-08-27T07:33:22.8983680Z   [c5fb5394] Xorg_xtrans_jll v1.6.0+0
+2025-08-27T07:33:22.8989180Z   [3161d3a3] Zstd_jll v1.5.7+1
+2025-08-27T07:33:22.8995220Z   [9a68df92] isoband_jll v0.2.3+0
+2025-08-27T07:33:22.9001060Z   [a4ae2306] libaom_jll v3.12.1+0
+2025-08-27T07:33:22.9007300Z   [0ac62f75] libass_jll v0.17.4+0
+2025-08-27T07:33:22.9011990Z   [1183f4f0] libdecor_jll v0.2.2+0
+2025-08-27T07:33:22.9022070Z   [f638f0a6] libfdk_aac_jll v2.0.4+0
+2025-08-27T07:33:22.9032760Z   [b53b4c65] libpng_jll v1.6.50+0
+2025-08-27T07:33:22.9039270Z   [075b6546] libsixel_jll v1.10.5+0
+2025-08-27T07:33:22.9046880Z   [f27f6e37] libvorbis_jll v1.3.8+0
+2025-08-27T07:33:22.9053020Z   [c5f90fcd] libwebp_jll v1.6.0+0
+2025-08-27T07:33:22.9058520Z   [1317d2d5] oneTBB_jll v2022.0.0+0
+2025-08-27T07:33:22.9065230Z   [1270edf5] x264_jll v10164.0.1+0
+2025-08-27T07:33:22.9069210Z   [dfaa095f] x265_jll v4.1.0+0
+2025-08-27T07:33:22.9074390Z   [d8fb68d0] xkbcommon_jll v1.9.2+0
+2025-08-27T07:33:22.9079720Z   [0dad84c5] ArgTools v1.1.2
+2025-08-27T07:33:22.9084660Z   [56f22d72] Artifacts v1.11.0
+2025-08-27T07:33:22.9089230Z   [2a0f44e3] Base64 v1.11.0
+2025-08-27T07:33:22.9095130Z   [8bf52ea8] CRC32c v1.11.0
+2025-08-27T07:33:22.9101620Z   [ade2ca70] Dates v1.11.0
+2025-08-27T07:33:22.9107340Z   [8ba89e20] Distributed v1.11.0
+2025-08-27T07:33:22.9111720Z   [f43a241f] Downloads v1.6.0
+2025-08-27T07:33:22.9115380Z   [7b1f6079] FileWatching v1.11.0
+2025-08-27T07:33:22.9120410Z   [9fa8497b] Future v1.11.0
+2025-08-27T07:33:22.9125160Z   [b77e0a4c] InteractiveUtils v1.11.0
+2025-08-27T07:33:22.9130460Z   [4af54fe1] LazyArtifacts v1.11.0
+2025-08-27T07:33:22.9135220Z   [b27032c2] LibCURL v0.6.4
+2025-08-27T07:33:22.9140630Z   [76f85450] LibGit2 v1.11.0
+2025-08-27T07:33:22.9147270Z   [8f399da3] Libdl v1.11.0
+2025-08-27T07:33:22.9153800Z   [37e2e46d] LinearAlgebra v1.11.0
+2025-08-27T07:33:22.9159120Z   [56ddb016] Logging v1.11.0
+2025-08-27T07:33:22.9163950Z   [d6f4376e] Markdown v1.11.0
+2025-08-27T07:33:22.9168740Z   [a63ad114] Mmap v1.11.0
+2025-08-27T07:33:22.9173850Z   [ca575930] NetworkOptions v1.2.0
+2025-08-27T07:33:22.9179470Z   [44cfe95a] Pkg v1.11.0
+2025-08-27T07:33:22.9186720Z   [de0858da] Printf v1.11.0
+2025-08-27T07:33:22.9193340Z   [3fa0cd96] REPL v1.11.0
+2025-08-27T07:33:22.9199600Z   [9a3f8284] Random v1.11.0
+2025-08-27T07:33:22.9205010Z   [ea8e919c] SHA v0.7.0
+2025-08-27T07:33:22.9210110Z   [9e88b42a] Serialization v1.11.0
+2025-08-27T07:33:22.9216370Z   [1a1011a3] SharedArrays v1.11.0
+2025-08-27T07:33:22.9222600Z   [6462fe0b] Sockets v1.11.0
+2025-08-27T07:33:22.9227930Z   [2f01184e] SparseArrays v1.11.0
+2025-08-27T07:33:22.9232990Z   [f489334b] StyledStrings v1.11.0
+2025-08-27T07:33:22.9238200Z   [4607b0f0] SuiteSparse
+2025-08-27T07:33:22.9242910Z   [fa267f1f] TOML v1.0.3
+2025-08-27T07:33:22.9247950Z   [a4e569a6] Tar v1.10.0
+2025-08-27T07:33:22.9253130Z   [8dfed614] Test v1.11.0
+2025-08-27T07:33:22.9257530Z   [cf7118a7] UUIDs v1.11.0
+2025-08-27T07:33:22.9262540Z   [4ec0a83e] Unicode v1.11.0
+2025-08-27T07:33:22.9267290Z   [e66e0078] CompilerSupportLibraries_jll v1.1.1+0
+2025-08-27T07:33:22.9272890Z   [deac9b47] LibCURL_jll v8.6.0+0
+2025-08-27T07:33:22.9277880Z   [e37daf67] LibGit2_jll v1.7.2+0
+2025-08-27T07:33:22.9282940Z   [29816b5a] LibSSH2_jll v1.11.0+1
+2025-08-27T07:33:22.9287950Z   [c8ffd9c3] MbedTLS_jll v2.28.6+0
+2025-08-27T07:33:22.9294220Z   [14a3606d] MozillaCACerts_jll v2023.12.12
+2025-08-27T07:33:22.9299350Z   [4536629a] OpenBLAS_jll v0.3.27+1
+2025-08-27T07:33:22.9304560Z   [05823500] OpenLibm_jll v0.8.5+0
+2025-08-27T07:33:22.9309080Z   [efcefdf7] PCRE2_jll v10.42.0+1
+2025-08-27T07:33:22.9314270Z   [bea87d4a] SuiteSparse_jll v7.7.0+0
+2025-08-27T07:33:22.9318990Z   [83775a58] Zlib_jll v1.2.13+1
+2025-08-27T07:33:22.9323710Z   [8e850b90] libblastrampoline_jll v5.11.0+0
+2025-08-27T07:33:22.9328450Z   [8e850ede] nghttp2_jll v1.59.0+0
+2025-08-27T07:33:22.9333590Z   [3f19e933] p7zip_jll v17.4.0+2
+2025-08-27T07:33:22.9339030Z         Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading.
+2025-08-27T07:33:28.9715030Z Precompiling project for configuration --code-coverage=@/Users/runner/work/JuliaTestRocket/JuliaTestRocket --color=auto --check-bounds=yes --warn-overwrite=yes --depwarn=yes --inline=yes --startup-file=no --track-allocation=none...
+2025-08-27T07:33:32.7002990Z    2781.7 ms  ✓ RangeArrays
+2025-08-27T07:33:33.2598610Z    3239.3 ms  ✓ AbstractFFTs
+2025-08-27T07:33:33.9279070Z    4855.1 ms  ✓ Combinatorics
+2025-08-27T07:33:34.4463720Z    1736.7 ms  ✓ LaTeXStrings
+2025-08-27T07:33:35.2518720Z    1973.7 ms  ✓ PositiveFactorizations
+2025-08-27T07:33:35.5036110Z    1574.8 ms  ✓ IndirectArrays
+2025-08-27T07:33:36.0868800Z    1642.4 ms  ✓ PolygonOps
+2025-08-27T07:33:36.6426180Z    1392.5 ms  ✓ IteratorInterfaceExtensions
+2025-08-27T07:33:37.2816500Z    1772.2 ms  ✓ TensorCore
+2025-08-27T07:33:38.6661760Z    2029.0 ms  ✓ GeoFormatTypes
+2025-08-27T07:33:39.1627320Z    1877.6 ms  ✓ StatsAPI
+2025-08-27T07:33:39.8923240Z    1225.3 ms  ✓ AbstractLattices
+2025-08-27T07:33:41.1451700Z    1991.8 ms  ✓ ADTypes
+2025-08-27T07:33:41.2457400Z   11311.6 ms  ✓ BaseDirs
+2025-08-27T07:33:41.7246420Z    5639.6 ms  ✓ ModernGL
+2025-08-27T07:33:41.8452500Z    1948.1 ms  ✓ Contour
+2025-08-27T07:33:43.1262430Z    1979.9 ms  ✓ CEnum
+2025-08-27T07:33:43.8514360Z    2006.2 ms  ✓ UnPack
+2025-08-27T07:33:44.3144400Z    2589.1 ms  ✓ TriplotBase
+2025-08-27T07:33:46.5965370Z    5345.7 ms  ✓ OffsetArrays
+2025-08-27T07:33:47.2385010Z    3383.5 ms  ✓ IntegerMathUtils
+2025-08-27T07:33:48.5720820Z    4258.2 ms  ✓ Statistics
+2025-08-27T07:33:49.2962050Z    6157.3 ms  ✓ FillArrays
+2025-08-27T07:33:50.5014710Z    3902.4 ms  ✓ IterTools
+2025-08-27T07:33:52.9744250Z    3688.8 ms  ✓ OrderedCollections
+2025-08-27T07:33:53.4911820Z    4913.2 ms  ✓ Grisu
+2025-08-27T07:33:54.0505660Z    3549.6 ms  ✓ Observables
+2025-08-27T07:33:55.7531990Z    2256.7 ms  ✓ DataValueInterfaces
+2025-08-27T07:33:55.9864050Z    3010.6 ms  ✓ Requires
+2025-08-27T07:33:56.2001310Z    2150.0 ms  ✓ EnumX
+2025-08-27T07:33:57.8458550Z    1858.5 ms  ✓ Reexport
+2025-08-27T07:33:57.9368930Z    2181.7 ms  ✓ StableRNGs
+2025-08-27T07:33:58.7105720Z    2508.7 ms  ✓ DocStringExtensions
+2025-08-27T07:33:59.6282600Z   12381.6 ms  ✓ MacroTools
+2025-08-27T07:34:00.2208860Z    2373.8 ms  ✓ AbstractTrees
+2025-08-27T07:34:01.0239630Z    2300.2 ms  ✓ IntervalSets
+2025-08-27T07:34:01.8493180Z    2207.2 ms  ✓ RoundingEmulator
+2025-08-27T07:34:02.1423490Z    4211.4 ms  ✓ IrrationalConstants
+2025-08-27T07:34:02.5394960Z    2308.8 ms  ✓ Extents
+2025-08-27T07:34:03.0684320Z    2034.8 ms  ✓ PtrArrays
+2025-08-27T07:34:04.3703130Z    2511.3 ms  ✓ TranscodingStreams
+2025-08-27T07:34:05.1075050Z    2966.1 ms  ✓ NaNMath
+2025-08-27T07:34:05.2081310Z    2672.3 ms  ✓ LazyModules
+2025-08-27T07:34:05.9706180Z    2897.1 ms  ✓ Multisets
+2025-08-27T07:34:07.6244960Z    3246.9 ms  ✓ RingLists
+2025-08-27T07:34:08.3041120Z    3088.7 ms  ✓ ConstructionBase
+2025-08-27T07:34:08.3787990Z    3264.0 ms  ✓ Inflate
+2025-08-27T07:34:08.9203850Z    2948.8 ms  ✓ Mods
+2025-08-27T07:34:10.1838630Z    2564.6 ms  ✓ DataAPI
+2025-08-27T07:34:11.0393650Z    2741.4 ms  ✓ StaticArraysCore
+2025-08-27T07:34:11.4356710Z    3060.1 ms  ✓ TupleTools
+2025-08-27T07:34:12.0540630Z    3132.8 ms  ✓ MappedArrays
+2025-08-27T07:34:13.2136610Z    3005.7 ms  ✓ WeakKeyIdDicts
+2025-08-27T07:34:14.5705200Z    3524.9 ms  ✓ SuiteSparse
+2025-08-27T07:34:15.2970200Z    3855.8 ms  ✓ ProgressMeter
+2025-08-27T07:34:15.7741100Z    2541.1 ms  ✓ WoodburyMatrices
+2025-08-27T07:34:16.1276090Z    4078.1 ms  ✓ Formatting
+2025-08-27T07:34:17.3460950Z    2049.1 ms  ✓ Scratch
+2025-08-27T07:34:17.7768730Z    3212.4 ms  ✓ StructTypes
+2025-08-27T07:34:18.5588380Z    2429.0 ms  ✓ Compat
+2025-08-27T07:34:20.1820910Z    4383.9 ms  ✓ Preferences
+2025-08-27T07:34:23.8701040Z    3677.3 ms  ✓ Permutations
+2025-08-27T07:34:26.6922120Z    8130.9 ms  ✓ AbstractFFTs → AbstractFFTsTestExt
+2025-08-27T07:34:27.1983880Z    3323.4 ms  ✓ TableTraits
+2025-08-27T07:34:27.4498370Z   10101.7 ms  ✓ UnicodeFun
+2025-08-27T07:34:28.8293860Z   11049.6 ms  ✓ PkgVersion
+2025-08-27T07:34:30.5877670Z    3387.7 ms  ✓ StackViews
+2025-08-27T07:34:31.1157200Z    3664.2 ms  ✓ PaddedViews
+2025-08-27T07:34:32.6825710Z    5987.0 ms  ✓ DifferentiationInterface
+2025-08-27T07:34:32.9313260Z    4087.6 ms  ✓ Primes
+2025-08-27T07:34:33.4008430Z    2815.6 ms  ✓ SignedDistanceFields
+2025-08-27T07:34:34.9646750Z    2286.9 ms  ✓ Statistics → SparseArraysExt
+2025-08-27T07:34:35.0744920Z    2129.7 ms  ✓ FillArrays → FillArraysStatisticsExt
+2025-08-27T07:34:35.7516730Z    2343.7 ms  ✓ FillArrays → FillArraysSparseArraysExt
+2025-08-27T07:34:37.1838070Z    2111.6 ms  ✓ Showoff
+2025-08-27T07:34:37.3844140Z    2419.0 ms  ✓ Parameters
+2025-08-27T07:34:38.7285430Z    1545.3 ms  ✓ Ratios
+2025-08-27T07:34:38.7991930Z    7678.5 ms  ✓ FixedPointNumbers
+2025-08-27T07:34:39.3133440Z    1924.9 ms  ✓ Adapt
+2025-08-27T07:34:39.3335390Z    3587.0 ms  ✓ MakieCore
+2025-08-27T07:34:41.4325690Z    2641.6 ms  ✓ PikaParser
+2025-08-27T07:34:41.5222520Z    2201.8 ms  ✓ CommonSubexpressions
+2025-08-27T07:34:42.2051030Z    2868.8 ms  ✓ SimpleTraits
+2025-08-27T07:34:44.0121040Z    2574.7 ms  ✓ IntervalSets → IntervalSetsRandomExt
+2025-08-27T07:34:44.0353870Z    2516.6 ms  ✓ IntervalSets → IntervalSetsStatisticsExt
+2025-08-27T07:34:45.5966970Z    3391.8 ms  ✓ LogExpFunctions
+2025-08-27T07:34:46.9782770Z    2940.6 ms  ✓ ConstructionBase → ConstructionBaseIntervalSetsExt
+2025-08-27T07:34:47.3021450Z    3286.0 ms  ✓ AliasTables
+2025-08-27T07:34:49.4861740Z    3883.3 ms  ✓ ConstructionBase → ConstructionBaseLinearAlgebraExt
+2025-08-27T07:34:51.1434290Z    4162.4 ms  ✓ ADTypes → ADTypesConstructionBaseExt
+2025-08-27T07:34:52.7369950Z    3254.8 ms  ✓ Missings
+2025-08-27T07:34:53.1579470Z    5860.3 ms  ✓ GeoInterface
+2025-08-27T07:34:53.4141860Z    2271.8 ms  ✓ DiffResults
+2025-08-27T07:34:55.5295390Z    2113.9 ms  ✓ RelocatableFolders
+2025-08-27T07:34:55.8062920Z    3065.6 ms  ✓ PDMats
+2025-08-27T07:34:55.8817450Z    2720.3 ms  ✓ AxisAlgorithms
+2025-08-27T07:34:57.7089280Z    2181.5 ms  ✓ Compat → CompatLinearAlgebraExt
+2025-08-27T07:34:58.3193460Z    2425.0 ms  ✓ PrecompileTools
+2025-08-27T07:34:58.4011970Z    2579.9 ms  ✓ JLLWrappers
+2025-08-27T07:34:58.9958760Z   20265.2 ms  ✓ FileIO
+2025-08-27T07:35:01.0867870Z    2765.6 ms  ✓ MosaicViews
+2025-08-27T07:35:01.1394680Z    3431.6 ms  ✓ Tables
+2025-08-27T07:35:01.5493440Z    3141.6 ms  ✓ DifferentiationInterface → DifferentiationInterfaceSparseArraysExt
+2025-08-27T07:35:03.8379670Z    2749.9 ms  ✓ Ratios → RatiosFixedPointNumbersExt
+2025-08-27T07:35:04.4312290Z    3282.0 ms  ✓ Adapt → AdaptSparseArraysExt
+2025-08-27T07:35:04.9639260Z    3409.1 ms  ✓ ArrayInterface
+2025-08-27T07:35:07.5212940Z    3681.1 ms  ✓ OffsetArrays → OffsetArraysAdaptExt
+2025-08-27T07:35:09.8141070Z    5386.2 ms  ✓ AxisArrays
+2025-08-27T07:35:11.0512810Z   12050.0 ms  ✓ ColorTypes
+2025-08-27T07:35:11.6038200Z    4073.3 ms  ✓ FillArrays → FillArraysPDMatsExt
+2025-08-27T07:35:12.2308340Z    7271.8 ms  ✓ Setfield
+2025-08-27T07:35:15.4040120Z    5576.1 ms  ✓ DataStructures
+2025-08-27T07:35:15.5774350Z    4522.4 ms  ✓ ChainRulesCore
+2025-08-27T07:35:18.7101160Z    7114.3 ms  ✓ Aqua
+2025-08-27T07:35:21.1507850Z    5749.0 ms  ✓ RecipesBase
+2025-08-27T07:35:24.9762180Z    3827.2 ms  ✓ OpenSSL_jll
+2025-08-27T07:35:28.0025190Z    3014.4 ms  ✓ Graphite2_jll
+2025-08-27T07:35:30.8572130Z    2859.3 ms  ✓ Libmount_jll
+2025-08-27T07:35:32.9607490Z    2105.3 ms  ✓ EpollShim_jll
+2025-08-27T07:35:35.1369670Z    2168.0 ms  ✓ LLVMOpenMP_jll
+2025-08-27T07:35:35.9537480Z   23720.0 ms  ✓ StaticArrays
+2025-08-27T07:35:37.4438110Z    2310.7 ms  ✓ Bzip2_jll
+2025-08-27T07:35:38.2405350Z    2287.8 ms  ✓ Rmath_jll
+2025-08-27T07:35:39.5809250Z    2134.7 ms  ✓ Xorg_libXau_jll
+2025-08-27T07:35:40.6056810Z    2359.3 ms  ✓ libpng_jll
+2025-08-27T07:35:42.3285370Z    2733.1 ms  ✓ libfdk_aac_jll
+2025-08-27T07:35:43.6208350Z    3017.4 ms  ✓ Imath_jll
+2025-08-27T07:35:45.4818420Z   29904.4 ms  ✓ SIMD
+2025-08-27T07:35:47.3241590Z    3698.2 ms  ✓ Giflib_jll
+2025-08-27T07:35:48.5136160Z    6175.1 ms  ✓ IntelOpenMP_jll
+2025-08-27T07:35:49.4620750Z    3970.5 ms  ✓ LAME_jll
+2025-08-27T07:35:50.4280630Z    3107.9 ms  ✓ LERC_jll
+2025-08-27T07:35:51.0884240Z    2569.2 ms  ✓ EarCut_jll
+2025-08-27T07:35:51.6743540Z    2210.3 ms  ✓ CRlibm_jll
+2025-08-27T07:35:52.8045820Z    2375.3 ms  ✓ JpegTurbo_jll
+2025-08-27T07:35:53.4613720Z    2373.3 ms  ✓ XZ_jll
+2025-08-27T07:35:54.0249250Z    2350.2 ms  ✓ Ogg_jll
+2025-08-27T07:35:55.1549960Z    2346.7 ms  ✓ oneTBB_jll
+2025-08-27T07:35:55.5639690Z    2104.5 ms  ✓ Xorg_libXdmcp_jll
+2025-08-27T07:35:56.4497600Z    2428.1 ms  ✓ x265_jll
+2025-08-27T07:35:57.4411040Z    2286.3 ms  ✓ x264_jll
+2025-08-27T07:35:57.7983100Z    2229.9 ms  ✓ Zstd_jll
+2025-08-27T07:35:58.6939200Z    2240.2 ms  ✓ libaom_jll
+2025-08-27T07:35:59.6489530Z    2204.8 ms  ✓ Expat_jll
+2025-08-27T07:36:01.3519280Z    3556.3 ms  ✓ LZO_jll
+2025-08-27T07:36:02.5955170Z    3907.5 ms  ✓ Opus_jll
+2025-08-27T07:36:03.9454410Z    4299.3 ms  ✓ Xorg_xtrans_jll
+2025-08-27T07:36:05.1248730Z    3764.3 ms  ✓ Libiconv_jll
+2025-08-27T07:36:06.4025450Z    3804.8 ms  ✓ Libffi_jll
+2025-08-27T07:36:07.7753600Z    3825.7 ms  ✓ isoband_jll
+2025-08-27T07:36:08.9048300Z    3782.8 ms  ✓ FFTW_jll
+2025-08-27T07:36:09.8304630Z    3428.0 ms  ✓ OpenSpecFun_jll
+2025-08-27T07:36:10.1418510Z    2368.6 ms  ✓ Libuuid_jll
+2025-08-27T07:36:11.2484150Z    2345.4 ms  ✓ FriBidi_jll
+2025-08-27T07:36:12.3018380Z    2453.9 ms  ✓ OpenBLASConsistentFPCSR_jll
+2025-08-27T07:36:13.2745890Z    3131.1 ms  ✓ StructArrays
+2025-08-27T07:36:15.2542300Z    2938.8 ms  ✓ ArrayInterface → ArrayInterfaceSparseArraysExt
+2025-08-27T07:36:15.4980940Z    2217.7 ms  ✓ ArrayInterface → ArrayInterfaceStaticArraysCoreExt
+2025-08-27T07:36:17.3534760Z   58636.8 ms  ✓ Parsers
+2025-08-27T07:36:23.3576610Z    8100.8 ms  ✓ QOI
+2025-08-27T07:36:26.7153760Z   15465.0 ms  ✓ StableHashTraits
+2025-08-27T07:36:26.9327330Z   11428.7 ms  ✓ ColorVectorSpace
+2025-08-27T07:36:27.4749650Z    4107.2 ms  ✓ SortingAlgorithms
+2025-08-27T07:36:30.3027320Z    3377.1 ms  ✓ SimplePartitions
+2025-08-27T07:36:30.7914530Z    3316.6 ms  ✓ ChainRulesCore → ChainRulesCoreSparseArraysExt
+2025-08-27T07:36:31.2261700Z    4506.5 ms  ✓ QuadGK
+2025-08-27T07:36:32.6044430Z    2301.7 ms  ✓ AbstractFFTs → AbstractFFTsChainRulesCoreExt
+2025-08-27T07:36:33.2329910Z    2446.5 ms  ✓ ADTypes → ADTypesChainRulesCoreExt
+2025-08-27T07:36:33.9068670Z    2680.5 ms  ✓ DifferentiationInterface → DifferentiationInterfaceChainRulesCoreExt
+2025-08-27T07:36:35.8663420Z    2631.1 ms  ✓ ArrayInterface → ArrayInterfaceChainRulesCoreExt
+2025-08-27T07:36:38.1213610Z    5494.6 ms  ✓ LogExpFunctions → LogExpFunctionsChainRulesCoreExt
+2025-08-27T07:36:38.2345400Z   20876.6 ms  ✓ Colors
+2025-08-27T07:36:38.4678830Z    2592.8 ms  ✓ IntervalSets → IntervalSetsRecipesBaseExt
+2025-08-27T07:36:42.9414990Z    4816.3 ms  ✓ Pixman_jll
+2025-08-27T07:36:43.9894400Z    5748.2 ms  ✓ StaticArrays → StaticArraysChainRulesCoreExt
+2025-08-27T07:36:44.3895090Z    5917.3 ms  ✓ StaticArrays → StaticArraysStatisticsExt
+2025-08-27T07:36:48.9544290Z    6002.1 ms  ✓ ConstructionBase → ConstructionBaseStaticArraysExt
+2025-08-27T07:36:49.7022460Z    5693.5 ms  ✓ DifferentiationInterface → DifferentiationInterfaceStaticArraysExt
+2025-08-27T07:36:49.8972090Z    5511.5 ms  ✓ Adapt → AdaptStaticArraysExt
+2025-08-27T07:36:52.1181890Z    3165.4 ms  ✓ FreeType2_jll
+2025-08-27T07:36:52.7701140Z    3065.4 ms  ✓ Rmath
+2025-08-27T07:36:53.0194390Z    3120.8 ms  ✓ OpenEXR_jll
+2025-08-27T07:36:56.0080420Z    2975.1 ms  ✓ CRlibm
+2025-08-27T07:36:58.9663580Z    2949.7 ms  ✓ libsixel_jll
+2025-08-27T07:37:03.5647180Z    4593.8 ms  ✓ libvorbis_jll
+2025-08-27T07:37:10.1460780Z    6577.3 ms  ✓ MKL_jll
+2025-08-27T07:37:13.1198710Z    2972.0 ms  ✓ Xorg_libxcb_jll
+2025-08-27T07:37:16.4376480Z    3313.7 ms  ✓ Libtiff_jll
+2025-08-27T07:37:18.7451390Z    2314.2 ms  ✓ Dbus_jll
+2025-08-27T07:37:22.2357340Z    3480.0 ms  ✓ XML2_jll
+2025-08-27T07:37:26.5610040Z    4328.8 ms  ✓ GettextRuntime_jll
+2025-08-27T07:37:29.9993160Z    3431.8 ms  ✓ Wayland_jll
+2025-08-27T07:37:32.0971270Z    2104.6 ms  ✓ Isoband
+2025-08-27T07:37:38.9210070Z    6818.0 ms  ✓ SpecialFunctions
+2025-08-27T07:37:41.4600990Z    2537.9 ms  ✓ StructArrays → StructArraysAdaptExt
+2025-08-27T07:37:45.2407710Z    3782.7 ms  ✓ StructArrays → StructArraysSparseArraysExt
+2025-08-27T07:37:50.6933310Z    5451.7 ms  ✓ StructArrays → StructArraysStaticArraysExt
+2025-08-27T07:37:53.3939180Z    2699.2 ms  ✓ StructArrays → StructArraysLinearAlgebraExt
+2025-08-27T07:37:56.5641070Z    3167.8 ms  ✓ FiniteDiff
+2025-08-27T07:37:59.7163500Z   67603.1 ms  ✓ Automa
+2025-08-27T07:38:06.0123900Z    9444.5 ms  ✓ JSON
+2025-08-27T07:38:11.3449070Z    5329.7 ms  ✓ Graphics
+2025-08-27T07:38:12.9282840Z   13204.2 ms  ✓ StatsBase
+2025-08-27T07:38:14.1052550Z    2751.3 ms  ✓ Animations
+2025-08-27T07:38:24.2305370Z   10127.2 ms  ✓ ColorSchemes
+2025-08-27T07:38:32.0225120Z    7779.8 ms  ✓ Interpolations
+2025-08-27T07:38:35.1300250Z    3095.7 ms  ✓ FreeType
+2025-08-27T07:38:37.7091300Z  123794.9 ms  ✓ Polynomials
+2025-08-27T07:38:37.9991310Z    2869.9 ms  ✓ Fontconfig_jll
+2025-08-27T07:38:44.6665920Z    6959.9 ms  ✓ OpenEXR
+2025-08-27T07:38:48.4269330Z   10426.2 ms  ✓ IntervalArithmetic
+2025-08-27T07:38:51.2041350Z    2774.1 ms  ✓ Xorg_libX11_jll
+2025-08-27T07:38:53.6007520Z    2397.5 ms  ✓ LightXML
+2025-08-27T07:38:56.9583720Z    3346.9 ms  ✓ Glib_jll
+2025-08-27T07:39:03.4329170Z    6481.3 ms  ✓ SpecialFunctions → SpecialFunctionsChainRulesCoreExt
+2025-08-27T07:39:08.7637720Z    5329.5 ms  ✓ HypergeometricFunctions
+2025-08-27T07:39:11.3159690Z  138541.2 ms  ✓ TiffImages
+2025-08-27T07:39:11.4547990Z    2685.0 ms  ✓ DiffRules
+2025-08-27T07:39:14.6885560Z    3358.4 ms  ✓ ColorVectorSpace → SpecialFunctionsExt
+2025-08-27T07:39:16.0410920Z   63117.0 ms  ✓ ImageCore
+2025-08-27T07:39:17.5814200Z    2878.0 ms  ✓ FiniteDiff → FiniteDiffSparseArraysExt
+2025-08-27T07:39:18.7857330Z    2742.5 ms  ✓ FiniteDiff → FiniteDiffStaticArraysExt
+2025-08-27T07:39:20.0139850Z    2438.8 ms  ✓ DifferentiationInterface → DifferentiationInterfaceFiniteDiffExt
+2025-08-27T07:39:23.4739530Z    4687.5 ms  ✓ ColorBrewer
+2025-08-27T07:39:29.2458380Z    5770.6 ms  ✓ Polynomials → PolynomialsMakieCoreExt
+2025-08-27T07:39:29.7567460Z   45091.8 ms  ✓ FFTW
+2025-08-27T07:39:30.8513880Z   19384.5 ms  ✓ GeometryBasics
+2025-08-27T07:39:32.2601640Z    2998.6 ms  ✓ Polynomials → PolynomialsChainRulesCoreExt
+2025-08-27T07:39:34.0900290Z    3225.1 ms  ✓ IntervalArithmetic → IntervalArithmeticSparseArraysExt
+2025-08-27T07:39:34.1300260Z    4362.1 ms  ✓ SimplePolynomials
+2025-08-27T07:39:35.0384080Z    2762.3 ms  ✓ IntervalArithmetic → IntervalArithmeticIntervalSetsExt
+2025-08-27T07:39:36.3153020Z    2226.0 ms  ✓ IntervalArithmetic → IntervalArithmeticRecipesBaseExt
+2025-08-27T07:39:36.8054280Z    2677.2 ms  ✓ IntervalArithmetic → IntervalArithmeticLinearAlgebraExt
+2025-08-27T07:39:36.9692540Z    1926.5 ms  ✓ Xorg_libXrender_jll
+2025-08-27T07:39:38.2057250Z    1887.0 ms  ✓ Xorg_libXext_jll
+2025-08-27T07:39:38.8231160Z    2020.6 ms  ✓ Xorg_libXfixes_jll
+2025-08-27T07:39:39.2905030Z    2317.7 ms  ✓ Xorg_libxkbfile_jll
+2025-08-27T07:39:43.2957430Z    4005.6 ms  ✓ IntervalArithmetic → IntervalArithmeticDiffRulesExt
+2025-08-27T07:39:48.1140930Z    9901.4 ms  ✓ StatsFuns
+2025-08-27T07:39:52.0950390Z    8803.2 ms  ✓ ImageBase
+2025-08-27T07:39:53.0899510Z   14257.6 ms  ✓ ForwardDiff
+2025-08-27T07:40:01.0958740Z   12985.5 ms  ✓ PNGFiles
+2025-08-27T07:40:01.3410360Z    9245.9 ms  ✓ Sixel
+2025-08-27T07:40:03.3729190Z   10291.8 ms  ✓ JpegTurbo
+2025-08-27T07:40:07.2689340Z    6168.2 ms  ✓ Polynomials → PolynomialsFFTWExt
+2025-08-27T07:40:08.6601050Z    5280.7 ms  ✓ Packing
+2025-08-27T07:40:10.3052100Z   50290.3 ms  ✓ PlotUtils
+2025-08-27T07:40:11.8029210Z    4536.9 ms  ✓ ShaderAbstractions
+2025-08-27T07:40:16.0487820Z    4243.0 ms  ✓ LinearAlgebraX
+2025-08-27T07:40:16.1197060Z    7460.1 ms  ✓ MeshIO
+2025-08-27T07:40:18.5647240Z    2438.2 ms  ✓ Xorg_libXinerama_jll
+2025-08-27T07:40:18.9110130Z    8598.8 ms  ✓ FreeTypeAbstraction
+2025-08-27T07:40:21.8732430Z    3316.2 ms  ✓ Xorg_libXrandr_jll
+2025-08-27T07:40:22.4068100Z    3493.6 ms  ✓ Libglvnd_jll
+2025-08-27T07:40:25.8850270Z    3476.8 ms  ✓ Xorg_libXcursor_jll
+2025-08-27T07:40:26.8884600Z    5007.6 ms  ✓ Cairo_jll
+2025-08-27T07:40:28.2955080Z    2409.0 ms  ✓ Xorg_libXi_jll
+2025-08-27T07:40:28.8888160Z    1998.5 ms  ✓ Xorg_xkbcomp_jll
+2025-08-27T07:40:32.1570570Z   30813.5 ms  ✓ GridLayoutBase
+2025-08-27T07:40:32.9622960Z   16904.5 ms  ✓ ExactPredicates
+2025-08-27T07:40:32.9724550Z    4680.7 ms  ✓ StatsFuns → StatsFunsChainRulesCoreExt
+2025-08-27T07:40:36.0053820Z    3031.8 ms  ✓ DifferentiationInterface → DifferentiationInterfaceForwardDiffExt
+2025-08-27T07:40:36.5238450Z    3563.6 ms  ✓ ForwardDiff → ForwardDiffStaticArraysExt
+2025-08-27T07:40:39.5805970Z    7413.4 ms  ✓ ImageAxes
+2025-08-27T07:40:40.2462760Z    3720.7 ms  ✓ IntervalArithmetic → IntervalArithmeticForwardDiffExt
+2025-08-27T07:40:41.7282830Z    5723.5 ms  ✓ Interpolations → InterpolationsForwardDiffExt
+2025-08-27T07:40:46.1605300Z   17274.9 ms  ✓ Distributions
+2025-08-27T07:40:46.2225660Z    5970.2 ms  ✓ libwebp_jll
+2025-08-27T07:40:47.3143190Z    5581.8 ms  ✓ HarfBuzz_jll
+2025-08-27T07:40:48.7503650Z    2586.6 ms  ✓ Xorg_xkeyboard_config_jll
+2025-08-27T07:40:50.5192520Z    4291.5 ms  ✓ NLSolversBase
+2025-08-27T07:40:51.7473450Z    4427.2 ms  ✓ ImageMetadata
+2025-08-27T07:40:52.9356930Z    4176.6 ms  ✓ Distributions → DistributionsTestExt
+2025-08-27T07:40:54.0350080Z    3504.9 ms  ✓ Distributions → DistributionsChainRulesCoreExt
+2025-08-27T07:40:55.2080290Z    3458.8 ms  ✓ SimpleRandom
+2025-08-27T07:40:57.4269720Z    3395.5 ms  ✓ libass_jll
+2025-08-27T07:40:59.4161320Z    4212.6 ms  ✓ Pango_jll
+2025-08-27T07:41:00.8984300Z    3473.4 ms  ✓ xkbcommon_jll
+2025-08-27T07:41:00.9488010Z   21366.4 ms  ✓ MathTeXEngine
+2025-08-27T07:41:02.3172870Z    9379.5 ms  ✓ WebP
+2025-08-27T07:41:07.4768650Z    8059.1 ms  ✓ LineSearches
+2025-08-27T07:41:08.8882520Z    6570.4 ms  ✓ FFMPEG_jll
+2025-08-27T07:41:09.0595760Z    8157.0 ms  ✓ Netpbm
+2025-08-27T07:41:09.3502390Z    8408.5 ms  ✓ KernelDensity
+2025-08-27T07:41:11.0973030Z    2209.9 ms  ✓ libdecor_jll
+2025-08-27T07:41:13.0320490Z    5543.1 ms  ✓ Cairo
+2025-08-27T07:41:13.5695080Z    2467.2 ms  ✓ GLFW_jll
+2025-08-27T07:41:13.6507040Z    4291.5 ms  ✓ ImageIO
+2025-08-27T07:41:16.0126860Z    6952.0 ms  ✓ Optim
+2025-08-27T07:41:16.3806410Z    2818.0 ms  ✓ GLFW
+2025-08-27T07:41:20.8289410Z    4815.5 ms  ✓ SimpleGraphs
+2025-08-27T07:41:27.9653610Z    7119.8 ms  ✓ DelaunayTriangulation
+2025-08-27T07:44:22.8373030Z  174855.6 ms  ✓ Makie
+2025-08-27T07:45:04.3426240Z            ✗ GLMakie
+2025-08-27T07:45:37.2287100Z   74357.9 ms  ✓ CairoMakie
+2025-08-27T07:45:40.6239850Z    3390.5 ms  ✓ PointController
+2025-08-27T07:45:40.6260880Z   295 dependencies successfully precompiled in 734 seconds. 40 already precompiled.
+2025-08-27T07:45:40.6263890Z   198 dependencies precompiled but different versions are currently loaded. Restart julia to access the new versions. Otherwise, loading dependents of these packages may trigger further precompilation to work with the unexpected versions.
+2025-08-27T07:45:40.6268290Z   2 dependencies had output during precompilation:
+2025-08-27T07:45:40.6269840Z ┌ Formatting
+2025-08-27T07:45:40.6271640Z │  ┌ Warning: DEPRECATION NOTICE
+2025-08-27T07:45:40.6273510Z │  │ 
+2025-08-27T07:45:40.6274780Z │  │ Formatting.jl has been unmaintained for a while, with some serious
+2025-08-27T07:45:40.6277200Z │  │ correctness bugs compromising the original purpose of the package. As a result,
+2025-08-27T07:45:40.6280200Z │  │ it has been deprecated - consider using an alternative, such as
+2025-08-27T07:45:40.6281610Z │  │ `Format.jl` (https://github.com/JuliaString/Format.jl) or the `Printf` stdlib directly.
+2025-08-27T07:45:40.6282220Z │  │ 
+2025-08-27T07:45:40.6282680Z │  │ If you are not using Formatting.jl as a direct dependency, please consider
+2025-08-27T07:45:40.6285790Z │  │ opening an issue on any packages you are using that do use it as a dependency.
+2025-08-27T07:45:40.6287350Z │  │ From Julia 1.9 onwards, you can query `]why Formatting` to figure out which
+2025-08-27T07:45:40.6288510Z │  │ package originally brings it in as a dependency.
+2025-08-27T07:45:40.6289880Z │  └ @ Formatting ~/.julia/packages/Formatting/3VxOt/src/Formatting.jl:12
+2025-08-27T07:45:40.6316870Z └  
+2025-08-27T07:45:40.6317200Z ┌ CairoMakie
+2025-08-27T07:45:40.6319270Z │  WARNING: importing deprecated binding Makie.MakieLayout into CairoMakie.
+2025-08-27T07:45:40.6321050Z │  The module `MakieLayout` has been removed and integrated into Makie, so simply replace all usage of `MakieLayout` with `Makie`.
+2025-08-27T07:45:40.6322160Z │  WARNING: importing deprecated binding Makie._alternative_fonts into CairoMakie.
+2025-08-27T07:45:40.6330350Z │  , use ALTERNATIVE_FONTS instead.
+2025-08-27T07:45:40.6333340Z │  WARNING: importing deprecated binding Makie._current_figure into CairoMakie.
+2025-08-27T07:45:40.6335580Z │  , use CURRENT_FIGURE instead.
+2025-08-27T07:45:40.6336290Z │  WARNING: importing deprecated binding Makie._default_font into CairoMakie.
+2025-08-27T07:45:40.6336890Z │  , use DEFAULT_FONT instead.
+2025-08-27T07:45:40.6339980Z │  WARNING: importing deprecated binding Makie.default_palettes into CairoMakie.
+2025-08-27T07:45:40.6341380Z │  , use DEFAULT_PALETTES instead.
+2025-08-27T07:45:40.6343290Z │  WARNING: importing deprecated binding Makie.minimal_default into CairoMakie.
+2025-08-27T07:45:40.6343810Z │  , use MAKIE_DEFAULT_THEME instead.
+2025-08-27T07:45:40.6345380Z └  
+2025-08-27T07:45:40.6480160Z 
+2025-08-27T07:45:41.9481440Z ERROR: The following 1 direct dependency failed to precompile:
+2025-08-27T07:45:41.9582350Z 
+2025-08-27T07:45:41.9685220Z GLMakie --code-coverage=@/Users/runner/work/JuliaTestRocket/JuliaTestRocket --color=auto --check-bounds=yes --warn-overwrite=yes --depwarn=yes --inline=yes --startup-file=no --track-allocation=none 
+2025-08-27T07:45:41.9787880Z 
+2025-08-27T07:45:41.9888950Z Failed to precompile GLMakie [e9467ef8-e4e7-5192-8a1a-b1aee30e663a] to "/Users/runner/.julia/compiled/v1.11/GLMakie/jl_pQTJDB".
+2025-08-27T07:45:41.9992040Z WARNING: importing deprecated binding Makie.MakieLayout into GLMakie.
+2025-08-27T07:45:42.0093600Z The module `MakieLayout` has been removed and integrated into Makie, so simply replace all usage of `MakieLayout` with `Makie`.
+2025-08-27T07:45:42.0195070Z WARNING: importing deprecated binding Makie._alternative_fonts into GLMakie.
+2025-08-27T07:45:42.0296440Z , use ALTERNATIVE_FONTS instead.
+2025-08-27T07:45:42.0398520Z WARNING: importing deprecated binding Makie._current_figure into GLMakie.
+2025-08-27T07:45:42.0504130Z , use CURRENT_FIGURE instead.
+2025-08-27T07:45:42.0662520Z WARNING: importing deprecated binding Makie._default_font into GLMakie.
+2025-08-27T07:45:42.0908570Z , use DEFAULT_FONT instead.
+2025-08-27T07:45:42.1033500Z WARNING: importing deprecated binding Makie.default_palettes into GLMakie.
+2025-08-27T07:45:42.1034710Z , use DEFAULT_PALETTES instead.
+2025-08-27T07:45:42.1136780Z WARNING: importing deprecated binding Makie.minimal_default into GLMakie.
+2025-08-27T07:45:42.1241660Z , use MAKIE_DEFAULT_THEME instead.
+2025-08-27T07:45:42.1332900Z ┌ Warning:     GLFW couldn't create an OpenGL window.
+2025-08-27T07:45:42.1333530Z │     This likely means, you don't have an OpenGL capable Graphic Card,
+2025-08-27T07:45:42.1334070Z │     or you don't have an OpenGL 3.3 capable video driver installed.
+2025-08-27T07:45:42.1334670Z │     Have a look at the troubleshooting section in the GLMakie readme:
+2025-08-27T07:45:42.1335340Z │     https://github.com/MakieOrg/Makie.jl/tree/master/GLMakie#troubleshooting-opengl.
+2025-08-27T07:45:42.1336070Z └ @ GLMakie ~/.julia/packages/GLMakie/F1fQC/src/screen.jl:228
+2025-08-27T07:45:42.1336820Z ERROR: LoadError: GLFWError (FORMAT_UNAVAILABLE): NSGL: Failed to find a suitable pixel format
+2025-08-27T07:45:42.1337370Z Stacktrace:
+2025-08-27T07:45:42.1474890Z   [1] _ErrorCallbackWrapper(code::Int32, description::Cstring)
+2025-08-27T07:45:42.1475470Z     @ GLFW ~/.julia/packages/GLFW/Zwulj/src/callback.jl:46
+2025-08-27T07:45:42.1481820Z   [2] CreateWindow(width::Int64, height::Int64, title::String, monitor::GLFW.Monitor, share::GLFW.Window)
+2025-08-27T07:45:42.1482380Z     @ GLFW ~/.julia/packages/GLFW/Zwulj/src/glfw3.jl:580
+2025-08-27T07:45:42.1485230Z   [3] GLFW.Window(; name::String, resolution::Tuple{Int64, Int64}, debugging::Bool, major::Int64, minor::Int64, windowhints::Vector{Tuple{UInt32, Int64}}, contexthints::Vector{Tuple{UInt32, Integer}}, visible::Bool, focus::Bool, fullscreen::Bool, monitor::Nothing, share::GLFW.Window)
+2025-08-27T07:45:42.1498860Z     @ GLFW ~/.julia/packages/GLFW/Zwulj/src/glfw3.jl:404
+2025-08-27T07:45:42.1500400Z   [4] Window
+2025-08-27T07:45:42.1502560Z     @ ~/.julia/packages/GLFW/Zwulj/src/glfw3.jl:362 [inlined]
+2025-08-27T07:45:42.1507050Z   [5] empty_screen(debugging::Bool; reuse::Bool)
+2025-08-27T07:45:42.1511360Z     @ GLMakie ~/.julia/packages/GLMakie/F1fQC/src/screen.jl:219
+2025-08-27T07:45:42.1514380Z   [6] empty_screen
+2025-08-27T07:45:42.1520620Z     @ ~/.julia/packages/GLMakie/F1fQC/src/screen.jl:202 [inlined]
+2025-08-27T07:45:42.1521230Z   [7] singleton_screen(debugging::Bool)
+2025-08-27T07:45:42.1522510Z     @ GLMakie ~/.julia/packages/GLMakie/F1fQC/src/screen.jl:304
+2025-08-27T07:45:42.1523180Z   [8] macro expansion
+2025-08-27T07:45:42.1523650Z     @ ~/.julia/packages/GLMakie/F1fQC/src/precompiles.jl:18 [inlined]
+2025-08-27T07:45:42.1524040Z   [9] macro expansion
+2025-08-27T07:45:42.1524410Z     @ ~/.julia/packages/PrecompileTools/L8A3n/src/workloads.jl:78 [inlined]
+2025-08-27T07:45:42.1524960Z  [10] macro expansion
+2025-08-27T07:45:42.1525460Z     @ ~/.julia/packages/GLMakie/F1fQC/src/precompiles.jl:16 [inlined]
+2025-08-27T07:45:42.1525960Z  [11] macro expansion
+2025-08-27T07:45:42.1526480Z     @ ~/.julia/packages/PrecompileTools/L8A3n/src/workloads.jl:140 [inlined]
+2025-08-27T07:45:42.1526870Z  [12] top-level scope
+2025-08-27T07:45:42.1527210Z     @ ~/.julia/packages/GLMakie/F1fQC/src/precompiles.jl:14
+2025-08-27T07:45:42.1527650Z  [13] include(mod::Module, _path::String)
+2025-08-27T07:45:42.1527950Z     @ Base ./Base.jl:562
+2025-08-27T07:45:42.1529800Z  [14] include(x::String)
+2025-08-27T07:45:42.1531500Z     @ GLMakie ~/.julia/packages/GLMakie/F1fQC/src/GLMakie.jl:1
+2025-08-27T07:45:42.1532680Z  [15] top-level scope
+2025-08-27T07:45:42.1533550Z     @ ~/.julia/packages/GLMakie/F1fQC/src/GLMakie.jl:59
+2025-08-27T07:45:42.1534750Z  [16] include
+2025-08-27T07:45:42.1535590Z     @ ./Base.jl:562 [inlined]
+2025-08-27T07:45:42.1537640Z  [17] include_package_for_output(pkg::Base.PkgId, input::String, depot_path::Vector{String}, dl_load_path::Vector{String}, load_path::Vector{String}, concrete_deps::Vector{Pair{Base.PkgId, UInt128}}, source::Nothing)
+2025-08-27T07:45:42.1539880Z     @ Base ./loading.jl:2881
+2025-08-27T07:45:42.1540700Z  [18] top-level scope
+2025-08-27T07:45:42.1541520Z     @ stdin:6
+2025-08-27T07:45:42.1542740Z in expression starting at /Users/runner/.julia/packages/GLMakie/F1fQC/src/precompiles.jl:13
+2025-08-27T07:45:42.1544400Z in expression starting at /Users/runner/.julia/packages/GLMakie/F1fQC/src/GLMakie.jl:1
+2025-08-27T07:45:42.1546030Z in expression starting at stdin:
+2025-08-27T07:45:44.4237870Z ##[error]Process completed with exit code 1.
+2025-08-27T07:45:44.4905460Z Post job cleanup.
+2025-08-27T07:45:44.4992990Z Post job cleanup.
+2025-08-27T07:45:49.6720570Z       Active manifest files: 1 found
+2025-08-27T07:45:49.9100210Z       Active artifact files: 73 found
+2025-08-27T07:45:49.9172390Z       Active scratchspaces: 0 found
+2025-08-27T07:45:49.9606160Z      Deleted no artifacts, repos, packages or scratchspaces
+2025-08-27T07:45:51.1487590Z No existing caches found on ref `refs/heads/main` matching restore key `julia-cache;workflow=CI;job=test;os=macOS;version=1.11;os=macOS-latest;arch=x64;`
+2025-08-27T07:45:51.2537130Z Post job cleanup.
+2025-08-27T07:45:51.5465920Z [command]/opt/homebrew/bin/git version
+2025-08-27T07:45:51.5820780Z git version 2.50.1
+2025-08-27T07:45:51.5889340Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/598fb4a8-bc4e-4c0e-9498-9dfc407994e1/.gitconfig'
+2025-08-27T07:45:51.5914200Z Temporarily overriding HOME='/Users/runner/work/_temp/598fb4a8-bc4e-4c0e-9498-9dfc407994e1' before making global git config changes
+2025-08-27T07:45:51.5916110Z Adding repository directory to the temporary git global config as a safe directory
+2025-08-27T07:45:51.5919300Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/JuliaTestRocket/JuliaTestRocket
+2025-08-27T07:45:51.6297700Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-08-27T07:45:51.6813910Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-08-27T07:45:51.9556950Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-08-27T07:45:51.9686940Z http.https://github.com/.extraheader
+2025-08-27T07:45:51.9710110Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-08-27T07:45:51.9863660Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-08-27T07:45:52.1901130Z Cleaning up orphan processes

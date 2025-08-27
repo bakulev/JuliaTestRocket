@@ -1,0 +1,10 @@
+﻿2025-08-27T07:29:38.5713706Z Post job cleanup.
+2025-08-27T07:29:38.5735953Z Post job cleanup.
+2025-08-27T07:29:39.3915653Z       Active manifest files: 1 found
+2025-08-27T07:29:39.4202450Z       Active artifact files: 72 found
+2025-08-27T07:29:39.4223303Z       Active scratchspaces: 1 found
+2025-08-27T07:29:39.4277664Z      Deleted no artifacts, repos, packages or scratchspaces
+2025-08-27T07:29:43.1213453Z No existing caches found on ref `refs/heads/main` matching restore key `julia-cache;workflow=CI;job=smoke-glmakie;os=Linux;`
+2025-08-27T07:29:43.1414747Z Post job cleanup.
+2025-08-27T07:29:43.2645977Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/JuliaTestRocket/JuliaTestRocket --files-from manifest.txt --use-compress-program zstdmt
+2025-08-27T07:29:46.8025625Z ##[warning]Failed to save: <h2>Our services aren't available right now</h2><p>We're working to restore all services as soon as possible. Please check back soon.</p>06rOuaAAAAADsjaWC5VJBSZ1/V/dYc+diQ0hJMzBFREdFMDIwOQBFZGdl

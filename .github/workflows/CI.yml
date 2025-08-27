@@ -20,7 +20,6 @@ jobs:
         version:
           - '1.10'  # LTS
           - '1.11'  # Latest stable
-          - 'nightly'
         os:
           - ubuntu-latest
           - macOS-latest

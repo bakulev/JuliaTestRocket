@@ -1,0 +1,20 @@
+﻿2025-08-27T07:21:19.3251420Z ##[group]Run julia-actions/setup-julia@v1
+2025-08-27T07:21:19.3251670Z with:
+2025-08-27T07:21:19.3251790Z   version: nightly
+2025-08-27T07:21:19.3251940Z   arch: x64
+2025-08-27T07:21:19.3252080Z   include-all-prereleases: false
+2025-08-27T07:21:19.3252240Z   show-versioninfo: false
+2025-08-27T07:21:19.3252380Z ##[endgroup]
+2025-08-27T07:21:25.0418800Z [command]/usr/bin/tar xf /Users/runner/work/_temp/0fe36f17-5219-4246-a91a-eef352476c82 --strip-components=1 -C /Users/runner/hostedtoolcache/julia/nightly/x64
+2025-08-27T07:21:27.8346930Z [command]/Users/runner/hostedtoolcache/julia/nightly/x64/bin/julia --compile=min -O0 -e using InteractiveUtils; versioninfo()
+2025-08-27T07:21:46.1570850Z Julia Version 1.13.0-DEV.1050
+2025-08-27T07:21:46.1658360Z Commit cbea8cf28e0 (2025-08-26 22:51 UTC)
+2025-08-27T07:21:46.1694550Z Build Info:
+2025-08-27T07:21:46.1713380Z   Official https://julialang.org release
+2025-08-27T07:21:46.1723440Z Platform Info:
+2025-08-27T07:21:46.1732730Z   OS: macOS (x86_64-apple-darwin24.0.0)
+2025-08-27T07:21:46.1734990Z   CPU: 3 × Apple M1 (Virtual)
+2025-08-27T07:21:46.1750450Z   WORD_SIZE: 64
+2025-08-27T07:21:46.1752750Z   LLVM: libLLVM-20.1.8 (ORCJIT, westmere)
+2025-08-27T07:21:46.1753900Z   GC: Built with stock GC
+2025-08-27T07:21:46.1755010Z Threads: 1 default, 1 interactive, 1 GC (on 3 virtual cores)

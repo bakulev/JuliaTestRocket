@@ -1,0 +1,19 @@
+﻿2025-08-27T07:28:13.7861101Z ##[group]Run DISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24' \
+2025-08-27T07:28:13.7861553Z [36;1mDISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24' \[0m
+2025-08-27T07:28:13.7861864Z [36;1m  julia --project=. -e "[0m
+2025-08-27T07:28:13.7862095Z [36;1m    using GLMakie[0m
+2025-08-27T07:28:13.7862324Z [36;1m    GLMakie.activate!()[0m
+2025-08-27T07:28:13.7862543Z [36;1m    using Pkg[0m
+2025-08-27T07:28:13.7862787Z [36;1m    # Only run the GLMakie smoke test, not all tests[0m
+2025-08-27T07:28:13.7863085Z [36;1m    include(\"test/test_glmakie_smoke.jl\")[0m
+2025-08-27T07:28:13.7863330Z [36;1m  "[0m
+2025-08-27T07:28:13.7902425Z shell: /usr/bin/bash -e {0}
+2025-08-27T07:28:13.7902665Z ##[endgroup]
+2025-08-27T07:29:01.1053414Z 
+2025-08-27T07:29:01.1054136Z [pid 6699] waiting for IO to finish:
+2025-08-27T07:29:01.1054815Z  Handle type        uv_handle_t->data
+2025-08-27T07:29:01.1055403Z  timer              0x1bde2330->0x7ff6ffdc6830
+2025-08-27T07:29:01.1057758Z This means that a package has started a background task or event source that has not finished running. For precompilation to complete successfully, the event source needs to be closed explicitly. See the developer documentation on fixing precompilation hangs for more help.
+2025-08-27T07:29:37.3991541Z [ Info: GLMakie backend detected and loaded
+2025-08-27T07:29:38.4788608Z Test Summary:      | Pass  Total  Time
+2025-08-27T07:29:38.4894847Z GLMakie Smoke Test |   12     12  1.0s

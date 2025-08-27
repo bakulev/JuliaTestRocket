@@ -1,9 +1,9 @@
 using Documenter
 using PointController
 
-# Set up GLMakie for documentation builds
-using GLMakie
-GLMakie.activate!()
+# Set up CairoMakie for documentation builds (works in CI)
+using CairoMakie
+CairoMakie.activate!()
 
 makedocs(;
     modules = [PointController],

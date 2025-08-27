@@ -1,0 +1,49 @@
+﻿2025-08-27T07:21:08.8405353Z Current runner version: '2.328.0'
+2025-08-27T07:21:08.8469691Z ##[group]Runner Image Provisioner
+2025-08-27T07:21:08.8470879Z Hosted Compute Agent
+2025-08-27T07:21:08.8471689Z Version: 20250812.370
+2025-08-27T07:21:08.8472676Z Commit: 4a2b2bf7520004e3e907c2150c8cabe342a3da32
+2025-08-27T07:21:08.8473826Z Build Date: 2025-08-12T16:08:14Z
+2025-08-27T07:21:08.8474753Z ##[endgroup]
+2025-08-27T07:21:08.8475521Z ##[group]Operating System
+2025-08-27T07:21:08.8476355Z Microsoft Windows Server 2022
+2025-08-27T07:21:08.8477348Z 10.0.20348
+2025-08-27T07:21:08.8478023Z Datacenter
+2025-08-27T07:21:08.8478765Z ##[endgroup]
+2025-08-27T07:21:08.8479521Z ##[group]Runner Image
+2025-08-27T07:21:08.8480308Z Image: windows-2022
+2025-08-27T07:21:08.8481126Z Version: 20250817.1.0
+2025-08-27T07:21:08.8482816Z Included Software: https://github.com/actions/runner-images/blob/win22/20250817.1/images/windows/Windows2022-Readme.md
+2025-08-27T07:21:08.8485270Z Image Release: https://github.com/actions/runner-images/releases/tag/win22%2F20250817.1
+2025-08-27T07:21:08.8488018Z ##[endgroup]
+2025-08-27T07:21:08.8492274Z ##[group]GITHUB_TOKEN Permissions
+2025-08-27T07:21:08.8494407Z Actions: write
+2025-08-27T07:21:08.8494923Z Attestations: write
+2025-08-27T07:21:08.8495431Z Checks: write
+2025-08-27T07:21:08.8495856Z Contents: write
+2025-08-27T07:21:08.8496296Z Deployments: write
+2025-08-27T07:21:08.8496784Z Discussions: write
+2025-08-27T07:21:08.8497198Z Issues: write
+2025-08-27T07:21:08.8497624Z Metadata: read
+2025-08-27T07:21:08.8498095Z Models: read
+2025-08-27T07:21:08.8498520Z Packages: write
+2025-08-27T07:21:08.8498943Z Pages: write
+2025-08-27T07:21:08.8499368Z PullRequests: write
+2025-08-27T07:21:08.8499872Z RepositoryProjects: write
+2025-08-27T07:21:08.8500380Z SecurityEvents: write
+2025-08-27T07:21:08.8500920Z Statuses: write
+2025-08-27T07:21:08.8501379Z ##[endgroup]
+2025-08-27T07:21:08.8503377Z Secret source: Actions
+2025-08-27T07:21:08.8504064Z Prepare workflow directory
+2025-08-27T07:21:08.8823574Z Prepare all required actions
+2025-08-27T07:21:08.8873278Z Getting action download info
+2025-08-27T07:21:09.1816471Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-08-27T07:21:09.6185664Z Download action repository 'julia-actions/setup-julia@v1' (SHA:ac0d62164df5a47de404f4e96ce86a1a28a28d56)
+2025-08-27T07:21:09.9642835Z Download action repository 'julia-actions/cache@v1' (SHA:dc1a3cdeacb521b0ca93cfc66143fcadb15a5bd0)
+2025-08-27T07:21:10.2219674Z Download action repository 'julia-actions/julia-processcoverage@v1' (SHA:03114f09f119417c3242a9fb6e0b722676aedf38)
+2025-08-27T07:21:10.4760725Z Download action repository 'codecov/codecov-action@v3' (SHA:ab904c41d6ece82784817410c45d8b8c02684457)
+2025-08-27T07:21:11.0824017Z Getting action download info
+2025-08-27T07:21:11.2676447Z Download action repository 'dcarbone/install-jq-action@v2.1.0' (SHA:8867ddb4788346d7c22b72ea2e2ffe4d514c7bcb)
+2025-08-27T07:21:11.5318840Z Download action repository 'actions/cache@4d4ae6ae148a43d0fd1eda1800170683e9882738' (SHA:4d4ae6ae148a43d0fd1eda1800170683e9882738)
+2025-08-27T07:21:12.1738710Z Download action repository 'pyTooling/Actions@adef08d3bdef092282614f3b683897cefae82ee3' (SHA:adef08d3bdef092282614f3b683897cefae82ee3)
+2025-08-27T07:21:12.5476283Z Complete job name: Julia nightly - windows-latest - x64

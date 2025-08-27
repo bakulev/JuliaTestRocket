@@ -1,0 +1,49 @@
+﻿2025-08-27T07:21:07.6081730Z Current runner version: '2.328.0'
+2025-08-27T07:21:07.6117590Z ##[group]Runner Image Provisioner
+2025-08-27T07:21:07.6118990Z Hosted Compute Agent
+2025-08-27T07:21:07.6119850Z Version: 20250825.382
+2025-08-27T07:21:07.6120800Z Commit: 7109f2abf901479dac39397456e363ac0cca0730
+2025-08-27T07:21:07.6121900Z Build Date: 2025-08-25T22:55:50Z
+2025-08-27T07:21:07.6122830Z ##[endgroup]
+2025-08-27T07:21:07.6123710Z ##[group]Operating System
+2025-08-27T07:21:07.6124640Z macOS
+2025-08-27T07:21:07.6125370Z 15.5
+2025-08-27T07:21:07.6126080Z 24F74
+2025-08-27T07:21:07.6126770Z ##[endgroup]
+2025-08-27T07:21:07.6127550Z ##[group]Runner Image
+2025-08-27T07:21:07.6128400Z Image: macos-15-arm64
+2025-08-27T07:21:07.6129210Z Version: 20250818.2206
+2025-08-27T07:21:07.6131150Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20250818.2206/images/macos/macos-15-arm64-Readme.md
+2025-08-27T07:21:07.6133810Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20250818.2206
+2025-08-27T07:21:07.6136560Z ##[endgroup]
+2025-08-27T07:21:07.6141060Z ##[group]GITHUB_TOKEN Permissions
+2025-08-27T07:21:07.6143820Z Actions: write
+2025-08-27T07:21:07.6144240Z Attestations: write
+2025-08-27T07:21:07.6144560Z Checks: write
+2025-08-27T07:21:07.6144950Z Contents: write
+2025-08-27T07:21:07.6145260Z Deployments: write
+2025-08-27T07:21:07.6145570Z Discussions: write
+2025-08-27T07:21:07.6145880Z Issues: write
+2025-08-27T07:21:07.6146170Z Metadata: read
+2025-08-27T07:21:07.6146470Z Models: read
+2025-08-27T07:21:07.6146760Z Packages: write
+2025-08-27T07:21:07.6147060Z Pages: write
+2025-08-27T07:21:07.6147360Z PullRequests: write
+2025-08-27T07:21:07.6147680Z RepositoryProjects: write
+2025-08-27T07:21:07.6148040Z SecurityEvents: write
+2025-08-27T07:21:07.6148430Z Statuses: write
+2025-08-27T07:21:07.6148750Z ##[endgroup]
+2025-08-27T07:21:07.6150330Z Secret source: Actions
+2025-08-27T07:21:07.6150770Z Prepare workflow directory
+2025-08-27T07:21:07.6365680Z Prepare all required actions
+2025-08-27T07:21:07.6392800Z Getting action download info
+2025-08-27T07:21:07.9191100Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-08-27T07:21:09.3049560Z Download action repository 'julia-actions/setup-julia@v1' (SHA:ac0d62164df5a47de404f4e96ce86a1a28a28d56)
+2025-08-27T07:21:10.6234380Z Download action repository 'julia-actions/cache@v1' (SHA:dc1a3cdeacb521b0ca93cfc66143fcadb15a5bd0)
+2025-08-27T07:21:11.4900780Z Download action repository 'julia-actions/julia-processcoverage@v1' (SHA:03114f09f119417c3242a9fb6e0b722676aedf38)
+2025-08-27T07:21:12.4020700Z Download action repository 'codecov/codecov-action@v3' (SHA:ab904c41d6ece82784817410c45d8b8c02684457)
+2025-08-27T07:21:13.8422630Z Getting action download info
+2025-08-27T07:21:13.9805370Z Download action repository 'dcarbone/install-jq-action@v2.1.0' (SHA:8867ddb4788346d7c22b72ea2e2ffe4d514c7bcb)
+2025-08-27T07:21:14.9854190Z Download action repository 'actions/cache@4d4ae6ae148a43d0fd1eda1800170683e9882738' (SHA:4d4ae6ae148a43d0fd1eda1800170683e9882738)
+2025-08-27T07:21:16.5160720Z Download action repository 'pyTooling/Actions@adef08d3bdef092282614f3b683897cefae82ee3' (SHA:adef08d3bdef092282614f3b683897cefae82ee3)
+2025-08-27T07:21:17.7954610Z Complete job name: Julia nightly - macOS-latest - x64

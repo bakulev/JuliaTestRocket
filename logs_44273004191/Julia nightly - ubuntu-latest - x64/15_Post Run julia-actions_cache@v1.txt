@@ -1,0 +1,7 @@
+﻿2025-08-27T07:26:37.3350314Z Post job cleanup.
+2025-08-27T07:26:37.3372868Z Post job cleanup.
+2025-08-27T07:26:38.4509832Z       Active manifest files: 1 found
+2025-08-27T07:26:38.4910314Z       Active artifact files: 57 found
+2025-08-27T07:26:38.4925019Z       Active scratchspaces: 0 found
+2025-08-27T07:26:38.5019516Z      Deleted no artifacts, repos, packages or scratchspaces
+2025-08-27T07:26:39.2753205Z No existing caches found on ref `refs/heads/main` matching restore key `julia-cache;workflow=CI;job=test;os=Linux;version=nightly;os=ubuntu-latest;arch=x64;`
