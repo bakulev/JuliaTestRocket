@@ -41,6 +41,7 @@ jobs:
       - uses: julia-actions/cache@v1
       
       - name: Install dependencies
+        shell: bash
         run: |
           julia --project=. -e "
             using Pkg
@@ -51,6 +52,7 @@ jobs:
       - name: Run tests with CairoMakie
         env:
           JULIA_NUM_THREADS: 2
+        shell: bash
         run: |
           julia --project=. -e "
             using Pkg
@@ -133,6 +135,7 @@ jobs:
           '
           
       - name: Run Aqua.jl quality checks with CairoMakie
+        shell: bash
         run: |
           julia --project=test -e '
             using Pkg
