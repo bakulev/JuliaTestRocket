@@ -56,5 +56,5 @@ julia --project=. -e "using Pkg; Pkg.instantiate()"
 ## Contents
 
 ```@contents
-Pages = ["getting-started.md", "architecture.md", "api.md", "examples.md", "troubleshooting.md"]
+Pages = ["getting-started.md", "architecture.md", "refactoring_plan.md", "api.md", "examples.md", "troubleshooting.md"]
 ```
