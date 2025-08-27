@@ -15,28 +15,28 @@ using PointController
 
     # Include comprehensive movement state tests (backend-agnostic)
     include("test_movement_state.jl")
-    
+
     # Include PointController module tests (backend-agnostic)
     include("test_point_controller.jl")
-    
+
     # Include input handler tests (backend-agnostic)
     include("test_input.jl")
-    
+
     # Include formatting integrity tests (backend-agnostic)
     include("test_formatting_integrity.jl")
-    
+
     # Include error handling tests (backend-agnostic)
     include("test_error_handling.jl")
-    
+
     # Include logging tests (backend-agnostic)
     include("test_logging.jl")
-    
+
     # Include time function tests (backend-agnostic)
     include("test_time_functions.jl")
-    
+
     # Include backend detection tests (backend-agnostic)
     include("test_backend_detection.jl")
-    
+
     # Include extended movement state tests (backend-agnostic)
     include("test_movement_state_extended.jl")
 end

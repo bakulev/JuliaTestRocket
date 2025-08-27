@@ -310,4 +310,3 @@ Update the time display observable.
 function update_time_display!(time_obs::Observable{String})
     return time_obs[] = format_current_time()
 end
-

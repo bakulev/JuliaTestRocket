@@ -173,4 +173,3 @@ function setup_keyboard_events!(
         rethrow(e)
     end
 end
-

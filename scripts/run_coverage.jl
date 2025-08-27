@@ -49,18 +49,18 @@ function display_coverage_report(coverage_data)
     println("\n" * "="^60)
     println("📈 COVERAGE REPORT")
     println("="^60)
-    
+
     lines_count = 0
     covered_count = 0
-    
+
     for fc in coverage_data
         covered = sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage])
         total = length(fc.coverage)
-        percentage = round(covered/total*100, digits=2)
-        
+        percentage = round(covered/total*100, digits = 2)
+
         lines_count += total
         covered_count += covered
-        
+
         # Color coding based on coverage
         if percentage >= 80
             status = "🟢"
@@ -69,15 +69,15 @@ function display_coverage_report(coverage_data)
         else
             status = "🔴"
         end
-        
+
         println("$status $(fc.filename): $(covered)/$(total) ($(percentage)%)")
     end
-    
+
     # Overall coverage
-    overall_percentage = round(covered_count/lines_count*100, digits=2)
+    overall_percentage = round(covered_count/lines_count*100, digits = 2)
     println("\n" * "-"^60)
     println("📊 OVERALL COVERAGE: $(covered_count)/$(lines_count) ($(overall_percentage)%)")
-    
+
     # Coverage status
     if overall_percentage >= 13.0
         println("✅ Coverage above threshold (13%)")

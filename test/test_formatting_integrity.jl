@@ -4,41 +4,41 @@ using Test
     @testset "Source File Syntax Validation" begin
         # Test that all modified files have valid Julia syntax
         # This specifically tests the files that had formatting changes (blank lines added)
-        
+
         modified_files = [
             "src/PointController.jl",
-            "src/input_handler.jl", 
+            "src/input_handler.jl",
             "src/logging_config.jl",
             "src/movement_state.jl",
-            "src/visualization.jl"
+            "src/visualization.jl",
         ]
-        
+
         for file in modified_files
             @testset "Syntax validation for $file" begin
                 # Test that the file can be parsed without syntax errors
                 content = read(file, String)
-                @test_nowarn Meta.parse(content, raise=false)
+                @test_nowarn Meta.parse(content, raise = false)
             end
         end
     end
-    
+
     @testset "File Ending Validation" begin
         # Test that files end with proper newlines after formatting changes
         modified_files = [
             "src/PointController.jl",
-            "src/input_handler.jl", 
+            "src/input_handler.jl",
             "src/logging_config.jl",
             "src/movement_state.jl",
-            "src/visualization.jl"
+            "src/visualization.jl",
         ]
-        
+
         for file in modified_files
             @testset "File ending validation for $file" begin
                 content = read(file, String)
-                
+
                 # Test that file ends with newline
                 @test endswith(content, '\n')
-                
+
                 # Test that file doesn't have excessive trailing whitespace
                 lines = split(content, '\n')
                 if length(lines) > 1
@@ -58,7 +58,7 @@ using Test
             end
         end
     end
-    
+
     @testset "Module Loading After Formatting" begin
         # Test that the module can still be loaded after formatting changes
         # This is already tested in the main test suite, so we just verify it works

@@ -31,12 +31,12 @@ else
     for file in cov_files
         println("  - $file")
     end
-    
+
     println("\n🗑️  Removing coverage files...")
     for file in cov_files
-        rm(file, force=true)
+        rm(file, force = true)
     end
-    
+
     println("✅ Cleaned up $(length(cov_files)) coverage files.")
 end
 
