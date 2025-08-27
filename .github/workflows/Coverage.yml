@@ -48,7 +48,7 @@ jobs:
             
             # Print coverage summary
             println(\"\\n📊 COVERAGE SUMMARY:\")
-            println(\"=\"^50)\")
+            println(\"=\"^50)
             total_lines = 0
             total_covered = 0
             for fc in coverage
