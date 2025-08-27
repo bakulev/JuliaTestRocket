@@ -45,7 +45,8 @@ jobs:
           julia --project=. -e "
             using Pkg
             Pkg.instantiate()
-            Pkg.precompile()
+            # Skip precompilation to avoid GLMakie issues in headless CI
+            # Precompilation will happen during test execution with CairoMakie
           "
           
       - name: Clean previous coverage files
