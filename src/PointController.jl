@@ -204,7 +204,7 @@ function run_point_controller()
 
         # Create movement state
         log_component_initialization("movement state")
-          # Movement speed in units per second
+        # Movement speed in units per second
         movement_state = MovementState(movement_speed = 1.5)
 
         # Set up Makie window with proper configuration and error handling
