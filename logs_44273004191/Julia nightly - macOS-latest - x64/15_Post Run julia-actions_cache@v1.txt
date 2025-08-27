@@ -1,7 +1,0 @@
-﻿2025-08-27T07:33:49.1541460Z Post job cleanup.
-2025-08-27T07:33:49.1586150Z Post job cleanup.
-2025-08-27T07:33:52.5384010Z       Active manifest files: 1 found
-2025-08-27T07:33:52.6748690Z       Active artifact files: 57 found
-2025-08-27T07:33:52.6776230Z       Active scratchspaces: 0 found
-2025-08-27T07:33:52.7158710Z      Deleted no artifacts, repos, packages or scratchspaces
-2025-08-27T07:33:54.0553080Z No existing caches found on ref `refs/heads/main` matching restore key `julia-cache;workflow=CI;job=test;os=macOS;version=nightly;os=macOS-latest;arch=x64;`
