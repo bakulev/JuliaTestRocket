@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Refactoring Plan · JuliaTestRocket</title><meta name="title" content="Refactoring Plan · JuliaTestRocket"/><meta property="og:title" content="Refactoring Plan · JuliaTestRocket"/><meta property="twitter:title" content="Refactoring Plan · JuliaTestRocket"/><meta name="description" content="Documentation for JuliaTestRocket."/><meta property="og:description" content="Documentation for JuliaTestRocket."/><meta property="twitter:description" content="Documentation for JuliaTestRocket."/><meta property="og:url" content="https://bakulev.github.io/JuliaTestRocket/refactoring_plan/"/><meta property="twitter:url" content="https://bakulev.github.io/JuliaTestRocket/refactoring_plan/"/><link rel="canonical" href="https://bakulev.github.io/JuliaTestRocket/refactoring_plan/"/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../getting-started/">Getting Started</a></li><li><a class="tocitem" href="../architecture/">Architecture</a></li><li class="is-active"><a class="tocitem" href>Refactoring Plan</a><ul class="internal"><li><a class="tocitem" href="#Current-State-Analysis"><span>Current State Analysis</span></a></li><li><a class="tocitem" href="#Phase-1:-Core-State-Separation"><span>Phase 1: Core State Separation</span></a></li><li><a class="tocitem" href="#Phase-2:-Physics-Integration"><span>Phase 2: Physics Integration</span></a></li><li><a class="tocitem" href="#Phase-3:-Bayesian-Extensibility"><span>Phase 3: Bayesian Extensibility</span></a></li><li><a class="tocitem" href="#Implementation-Timeline"><span>Implementation Timeline</span></a></li><li><a class="tocitem" href="#Benefits-of-This-Refactoring"><span>Benefits of This Refactoring</span></a></li></ul></li><li><a class="tocitem" href="../api/">API Reference</a></li><li><a class="tocitem" href="../examples/">Examples</a></li><li><a class="tocitem" href="../troubleshooting/">Troubleshooting</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Refactoring Plan</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Refactoring Plan</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/bakulev/JuliaTestRocket/blob/main/docs/src/refactoring_plan.md#" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Refactoring-Plan:-From-Current-to-Advanced-Architecture"><a class="docs-heading-anchor" href="#Refactoring-Plan:-From-Current-to-Advanced-Architecture">Refactoring Plan: From Current to Advanced Architecture</a><a id="Refactoring-Plan:-From-Current-to-Advanced-Architecture-1"></a><a class="docs-heading-anchor-permalink" href="#Refactoring-Plan:-From-Current-to-Advanced-Architecture" title="Permalink"></a></h1><p>This document provides a step-by-step plan to refactor the current PointController into the advanced architecture with Makie separation and Bayesian physics simulation.</p><h2 id="Current-State-Analysis"><a class="docs-heading-anchor" href="#Current-State-Analysis">Current State Analysis</a><a id="Current-State-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Current-State-Analysis" title="Permalink"></a></h2><h3 id="Current-Architecture"><a class="docs-heading-anchor" href="#Current-Architecture">Current Architecture</a><a id="Current-Architecture-1"></a><a class="docs-heading-anchor-permalink" href="#Current-Architecture" title="Permalink"></a></h3><pre><code class="nohighlight hljs">PointController.jl (Main module)
+├── movement_state.jl (State management)
+├── input_handler.jl (Event processing)
+├── visualization.jl (Makie-specific)
+└── logging_config.jl (Utilities)</code></pre><h3 id="Current-Dependencies"><a class="docs-heading-anchor" href="#Current-Dependencies">Current Dependencies</a><a id="Current-Dependencies-1"></a><a class="docs-heading-anchor-permalink" href="#Current-Dependencies" title="Permalink"></a></h3><ul><li>All modules depend on Makie for visualization</li><li>State management mixed with visualization logic</li><li>No separation between core simulation and display</li></ul><h2 id="Phase-1:-Core-State-Separation"><a class="docs-heading-anchor" href="#Phase-1:-Core-State-Separation">Phase 1: Core State Separation</a><a id="Phase-1:-Core-State-Separation-1"></a><a class="docs-heading-anchor-permalink" href="#Phase-1:-Core-State-Separation" title="Permalink"></a></h2><h3 id="Step-1.1:-Create-Core-State-Module"><a class="docs-heading-anchor" href="#Step-1.1:-Create-Core-State-Module">Step 1.1: Create Core State Module</a><a id="Step-1.1:-Create-Core-State-Module-1"></a><a class="docs-heading-anchor-permalink" href="#Step-1.1:-Create-Core-State-Module" title="Permalink"></a></h3><p>Create <code>src/core_state.jl</code>:</p><pre><code class="language-julia hljs">&quot;&quot;&quot;
+# Core State Module
+
+Core simulation state management without visualization dependencies.
+This module provides the foundation for the simulation engine.
+&quot;&quot;&quot;
+
+module CoreState
+
+using Observables: Observable
+using StaticArrays: SVector
+using Dates
+
+# Type definitions
+const Point2f = SVector{2, Float32}
+
+export SimulationState, StateHistory, PhysicsEngine
+export update_state!, calculate_next_state, get_current_state
+export create_simulation_state, create_physics_engine
+
+&quot;&quot;&quot;
+    SimulationState
+
+Core simulation state without visualization dependencies.
+&quot;&quot;&quot;
+mutable struct SimulationState
+    position::Observable{Point2f}
+    velocity::Observable{Point2f}
+    time::Observable{Float64}
+    pressed_keys::Observable{Set{Char}}
+    mass::Float64
+    damping::Float64
+    should_quit::Bool
+    
+    function SimulationState(; 
+        initial_position::Point2f = Point2f(0, 0),
+        mass::Float64 = 1.0,
+        damping::Float64 = 0.1
+    )
+        return new(
+            Observable(initial_position),
+            Observable(Point2f(0, 0)),
+            Observable(0.0),
+            Observable(Set{Char}()),
+            mass,
+            damping,
+            false
+        )
+    end
+end
+
+&quot;&quot;&quot;
+    StateHistory
+
+History of states for Bayesian inference and physics calculations.
+&quot;&quot;&quot;
+mutable struct StateHistory
+    states::Vector{SimulationState}
+    timestamps::Vector{Float64}
+    max_history::Int
+    
+    function StateHistory(max_history::Int = 100)
+        return new(SimulationState[], Float64[], max_history)
+    end
+end
+
+&quot;&quot;&quot;
+    PhysicsEngine
+
+Handles physics calculations and state transitions.
+&quot;&quot;&quot;
+struct PhysicsEngine
+    gravity::Point2f
+    friction::Float64
+    time_step::Float64
+    bounds::Tuple{Point2f, Point2f}
+    
+    function PhysicsEngine(;
+        gravity::Point2f = Point2f(0, -9.81),
+        friction::Float64 = 0.1,
+        time_step::Float64 = 1/60,
+        bounds::Tuple{Point2f, Point2f} = (Point2f(-10, -10), Point2f(10, 10))
+    )
+        return new(gravity, friction, time_step, bounds)
+    end
+end
+
+# Core state management functions
+function add_key!(state::SimulationState, key::Char)
+    keys = state.pressed_keys[]
+    push!(keys, key)
+    state.pressed_keys[] = keys
+end
+
+function remove_key!(state::SimulationState, key::Char)
+    keys = state.pressed_keys[]
+    delete!(keys, key)
+    state.pressed_keys[] = keys
+end
+
+function clear_keys!(state::SimulationState)
+    state.pressed_keys[] = Set{Char}()
+end
+
+function request_quit!(state::SimulationState)
+    state.should_quit = true
+end
+
+# Physics calculations
+function calculate_movement_vector(state::SimulationState)
+    keys = state.pressed_keys[]
+    if isempty(keys)
+        return Point2f(0, 0)
+    end
+    
+    # Key mappings (moved from movement_state.jl)
+    const KEY_MAPPINGS = Dict(
+        &#39;w&#39; =&gt; Point2f(0, 1),    # Up
+        &#39;s&#39; =&gt; Point2f(0, -1),   # Down
+        &#39;a&#39; =&gt; Point2f(-1, 0),   # Left
+        &#39;d&#39; =&gt; Point2f(1, 0),    # Right
+        &#39;W&#39; =&gt; Point2f(0, 1),    # Up (shift)
+        &#39;S&#39; =&gt; Point2f(0, -1),   # Down (shift)
+        &#39;A&#39; =&gt; Point2f(-1, 0),   # Left (shift)
+        &#39;D&#39; =&gt; Point2f(1, 0),    # Right (shift)
+    )
+    
+    total_movement = Point2f(0, 0)
+    for key in keys
+        if haskey(KEY_MAPPINGS, key)
+            total_movement += KEY_MAPPINGS[key]
+        end
+    end
+    
+    # Normalize for consistent speed
+    magnitude = sqrt(total_movement[1]^2 + total_movement[2]^2)
+    if magnitude &gt; 0
+        return total_movement / magnitude
+    else
+        return Point2f(0, 0)
+    end
+end
+
+function apply_physics!(state::SimulationState, engine::PhysicsEngine, dt::Float64)
+    # Get current state
+    pos = state.position[]
+    vel = state.velocity[]
+    
+    # Calculate input force from pressed keys
+    input_direction = calculate_movement_vector(state)
+    input_force = input_direction * 5.0  # Input force magnitude
+    
+    # Calculate physics forces
+    gravity_force = state.mass * engine.gravity
+    damping_force = -state.damping * vel
+    
+    # Total force
+    total_force = input_force + gravity_force + damping_force
+    
+    # Update velocity (F = ma)
+    acceleration = total_force / state.mass
+    new_velocity = vel + acceleration * dt
+    
+    # Update position
+    new_position = pos + new_velocity * dt
+    
+    # Apply boundary constraints
+    min_bounds, max_bounds = engine.bounds
+    new_position = Point2f(
+        clamp(new_position[1], min_bounds[1], max_bounds[1]),
+        clamp(new_position[2], min_bounds[2], max_bounds[2])
+    )
+    
+    # Update state
+    state.position[] = new_position
+    state.velocity[] = new_velocity
+    state.time[] += dt
+    
+    return state
+end
+
+function add_to_history!(history::StateHistory, state::SimulationState)
+    # Create a copy of the current state for history
+    state_copy = SimulationState(
+        position = Observable(state.position[]),
+        velocity = Observable(state.velocity[]),
+        time = Observable(state.time[]),
+        pressed_keys = Observable(copy(state.pressed_keys[])),
+        mass = state.mass,
+        damping = state.damping
+    )
+    
+    push!(history.states, state_copy)
+    push!(history.timestamps, state.time[])
+    
+    # Maintain history size limit
+    if length(history.states) &gt; history.max_history
+        popfirst!(history.states)
+        popfirst!(history.timestamps)
+    end
+end
+
+# Factory functions
+function create_simulation_state(; kwargs...)
+    return SimulationState(; kwargs...)
+end
+
+function create_physics_engine(; kwargs...)
+    return PhysicsEngine(; kwargs...)
+end
+
+function create_state_history(max_history::Int = 100)
+    return StateHistory(max_history)
+end
+
+end # module CoreState</code></pre><h3 id="Step-1.2:-Create-Visualization-Adapter-Interface"><a class="docs-heading-anchor" href="#Step-1.2:-Create-Visualization-Adapter-Interface">Step 1.2: Create Visualization Adapter Interface</a><a id="Step-1.2:-Create-Visualization-Adapter-Interface-1"></a><a class="docs-heading-anchor-permalink" href="#Step-1.2:-Create-Visualization-Adapter-Interface" title="Permalink"></a></h3><p>Create <code>src/visualization_adapters.jl</code>:</p><pre><code class="language-julia hljs">&quot;&quot;&quot;
+# Visualization Adapters
+
+Abstract interface and implementations for different visualization backends.
+&quot;&quot;&quot;
+
+module VisualizationAdapters
+
+using Observables: Observable
+using StaticArrays: SVector
+
+const Point2f = SVector{2, Float32}
+
+export VisualizationAdapter, setup_visualization, update_visualization
+export MakieAdapter, create_makie_adapter
+
+&quot;&quot;&quot;
+    VisualizationAdapter
+
+Abstract type for visualization adapters.
+&quot;&quot;&quot;
+abstract type VisualizationAdapter end
+
+&quot;&quot;&quot;
+    setup_visualization(adapter::VisualizationAdapter, state)
+
+Setup visualization for the given state.
+&quot;&quot;&quot;
+function setup_visualization(adapter::VisualizationAdapter, state)
+    error(&quot;setup_visualization not implemented for $(typeof(adapter))&quot;)
+end
+
+&quot;&quot;&quot;
+    update_visualization(adapter::VisualizationAdapter, state)
+
+Update visualization with current state.
+&quot;&quot;&quot;
+function update_visualization(adapter::VisualizationAdapter, state)
+    error(&quot;update_visualization not implemented for $(typeof(adapter))&quot;)
+end
+
+&quot;&quot;&quot;
+    close_visualization(adapter::VisualizationAdapter)
+
+Clean up visualization resources.
+&quot;&quot;&quot;
+function close_visualization(adapter::VisualizationAdapter)
+    error(&quot;close_visualization not implemented for $(typeof(adapter))&quot;)
+end
+
+# Makie-specific implementation
+struct MakieAdapter &lt;: VisualizationAdapter
+    fig::Any
+    ax::Any
+    point_plot::Any
+    coordinate_text::Any
+    time_text::Any
+    is_setup::Bool
+end
+
+function create_makie_adapter()
+    return MakieAdapter(nothing, nothing, nothing, nothing, nothing, false)
+end
+
+function setup_visualization(adapter::MakieAdapter, state)
+    if adapter.is_setup
+        return adapter
+    end
+    
+    # Create Makie figure and axis
+    fig = Main.Figure(
+        size = (800, 600),
+        title = &quot;Point Controller&quot;,
+        figure_padding = 10,
+        fontsize = 12,
+    )
+    
+    ax = Main.Axis(fig[1, 1],
+        xlabel = &quot;X Coordinate&quot;,
+        ylabel = &quot;Y Coordinate&quot;,
+        title = &quot;Interactive Point Control (Use WASD keys)&quot;,
+        aspect = Main.DataAspect(),
+        limits = (-10, 10, -10, 10),
+    )
+    
+    # Create point plot
+    point_plot = Main.scatter!(ax, state.position,
+        color = :red,
+        markersize = 20,
+        marker = :circle,
+        strokewidth = 0,
+    )
+    
+    # Create coordinate text
+    coordinate_text = Main.lift(state.position) do pos
+        x_rounded = round(pos[1], digits = 2)
+        y_rounded = round(pos[2], digits = 2)
+        return &quot;Position: ($x_rounded, $y_rounded)&quot;
+    end
+    
+    Main.text!(ax, -9.5, 7.5,
+        text = coordinate_text,
+        fontsize = 12,
+        color = :black,
+        align = (:left, :top),
+    )
+    
+    # Create time text
+    time_text = Main.lift(state.time) do t
+        return &quot;Time: $(round(t, digits = 1))s&quot;
+    end
+    
+    Main.text!(ax, -9.5, 8.5,
+        text = time_text,
+        fontsize = 12,
+        color = :blue,
+        align = (:left, :top),
+    )
+    
+    # Add grid
+    ax.xgridvisible = true
+    ax.ygridvisible = true
+    
+    # Display figure
+    Main.display(fig)
+    
+    # Update adapter
+    adapter.fig = fig
+    adapter.ax = ax
+    adapter.point_plot = point_plot
+    adapter.coordinate_text = coordinate_text
+    adapter.time_text = time_text
+    adapter.is_setup = true
+    
+    return adapter
+end
+
+function update_visualization(adapter::MakieAdapter, state)
+    # Makie updates automatically via Observables
+    # No explicit update needed
+    return adapter
+end
+
+function close_visualization(adapter::MakieAdapter)
+    if adapter.is_setup &amp;&amp; adapter.fig !== nothing
+        # Close Makie window
+        try
+            Main.close(adapter.fig)
+        catch e
+            @warn &quot;Error closing Makie window&quot; exception = string(e)
+        end
+    end
+end
+
+end # module VisualizationAdapters</code></pre><h3 id="Step-1.3:-Create-Input-Handler-Module"><a class="docs-heading-anchor" href="#Step-1.3:-Create-Input-Handler-Module">Step 1.3: Create Input Handler Module</a><a id="Step-1.3:-Create-Input-Handler-Module-1"></a><a class="docs-heading-anchor-permalink" href="#Step-1.3:-Create-Input-Handler-Module" title="Permalink"></a></h3><p>Create <code>src/input_handler_core.jl</code>:</p><pre><code class="language-julia hljs">&quot;&quot;&quot;
+# Core Input Handler
+
+Input processing without Makie dependencies.
+&quot;&quot;&quot;
+
+module InputHandlerCore
+
+using Logging
+
+export handle_key_press, handle_key_release, setup_keyboard_events
+export InputEvent, InputHandler
+
+&quot;&quot;&quot;
+    InputEvent
+
+Represents a keyboard input event.
+&quot;&quot;&quot;
+struct InputEvent
+    key::Char
+    action::Symbol  # :press or :release
+    timestamp::Float64
+end
+
+&quot;&quot;&quot;
+    InputHandler
+
+Handles input events and updates simulation state.
+&quot;&quot;&quot;
+struct InputHandler
+    event_queue::Vector{InputEvent}
+    is_active::Bool
+end
+
+function create_input_handler()
+    return InputHandler(InputEvent[], true)
+end
+
+function handle_key_press(key::Char, state)
+    try
+        # Handle quit key
+        if lowercase(key) == &#39;q&#39;
+            state.should_quit = true
+            return state
+        end
+
+        # Only process WASD keys for movement
+        const KEY_MAPPINGS = Dict(
+            &#39;w&#39; =&gt; [0, 1], &#39;s&#39; =&gt; [0, -1], &#39;a&#39; =&gt; [-1, 0], &#39;d&#39; =&gt; [1, 0],
+            &#39;W&#39; =&gt; [0, 1], &#39;S&#39; =&gt; [0, -1], &#39;A&#39; =&gt; [-1, 0], &#39;D&#39; =&gt; [1, 0]
+        )
+        
+        if haskey(KEY_MAPPINGS, key)
+            add_key!(state, key)
+            @debug &quot;Key pressed: $key&quot; context = &quot;input_handler&quot;
+        else
+            @debug &quot;Ignored key: $key&quot; context = &quot;input_handler&quot;
+        end
+
+        return state
+    catch e
+        @warn &quot;Error processing key press&quot; exception = string(e)
+        return state
+    end
+end
+
+function handle_key_release(key::Char, state)
+    try
+        const KEY_MAPPINGS = Dict(
+            &#39;w&#39; =&gt; [0, 1], &#39;s&#39; =&gt; [0, -1], &#39;a&#39; =&gt; [-1, 0], &#39;d&#39; =&gt; [1, 0],
+            &#39;W&#39; =&gt; [0, 1], &#39;S&#39; =&gt; [0, -1], &#39;A&#39; =&gt; [-1, 0], &#39;D&#39; =&gt; [1, 0]
+        )
+        
+        if haskey(KEY_MAPPINGS, key)
+            remove_key!(state, key)
+            @debug &quot;Key released: $key&quot; context = &quot;input_handler&quot;
+        else
+            @debug &quot;Ignored key release: $key&quot; context = &quot;input_handler&quot;
+        end
+
+        return state
+    catch e
+        @warn &quot;Error processing key release&quot; exception = string(e)
+        return state
+    end
+end
+
+# Makie-specific input setup (will be moved to MakieAdapter)
+function setup_keyboard_events(fig, state)
+    # This function will be implemented in the MakieAdapter
+    # It connects Makie events to the core input handler
+end
+
+end # module InputHandlerCore</code></pre><h3 id="Step-1.4:-Refactor-Main-Module"><a class="docs-heading-anchor" href="#Step-1.4:-Refactor-Main-Module">Step 1.4: Refactor Main Module</a><a id="Step-1.4:-Refactor-Main-Module-1"></a><a class="docs-heading-anchor-permalink" href="#Step-1.4:-Refactor-Main-Module" title="Permalink"></a></h3><p>Update <code>src/PointController.jl</code>:</p><pre><code class="language-julia hljs">&quot;&quot;&quot;
+# PointController.jl
+
+Main module using the new architecture with separated concerns.
+&quot;&quot;&quot;
+
+module PointController
+
+# Core dependencies
+using Logging
+
+# Include core modules
+include(&quot;core_state.jl&quot;)
+include(&quot;visualization_adapters.jl&quot;)
+include(&quot;input_handler_core.jl&quot;)
+
+# Re-export core functionality
+export run_point_controller, SimulationState, PhysicsEngine
+export create_simulation_state, create_physics_engine
+
+&quot;&quot;&quot;
+    run_point_controller()
+
+Main entry point using the new architecture.
+&quot;&quot;&quot;
+function run_point_controller()
+    # Check backend
+    if !check_backend_loaded()
+        error(&quot;No Makie backend detected. Please activate a backend before using PointController.&quot;)
+    end
+
+    # Initialize logging
+    setup_logging(Logging.Info)
+    log_application_start()
+
+    try
+        # Create core simulation components
+        state = create_simulation_state()
+        engine = create_physics_engine()
+        history = create_state_history()
+        
+        # Create and setup visualization
+        adapter = create_makie_adapter()
+        adapter = setup_visualization(adapter, state)
+        
+        # Setup input handling
+        setup_makie_input_events(adapter.fig, state)
+        
+        # Main simulation loop
+        last_update_time = time()
+        update_interval = 1/60  # 60 FPS
+
+        while !state.should_quit
+            current_time = time()
+            
+            if current_time - last_update_time &gt;= update_interval
+                # Update physics
+                apply_physics!(state, engine, update_interval)
+                
+                # Add to history
+                add_to_history!(history, state)
+                
+                # Update visualization (automatic via Observables)
+                update_visualization(adapter, state)
+                
+                last_update_time = current_time
+            end
+            
+            sleep(0.001)  # Small sleep to prevent busy waiting
+        end
+        
+        # Cleanup
+        close_visualization(adapter)
+        log_application_stop()
+        
+    catch e
+        handle_application_error(e)
+        rethrow(e)
+    end
+end
+
+# Helper functions (simplified versions of existing functions)
+function check_backend_loaded()
+    # Implementation similar to current version
+end
+
+function setup_logging(level)
+    # Implementation similar to current version
+end
+
+function log_application_start()
+    @info &quot;PointController started with new architecture&quot;
+end
+
+function log_application_stop()
+    @info &quot;PointController stopped&quot;
+end
+
+function setup_makie_input_events(fig, state)
+    # Connect Makie events to core input handler
+    Main.on(Main.events(fig).keyboardbutton) do event
+        key_string = string(event.key)
+        key_char = first(key_string)
+        
+        if event.action == Main.Keyboard.press
+            InputHandlerCore.handle_key_press(key_char, state)
+        elseif event.action == Main.Keyboard.release
+            InputHandlerCore.handle_key_release(key_char, state)
+        end
+    end
+end
+
+function handle_application_error(e)
+    @error &quot;Application error&quot; exception = string(e)
+end
+
+end # module PointController</code></pre><h2 id="Phase-2:-Physics-Integration"><a class="docs-heading-anchor" href="#Phase-2:-Physics-Integration">Phase 2: Physics Integration</a><a id="Phase-2:-Physics-Integration-1"></a><a class="docs-heading-anchor-permalink" href="#Phase-2:-Physics-Integration" title="Permalink"></a></h2><h3 id="Step-2.1:-Enhanced-Physics-Engine"><a class="docs-heading-anchor" href="#Step-2.1:-Enhanced-Physics-Engine">Step 2.1: Enhanced Physics Engine</a><a id="Step-2.1:-Enhanced-Physics-Engine-1"></a><a class="docs-heading-anchor-permalink" href="#Step-2.1:-Enhanced-Physics-Engine" title="Permalink"></a></h3><p>Extend <code>src/core_state.jl</code> with more sophisticated physics:</p><pre><code class="language-julia hljs"># Add to CoreState module
+
+&quot;&quot;&quot;
+    PhysicsModel
+
+Defines the physical laws governing the system.
+&quot;&quot;&quot;
+struct PhysicsModel
+    gravity::Point2f
+    force_field::Function  # Custom force field
+    constraints::Vector{Constraint}
+    time_step::Float64
+end
+
+&quot;&quot;&quot;
+    Constraint
+
+Physical constraints (boundaries, etc.)
+&quot;&quot;&quot;
+abstract type Constraint end
+
+struct BoundaryConstraint &lt;: Constraint
+    min_bounds::Point2f
+    max_bounds::Point2f
+end
+
+struct SpringConstraint &lt;: Constraint
+    anchor::Point2f
+    spring_constant::Float64
+    rest_length::Float64
+end
+
+# Enhanced physics calculation
+function apply_physics!(state::SimulationState, model::PhysicsModel, dt::Float64)
+    pos = state.position[]
+    vel = state.velocity[]
+    
+    # Calculate all forces
+    gravity_force = state.mass * model.gravity
+    damping_force = -state.damping * vel
+    custom_force = model.force_field(pos, vel)
+    
+    # Calculate constraint forces
+    constraint_forces = Point2f(0, 0)
+    for constraint in model.constraints
+        constraint_forces += calculate_constraint_force(constraint, pos, vel)
+    end
+    
+    # Total force
+    total_force = gravity_force + damping_force + custom_force + constraint_forces
+    
+    # Update velocity (F = ma)
+    acceleration = total_force / state.mass
+    new_velocity = vel + acceleration * dt
+    
+    # Update position
+    new_position = pos + new_velocity * dt
+    
+    # Apply constraints
+    new_position = apply_constraints(new_position, model.constraints)
+    
+    # Update state
+    state.position[] = new_position
+    state.velocity[] = new_velocity
+    state.time[] += dt
+    
+    return state
+end
+
+function calculate_constraint_force(constraint::BoundaryConstraint, pos, vel)
+    # Boundary constraint force
+    min_bounds, max_bounds = constraint.min_bounds, constraint.max_bounds
+    
+    force = Point2f(0, 0)
+    
+    # X boundary
+    if pos[1] &lt; min_bounds[1]
+        force += Point2f(10.0 * (min_bounds[1] - pos[1]), 0)
+    elseif pos[1] &gt; max_bounds[1]
+        force += Point2f(10.0 * (max_bounds[1] - pos[1]), 0)
+    end
+    
+    # Y boundary
+    if pos[2] &lt; min_bounds[2]
+        force += Point2f(0, 10.0 * (min_bounds[2] - pos[2]))
+    elseif pos[2] &gt; max_bounds[2]
+        force += Point2f(0, 10.0 * (max_bounds[2] - pos[2]))
+    end
+    
+    return force
+end
+
+function calculate_constraint_force(constraint::SpringConstraint, pos, vel)
+    # Spring force: F = -k * (x - x0)
+    displacement = pos - constraint.anchor
+    distance = sqrt(displacement[1]^2 + displacement[2]^2)
+    
+    if distance &gt; 0
+        direction = displacement / distance
+        spring_force = -constraint.spring_constant * (distance - constraint.rest_length) * direction
+        return spring_force
+    else
+        return Point2f(0, 0)
+    end
+end
+
+function apply_constraints(pos::Point2f, constraints::Vector{Constraint})
+    new_pos = pos
+    
+    for constraint in constraints
+        if constraint isa BoundaryConstraint
+            min_bounds, max_bounds = constraint.min_bounds, constraint.max_bounds
+            new_pos = Point2f(
+                clamp(new_pos[1], min_bounds[1], max_bounds[1]),
+                clamp(new_pos[2], min_bounds[2], max_bounds[2])
+            )
+        end
+    end
+    
+    return new_pos
+end</code></pre><h2 id="Phase-3:-Bayesian-Extensibility"><a class="docs-heading-anchor" href="#Phase-3:-Bayesian-Extensibility">Phase 3: Bayesian Extensibility</a><a id="Phase-3:-Bayesian-Extensibility-1"></a><a class="docs-heading-anchor-permalink" href="#Phase-3:-Bayesian-Extensibility" title="Permalink"></a></h2><h3 id="Step-3.1:-Bayesian-State-System"><a class="docs-heading-anchor" href="#Step-3.1:-Bayesian-State-System">Step 3.1: Bayesian State System</a><a id="Step-3.1:-Bayesian-State-System-1"></a><a class="docs-heading-anchor-permalink" href="#Step-3.1:-Bayesian-State-System" title="Permalink"></a></h3><p>Create <code>src/bayesian_state.jl</code>:</p><pre><code class="language-julia hljs">&quot;&quot;&quot;
+# Bayesian State System
+
+Bayesian inference for physics parameter estimation.
+&quot;&quot;&quot;
+
+module BayesianState
+
+using Distributions
+using Observables: Observable
+using StaticArrays: SVector
+
+const Point2f = SVector{2, Float32}
+
+export BayesianSimulationState, BayesianInferenceEngine
+export evaluate_next_state, update_parameter_estimates
+
+&quot;&quot;&quot;
+    BayesianSimulationState
+
+Extended state system with Bayesian inference capabilities.
+&quot;&quot;&quot;
+mutable struct BayesianSimulationState
+    # Core state
+    position::Observable{Point2f}
+    velocity::Observable{Point2f}
+    time::Observable{Float64}
+    pressed_keys::Observable{Set{Char}}
+    
+    # Physics parameters (with uncertainty)
+    mass::Observable{Normal{Float64}}
+    damping::Observable{Normal{Float64}}
+    
+    # State history for inference
+    history::Vector{Tuple{Point2f, Point2f, Float64}}  # (pos, vel, time)
+    max_history::Int
+    
+    # Bayesian inference engine
+    inference_engine::BayesianInferenceEngine
+    
+    function BayesianSimulationState(;
+        initial_position::Point2f = Point2f(0, 0),
+        prior_mass::Normal{Float64} = Normal(1.0, 0.5),
+        prior_damping::Normal{Float64} = Normal(0.1, 0.05),
+        max_history::Int = 100
+    )
+        return new(
+            Observable(initial_position),
+            Observable(Point2f(0, 0)),
+            Observable(0.0),
+            Observable(Set{Char}()),
+            Observable(prior_mass),
+            Observable(prior_damping),
+            Tuple{Point2f, Point2f, Float64}[],
+            max_history,
+            BayesianInferenceEngine(prior_mass, prior_damping, 0.1, 0.01)
+        )
+    end
+end
+
+&quot;&quot;&quot;
+    BayesianInferenceEngine
+
+Handles Bayesian parameter estimation and prediction.
+&quot;&quot;&quot;
+struct BayesianInferenceEngine
+    prior_mass::Normal{Float64}
+    prior_damping::Normal{Float64}
+    observation_noise::Float64
+    learning_rate::Float64
+end
+
+&quot;&quot;&quot;
+    evaluate_next_state
+
+Evaluates next state using Bayesian inference and physics.
+&quot;&quot;&quot;
+function evaluate_next_state(
+    state::BayesianSimulationState,
+    dt::Float64,
+    input_force::Point2f
+)
+    # 1. Update Bayesian parameter estimates from history
+    updated_mass = update_mass_estimate(state)
+    updated_damping = update_damping_estimate(state)
+    
+    # 2. Predict next state using current physics model
+    current_pos = state.position[]
+    current_vel = state.velocity[]
+    
+    # Get current parameter estimates
+    mass_mean = mean(updated_mass)
+    damping_mean = mean(updated_damping)
+    
+    # Calculate forces
+    gravity = Point2f(0, -9.81)
+    gravity_force = mass_mean * gravity
+    damping_force = -damping_mean * current_vel
+    
+    total_force = input_force + gravity_force + damping_force
+    
+    # Update velocity (F = ma)
+    acceleration = total_force / mass_mean
+    new_velocity = current_vel + acceleration * dt
+    
+    # Update position
+    new_position = current_pos + new_velocity * dt
+    
+    # 3. Update state
+    state.position[] = new_position
+    state.velocity[] = new_velocity
+    state.time[] += dt
+    state.mass[] = updated_mass
+    state.damping[] = updated_damping
+    
+    # 4. Add to history for future inference
+    push!(state.history, (current_pos, current_vel, state.time[]))
+    
+    # Maintain history size
+    if length(state.history) &gt; state.max_history
+        popfirst!(state.history)
+    end
+    
+    return state
+end
+
+&quot;&quot;&quot;
+    update_mass_estimate
+
+Update mass estimate using Bayesian inference from state history.
+&quot;&quot;&quot;
+function update_mass_estimate(state::BayesianSimulationState)
+    if length(state.history) &lt; 2
+        return state.inference_engine.prior_mass
+    end
+    
+    # Extract mass observations from history
+    observations = extract_mass_observations(state.history)
+    
+    if isempty(observations)
+        return state.mass[]
+    end
+    
+    # Bayesian update (simplified)
+    # In practice, you&#39;d use more sophisticated inference
+    current_mass = state.mass[]
+    new_mean = mean(observations)
+    new_std = std(observations) + state.inference_engine.observation_noise
+    
+    # Update with learning rate
+    alpha = state.inference_engine.learning_rate
+    updated_mean = (1 - alpha) * mean(current_mass) + alpha * new_mean
+    updated_std = max(std(current_mass), new_std)
+    
+    return Normal(updated_mean, updated_std)
+end
+
+&quot;&quot;&quot;
+    update_damping_estimate
+
+Update damping estimate using Bayesian inference from state history.
+&quot;&quot;&quot;
+function update_damping_estimate(state::BayesianSimulationState)
+    if length(state.history) &lt; 2
+        return state.inference_engine.prior_damping
+    end
+    
+    # Extract damping observations from history
+    observations = extract_damping_observations(state.history)
+    
+    if isempty(observations)
+        return state.damping[]
+    end
+    
+    # Bayesian update (simplified)
+    current_damping = state.damping[]
+    new_mean = mean(observations)
+    new_std = std(observations) + state.inference_engine.observation_noise
+    
+    # Update with learning rate
+    alpha = state.inference_engine.learning_rate
+    updated_mean = (1 - alpha) * mean(current_damping) + alpha * new_mean
+    updated_std = max(std(current_damping), new_std)
+    
+    return Normal(updated_mean, updated_std)
+end
+
+&quot;&quot;&quot;
+    extract_mass_observations
+
+Extract mass-related observations from state history.
+&quot;&quot;&quot;
+function extract_mass_observations(history::Vector{Tuple{Point2f, Point2f, Float64}})
+    observations = Float64[]
+    
+    for i in 2:length(history)
+        prev_pos, prev_vel, prev_time = history[i-1]
+        curr_pos, curr_vel, curr_time = history[i]
+        dt = curr_time - prev_time
+        
+        if dt &gt; 0
+            # Calculate observed acceleration
+            velocity_change = curr_vel - prev_vel
+            observed_acceleration = velocity_change / dt
+            
+            # Estimate mass from acceleration (simplified)
+            # In practice, you&#39;d need to know the applied force
+            if norm(observed_acceleration) &gt; 1e-6
+                # Assume some force magnitude for demonstration
+                estimated_mass = 1.0 / norm(observed_acceleration)
+                push!(observations, estimated_mass)
+            end
+        end
+    end
+    
+    return observations
+end
+
+&quot;&quot;&quot;
+    extract_damping_observations
+
+Extract damping-related observations from state history.
+&quot;&quot;&quot;
+function extract_damping_observations(history::Vector{Tuple{Point2f, Point2f, Float64}})
+    observations = Float64[]
+    
+    for (pos, vel, time) in history
+        if norm(vel) &gt; 1e-6
+            # Estimate damping from velocity magnitude
+            # This is a simplified approach
+            estimated_damping = 0.1 / norm(vel)
+            push!(observations, estimated_damping)
+        end
+    end
+    
+    return observations
+end
+
+end # module BayesianState</code></pre><h2 id="Implementation-Timeline"><a class="docs-heading-anchor" href="#Implementation-Timeline">Implementation Timeline</a><a id="Implementation-Timeline-1"></a><a class="docs-heading-anchor-permalink" href="#Implementation-Timeline" title="Permalink"></a></h2><h3 id="Week-1:-Core-Separation"><a class="docs-heading-anchor" href="#Week-1:-Core-Separation">Week 1: Core Separation</a><a id="Week-1:-Core-Separation-1"></a><a class="docs-heading-anchor-permalink" href="#Week-1:-Core-Separation" title="Permalink"></a></h3><ul><li>[ ] Create <code>core_state.jl</code> module</li><li>[ ] Create <code>visualization_adapters.jl</code> module</li><li>[ ] Create <code>input_handler_core.jl</code> module</li><li>[ ] Refactor <code>PointController.jl</code> to use new architecture</li><li>[ ] Test core functionality without visualization</li></ul><h3 id="Week-2:-Physics-Integration"><a class="docs-heading-anchor" href="#Week-2:-Physics-Integration">Week 2: Physics Integration</a><a id="Week-2:-Physics-Integration-1"></a><a class="docs-heading-anchor-permalink" href="#Week-2:-Physics-Integration" title="Permalink"></a></h3><ul><li>[ ] Enhance physics engine with constraints</li><li>[ ] Add spring forces and boundary conditions</li><li>[ ] Implement state history management</li><li>[ ] Test physics calculations</li></ul><h3 id="Week-3:-Bayesian-Extensibility"><a class="docs-heading-anchor" href="#Week-3:-Bayesian-Extensibility">Week 3: Bayesian Extensibility</a><a id="Week-3:-Bayesian-Extensibility-1"></a><a class="docs-heading-anchor-permalink" href="#Week-3:-Bayesian-Extensibility" title="Permalink"></a></h3><ul><li>[ ] Create <code>bayesian_state.jl</code> module</li><li>[ ] Implement parameter estimation</li><li>[ ] Add uncertainty quantification</li><li>[ ] Test Bayesian inference</li></ul><h3 id="Week-4:-Multi-Platform-Support"><a class="docs-heading-anchor" href="#Week-4:-Multi-Platform-Support">Week 4: Multi-Platform Support</a><a id="Week-4:-Multi-Platform-Support-1"></a><a class="docs-heading-anchor-permalink" href="#Week-4:-Multi-Platform-Support" title="Permalink"></a></h3><ul><li>[ ] Create Pluto adapter</li><li>[ ] Create Plots adapter</li><li>[ ] Add Jupyter notebook support</li><li>[ ] Comprehensive testing</li></ul><h2 id="Benefits-of-This-Refactoring"><a class="docs-heading-anchor" href="#Benefits-of-This-Refactoring">Benefits of This Refactoring</a><a id="Benefits-of-This-Refactoring-1"></a><a class="docs-heading-anchor-permalink" href="#Benefits-of-This-Refactoring" title="Permalink"></a></h2><ol><li><strong>Separation of Concerns</strong>: Core simulation logic is independent of visualization</li><li><strong>Testability</strong>: Core logic can be tested without graphics dependencies</li><li><strong>Portability</strong>: Works with any visualization system</li><li><strong>Scientific Rigor</strong>: Proper physics simulation with uncertainty quantification</li><li><strong>Educational Value</strong>: Demonstrates Bayesian inference in physical systems</li><li><strong>Maintainability</strong>: Clear interfaces and modular design</li><li><strong>Extensibility</strong>: Easy to add new features and visualization backends</li></ol><p>This refactoring plan provides a clear path to achieve your goals while preserving the reactive architecture benefits and adding sophisticated physics simulation capabilities.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../architecture/">« Architecture</a><a class="docs-footer-nextpage" href="../api/">API Reference »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Wednesday 27 August 2025 09:29">Wednesday 27 August 2025</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
