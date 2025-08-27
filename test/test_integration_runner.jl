@@ -6,7 +6,6 @@ using Test
 # Add the src directory to the load path for testing
 push!(LOAD_PATH, "../src")
 
-using PointController
 using GLMakie
 
 println("Starting Comprehensive Integration Tests...")

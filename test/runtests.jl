@@ -3,8 +3,10 @@ using Test
 # Add the src directory to the load path for testing
 push!(LOAD_PATH, "../src")
 
-# Load the PointController module
-using PointController
+# Load the PointController module only once
+if !isdefined(Main, :PointController)
+    include("../src/PointController.jl")
+end
 
 # Backend-agnostic tests (no rendering)
 @testset "PointController.jl Tests" begin
@@ -28,10 +30,10 @@ using PointController
     # Include error handling tests (backend-agnostic)
     include("test_error_handling.jl")
 
-    # Include logging tests (backend-agnostic)
+    # Include logging configuration tests (backend-agnostic)
     include("test_logging.jl")
 
-    # Include time function tests (backend-agnostic)
+    # Include time functions tests (backend-agnostic)
     include("test_time_functions.jl")
 
     # Include backend detection tests (backend-agnostic)

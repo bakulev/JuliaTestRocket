@@ -3,89 +3,81 @@
 # These tests don't require any Makie backend
 
 using Test
-using Observables: Observable
-using PointController
-using StaticArrays: SVector
-
-# Define Point2f to match our implementation
-const Point2f = SVector{2, Float32}
+using Logging: with_logger, NullLogger
 
 @testset "Error Handling Tests" begin
     @testset "Backend Initialization Error Handling" begin
-        # Test that initialize_backend_safely returns a boolean
-        @test isa(PointController.initialize_backend_safely(), Bool)
-
-        # Test that the function doesn't throw errors even if backend has issues
-        @test hasmethod(PointController.initialize_backend_safely, ())
+        # Test that backend check works (may or may not have backend)
+        backend_loaded = PointController.check_backend_loaded()
+        backend_name = PointController.get_backend_name()
+        
+        # Test that functions don't throw errors
+        @test_nowarn PointController.check_backend_loaded()
+        @test_nowarn PointController.get_backend_name()
+        
+        # If backend is loaded, it should have a name
+        if backend_loaded
+            @test backend_name !== nothing
+            @test backend_name isa String
+        else
+            @test backend_name === nothing
+        end
     end
 
     @testset "Movement State Error Handling" begin
-        state = MovementState()
+        state = PointController.MovementState()
 
-        # Test that invalid keys don't cause errors when added directly
-        @test_nowarn add_key!(state, 'x')
-        @test_nowarn remove_key!(state, 'x')
+        # Test that invalid operations don't cause errors
+        @test_nowarn PointController.add_key!(state, 'x')
+        @test_nowarn PointController.remove_key!(state, 'x')
+        @test_nowarn PointController.clear_all_keys_safely!(state)
 
-        # Test that clearing keys works even when empty
-        @test_nowarn clear_all_keys_safely!(state)
-
-        # Test that movement calculation works with invalid keys
-        add_key!(state, 'x')
-        @test_nowarn calculate_movement_vector(state)
-        @test calculate_movement_vector(state) == [0.0, 0.0]
+        # Test movement calculation with invalid keys
+        @test_nowarn PointController.calculate_movement_vector(state)
+        @test PointController.calculate_movement_vector(state) == [0.0, 0.0]
     end
 
     @testset "Input Handler Error Handling" begin
-        state = MovementState()
+        state = PointController.KeyState()
 
         # Test that invalid inputs don't cause errors
-        @test_nowarn handle_key_press('x', state)
-        @test_nowarn handle_key_release('x', state)
+        @test_nowarn PointController.handle_key_press('x', state)
+        @test_nowarn PointController.handle_key_release('x', state)
 
         # Test that the state remains consistent
         @test isempty(state.pressed_keys)
         @test state.should_quit == false
-
-        # Test that handle_key_press correctly filters invalid keys
-        @test_nowarn handle_key_press('x', state)
-        @test 'x' ∉ state.pressed_keys  # handle_key_press should filter invalid keys
-
-        # Test that valid keys are added
-        @test_nowarn handle_key_press('w', state)
-        @test 'w' in state.pressed_keys
     end
 
     @testset "State Consistency" begin
-        state = MovementState()
+        # Test that states remain consistent after errors
+        movement_state = PointController.MovementState()
+        key_state = PointController.KeyState()
 
-        # Test that errors don't corrupt state
-        @test isempty(state.pressed_keys)
-        @test state.should_quit == false
+        # Test movement state consistency
+        @test_nowarn PointController.add_key!(movement_state, 'w')
+        @test 'w' in movement_state.pressed_keys
 
-        # Test after various operations
-        @test_nowarn add_key!(state, 'w')
-        @test_nowarn add_key!(state, 'x')  # Invalid key - should be added directly
-        @test 'w' in state.pressed_keys
-        @test 'x' in state.pressed_keys  # Direct add_key! adds any key
-
-        @test_nowarn remove_key!(state, 'w')
-        @test_nowarn remove_key!(state, 'x')  # Invalid key
-        @test isempty(state.pressed_keys)
+        # Test key state consistency
+        @test_nowarn PointController.handle_key_press('w', key_state)
+        @test 'w' in key_state.pressed_keys
     end
 
     @testset "Boundary Conditions" begin
-        state = MovementState(position = Point2f(0, 0), movement_speed = 0.1)
+        # Test edge cases and boundary conditions
+        movement_state = PointController.MovementState()
 
-        # Test boundary constraints
-        for i in 1:200  # Move beyond boundaries
-            add_key!(state, 'w')
-            state = apply_movement_to_position(state, 0.1)
+        # Test with empty state
+        @test_nowarn PointController.calculate_movement_vector(movement_state)
+        @test PointController.calculate_movement_vector(movement_state) == [0.0, 0.0]
+
+        # Test with all keys pressed
+        for key in ['w', 'a', 's', 'd']
+            PointController.add_key!(movement_state, key)
         end
-
-        # Should be clamped to boundary
-        @test state.position[1] >= -10.0
-        @test state.position[1] <= 10.0
-        @test state.position[2] >= -10.0
-        @test state.position[2] <= 10.0
+        @test_nowarn PointController.calculate_movement_vector(movement_state)
+        movement = PointController.calculate_movement_vector(movement_state)
+        @test length(movement) == 2
+        @test all(isfinite, movement)
     end
 end

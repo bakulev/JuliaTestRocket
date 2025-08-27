@@ -3,7 +3,10 @@
 # These tests use CairoMakie for headless CI compatibility
 
 using Test
-using PointController
+
+# Import the functions we need to test
+using PointController: create_visualization, MovementState, KeyState, setup_keyboard_events!,
+    apply_movement_to_position, add_key!, remove_key!, handle_key_press, handle_key_release
 
 @testset "Comprehensive Integration Tests" begin
     @testset "Complete Application Flow" begin
@@ -12,15 +15,17 @@ using PointController
             # Create visualization
             fig, ax, point_position, coordinate_text, time_obs = create_visualization()
 
-            # Create movement state
-            state = MovementState(movement_speed = 2.0)
+            # Create movement state and key state
+            movement_state = MovementState(movement_speed = 2.0)
+            key_state = KeyState()
 
             # Set up keyboard events
-            setup_keyboard_events!(fig, state, point_position, time_obs)
+            setup_keyboard_events!(fig, key_state, point_position, time_obs)
 
             # Test basic functionality
             @test fig isa Figure
-            @test state isa MovementState
+            @test movement_state isa MovementState
+            @test key_state isa KeyState
             @test point_position isa Observable{Point2f}
         end
     end
@@ -57,11 +62,11 @@ using PointController
     @testset "Event System Integration" begin
         # Test that events can be set up without errors
         fig = Figure()
-        state = MovementState()
+        key_state = KeyState()
         point_position = Observable(Point2f(0, 0))
 
         # Test keyboard event setup
-        @test_nowarn setup_keyboard_events!(fig, state, point_position)
+        @test_nowarn setup_keyboard_events!(fig, key_state, point_position)
 
         # Test that events are properly connected
         @test hasfield(typeof(events(fig)), :keyboardbutton)
@@ -69,22 +74,22 @@ using PointController
 
     @testset "Error Recovery" begin
         # Test that errors don't crash the system
-        state = MovementState()
+        key_state = KeyState()
 
         # Test invalid key handling
-        @test_nowarn handle_key_press('x', state)
-        @test_nowarn handle_key_release('x', state)
+        @test_nowarn handle_key_press('x', key_state)
+        @test_nowarn handle_key_release('x', key_state)
 
         # Test state remains consistent
-        @test isempty(state.pressed_keys)
-        @test state.should_quit == false
+        @test isempty(key_state.pressed_keys)
+        @test key_state.should_quit == false
 
         # Test quit functionality
         using Logging: with_logger, NullLogger
         with_logger(NullLogger()) do
-            @test_nowarn handle_key_press('q', state)
+            @test_nowarn handle_key_press('q', key_state)
         end
-        @test state.should_quit == true
+        @test key_state.should_quit == true
     end
 
     @testset "Backend Detection" begin
@@ -95,19 +100,19 @@ using PointController
 
     @testset "Performance and Memory" begin
         # Test that repeated operations don't cause issues
-        state = MovementState()
+        movement_state = MovementState()
         point_position = Observable(Point2f(0, 0))
 
         # Test many position updates with time-based movement
         for i in 1:100
-            add_key!(state, 'w')
-            state = apply_movement_to_position(state, 0.1)  # 0.1 seconds per update
-            point_position[] = state.position
-            remove_key!(state, 'w')
+            add_key!(movement_state, 'w')
+            movement_state = apply_movement_to_position(movement_state, 0.1)  # 0.1 seconds per update
+            point_position[] = movement_state.position
+            remove_key!(movement_state, 'w')
         end
 
         # Test that state is still valid
-        @test isempty(state.pressed_keys)
+        @test isempty(movement_state.pressed_keys)
         @test point_position[] == Point2f(0, 10.0)  # Should hit boundary
     end
 end

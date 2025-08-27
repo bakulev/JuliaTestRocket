@@ -78,11 +78,11 @@ const BACKEND_NAME = Ref{Union{Nothing, String}}(nothing)
 
 # Export public API - functions and types that users and tests need
 export run_point_controller, KEY_MAPPINGS
-# Export movement state functions
-export add_key!,
+# Export movement state types and functions
+export MovementState, add_key!,
     remove_key!, calculate_movement_vector, reset_movement_state!, request_quit!
 export clear_all_keys_safely!, update_movement_timing!
-export update_time_display!, format_current_time
+export format_current_time
 # Export input handler functions  
 export handle_key_press,
     handle_key_release, is_movement_key, get_pressed_keys, setup_keyboard_events!
@@ -215,7 +215,6 @@ function run_point_controller()
         log_component_initialization("window")
         try
             setup_visualization_window(fig)
-            return fig
         catch e
             log_error_with_context("Failed to display window", "window_setup", e)
             @error "This may indicate window system compatibility issues"
@@ -225,13 +224,13 @@ function run_point_controller()
         # Connect all event handlers with error handling
         log_component_initialization("keyboard event handlers")
         try
-            setup_keyboard_events!(fig, key_state, position, time_obs)
-            return fig
+            @info "Setting up keyboard events..."
+            setup_keyboard_events!(fig, key_state, point_position, time_obs)
+            @info "Keyboard events set up successfully"
         catch e
             log_error_with_context("Failed to set up keyboard events", "keyboard_setup", e)
             @warn "Keyboard input may not work properly"
             # Don't rethrow - application can still run without keyboard events
-            return fig
         end
 
         # Movement updates are now handled in the main loop for better responsiveness

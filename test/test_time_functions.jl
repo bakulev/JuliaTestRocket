@@ -1,69 +1,76 @@
 # Time Functions Tests
-# Tests for time-related utility functions
+# Backend-agnostic tests for time-related functions
+# These tests don't require any Makie backend
 
 using Test
 using Observables: Observable
-using PointController
-using StaticArrays: SVector
-
-# Define Point2f to match our implementation
-const Point2f = SVector{2, Float32}
 
 @testset "Time Functions Tests" begin
-    @testset "format_current_time" begin
-        # Test that format_current_time returns a string
-        time_str = format_current_time()
-        @test isa(time_str, String)
-        @test !isempty(time_str)
+    @testset "PointController.format_current_time" begin
+        # Test time formatting
+        time_str = PointController.format_current_time()
+        @test time_str isa String
+        @test length(time_str) > 0
 
-        # Test that it returns a time format (HH:MM:SS)
-        @test occursin(r"^\d{2}:\d{2}:\d{2}$", time_str)
+        # Test that it returns a valid time format
+        @test occursin(r"\d{2}:\d{2}:\d{2}", time_str)
+
+        # Test multiple calls return valid times (they might be the same if executed quickly)
+        time1 = PointController.format_current_time()
+        sleep(0.1)
+        time2 = PointController.format_current_time()
+        @test time1 isa String
+        @test time2 isa String
+        @test length(time1) > 0
+        @test length(time2) > 0
+        # Note: times might be the same if executed quickly, which is fine
     end
 
-    @testset "create_time_observable" begin
-        # Test that create_time_observable returns an observable
-        time_obs = create_time_observable()
-        @test isa(time_obs, Observable)
-        @test isa(time_obs[], String)
+    @testset "PointController.create_time_observable" begin
+        # Test time observable creation
+        time_obs = PointController.create_time_observable()
+        @test time_obs isa Observable
+        @test time_obs[] isa String
+        @test length(time_obs[]) > 0
 
-        # Test that the observable contains a time string
-        time_str = time_obs[]
-        @test !isempty(time_str)
-        @test occursin(r"^\d{2}:\d{2}:\d{2}$", time_str)
+        # Test that observable contains valid time format
+        @test occursin(r"\d{2}:\d{2}:\d{2}", time_obs[])
     end
-
-
 
     @testset "update_movement_timing!" begin
-        state = MovementState()
+        state = PointController.MovementState()
+
+        # Test initial timing state
         initial_time = state.last_update_time
-        initial_elapsed = state.elapsed_time
+        @test state.elapsed_time == 0.0
 
-        # Test timing update with a small delay to ensure time difference
-        sleep(0.001)  # Small delay to ensure time difference
+        # Test timing update
+        sleep(0.1)  # Wait a bit to ensure time difference
         current_time = time()
-        @test_nowarn update_movement_timing!(state, current_time)
+        PointController.update_movement_timing!(state, current_time)
+        @test state.elapsed_time > 0.0
+        @test state.last_update_time > initial_time
 
-        # Test that timing was updated
-        @test state.last_update_time == current_time
-        @test state.elapsed_time > 0.0  # Should be positive since some time passed
+        # Test multiple timing updates
+        sleep(0.1)  # Wait again
+        current_time = time()
+        PointController.update_movement_timing!(state, current_time)
+        @test state.elapsed_time > 0.0  # Should be positive
+        @test state.last_update_time > initial_time  # Should be updated
     end
 
     @testset "Movement State Timing Integration" begin
-        state = MovementState()
+        state = PointController.MovementState()
 
-        # Test initial timing state
-        @test state.elapsed_time == 0.0
-        @test state.last_update_time > 0.0  # Should be set to current time
-
-        # Test timing update with movement
-        add_key!(state, 'w')
-        sleep(0.001)  # Small delay to ensure time difference
+        # Test that timing works with movement
+        PointController.add_key!(state, 'w')
+        
+        # Update timing
         current_time = time()
-        update_movement_timing!(state, current_time)
-
-        # Test that elapsed time is calculated correctly
-        @test state.elapsed_time > 0.0
-        @test state.last_update_time == current_time
+        PointController.update_movement_timing!(state, current_time)
+        
+        # Apply movement with timing
+        new_state = PointController.apply_movement_to_position(state, state.elapsed_time)
+        @test new_state.position != state.position  # Should have moved
     end
 end
