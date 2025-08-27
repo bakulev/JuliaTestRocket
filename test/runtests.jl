@@ -27,6 +27,18 @@ using PointController
     
     # Include error handling tests (backend-agnostic)
     include("test_error_handling.jl")
+    
+    # Include logging tests (backend-agnostic)
+    include("test_logging.jl")
+    
+    # Include time function tests (backend-agnostic)
+    include("test_time_functions.jl")
+    
+    # Include backend detection tests (backend-agnostic)
+    include("test_backend_detection.jl")
+    
+    # Include extended movement state tests (backend-agnostic)
+    include("test_movement_state_extended.jl")
 end
 
 # Backend-specific tests (only run if backend is available)
