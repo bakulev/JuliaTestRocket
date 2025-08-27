@@ -17,9 +17,14 @@ using Test
             @testset "Syntax validation for $file" begin
                 # Test that the file can be parsed without syntax errors
                 content = read(file, String)
-                # Check that parsing succeeds (returns a valid expression or nothing)
-                result = Meta.parse(content, raise = false)
-                @test result !== nothing
+                # Use Meta.parseall to validate the entire file content
+                try
+                    Meta.parseall(content)
+                    @test true
+                catch err
+                    @error "Syntax error in $file: $(err)"
+                    @test false
+                end
             end
         end
     end
