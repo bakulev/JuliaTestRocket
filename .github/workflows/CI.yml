@@ -49,6 +49,7 @@ jobs:
           "
           
       - name: Clean previous coverage files
+        shell: bash
         run: |
           find . -name "*.cov" -delete
           
