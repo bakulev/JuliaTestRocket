@@ -13,40 +13,18 @@ using StaticArrays: SVector
 const Point2f = SVector{2, Float32}
 
 @testset "Extended Movement State Tests" begin
-    @testset "create_point_position" begin
-        # Test that create_point_position returns an observable
-        position = create_point_position()
-        @test isa(position, Observable)
-        @test isa(position[], Point2f)
-
-        # Test that it starts at origin
-        @test position[] == Point2f(0.0, 0.0)
-    end
-
     @testset "get_current_position" begin
         # Test get_current_position with origin
-        position = Observable(Point2f(0.0, 0.0))
-        current_pos = get_current_position(position)
+        state = MovementState(position = Point2f(0.0, 0.0))
+        current_pos = get_current_position(state)
         @test isa(current_pos, Tuple)
         @test length(current_pos) == 2
         @test current_pos == (0.0, 0.0)
 
         # Test with different position
-        position[] = Point2f(1.5, -2.3)
-        current_pos = get_current_position(position)
+        state.position = Point2f(1.5, -2.3)
+        current_pos = get_current_position(state)
         @test current_pos == (1.5f0, -2.3f0)  # Float32 precision
-    end
-
-    @testset "update_position_from_state!" begin
-        # Test that update_position_from_state! is an alias for apply_movement_to_position!
-        state = MovementState(movement_speed = 2.0)
-        position = Observable(Point2f(0.0, 0.0))
-
-        add_key!(state, 'w')
-        state.elapsed_time = 0.5
-
-        @test_nowarn update_position_from_state!(position, state)
-        @test position[] == Point2f(0.0, 1.0)
     end
 
     @testset "reset_movement_state!" begin
@@ -116,32 +94,27 @@ const Point2f = SVector{2, Float32}
     end
 
     @testset "Movement State Boundary Conditions" begin
-        state = MovementState(movement_speed = 1.0)
-        position = Observable(Point2f(0.0, 0.0))
+        state = MovementState(position = Point2f(0.0, 0.0), movement_speed = 1.0)
 
         # Test movement that would exceed boundaries
         add_key!(state, 'd')  # Move right
-        state.elapsed_time = 15.0  # This would move 15 units right
-
-        apply_movement_to_position!(position, state)
+        new_state = apply_movement_to_position(state, 15.0)  # This would move 15 units right
 
         # Should be clamped to boundary
-        @test position[] == Point2f(10.0, 0.0)  # Clamped to +10
+        @test new_state.position == Point2f(10.0, 0.0)  # Clamped to +10
 
         # Test negative boundary - need to set position first, then apply movement
-        position[] = Point2f(-15.0, 0.0)  # Set to beyond boundary
+        boundary_state = MovementState(position = Point2f(-15.0, 0.0), movement_speed = 1.0)
         # Clear previous movement and set up for left movement
-        clear_all_keys_safely!(state)
-        add_key!(state, 'a')  # Move left
-        state.elapsed_time = 1.0  # Small movement to test clamping
+        clear_all_keys_safely!(boundary_state)
+        add_key!(boundary_state, 'a')  # Move left
+        boundary_state = apply_movement_to_position(boundary_state, 1.0)  # Small movement to test clamping
 
-        apply_movement_to_position!(position, state)
-        @test position[] == Point2f(-10.0, 0.0)  # Should be clamped to -10
+        @test boundary_state.position == Point2f(-10.0, 0.0)  # Should be clamped to -10
     end
 
     @testset "Movement State Performance" begin
-        state = MovementState()
-        position = Observable(Point2f(0.0, 0.0))
+        state = MovementState(position = Point2f(0.0, 0.0))
 
         # Test rapid state changes
         for i in 1:100
@@ -153,14 +126,12 @@ const Point2f = SVector{2, Float32}
 
         # Test rapid position updates
         add_key!(state, 'd')
-        state.elapsed_time = 0.1
-
         for i in 1:50
-            @test_nowarn apply_movement_to_position!(position, state)
+            @test_nowarn state = apply_movement_to_position(state, 0.1)
         end
 
         # Check that we're close to the boundary (allowing for Float32 precision)
-        @test abs(position[][1] - 10.0) < FLOAT_TOLERANCE
-        @test position[][2] == 0.0
+        @test abs(state.position[1] - 10.0) < 1e-5
+        @test state.position[2] == 0.0
     end
 end

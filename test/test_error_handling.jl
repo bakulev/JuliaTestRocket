@@ -74,19 +74,18 @@ const Point2f = SVector{2, Float32}
     end
 
     @testset "Boundary Conditions" begin
-        state = MovementState(movement_speed = 0.1)
-        position = Observable(Point2f(0, 0))
+        state = MovementState(position = Point2f(0, 0), movement_speed = 0.1)
 
         # Test boundary constraints
         for i in 1:200  # Move beyond boundaries
             add_key!(state, 'w')
-            apply_movement_to_position!(position, state)
+            state = apply_movement_to_position(state, 0.1)
         end
 
         # Should be clamped to boundary
-        @test position[][1] >= -10.0
-        @test position[][1] <= 10.0
-        @test position[][2] >= -10.0
-        @test position[][2] <= 10.0
+        @test state.position[1] >= -10.0
+        @test state.position[1] <= 10.0
+        @test state.position[2] >= -10.0
+        @test state.position[2] <= 10.0
     end
 end

@@ -30,8 +30,8 @@ PointController.update_backend_detection()
     end
 
     @testset "Point Position Management" begin
-        # Test point position creation
-        position = create_point_position()
+        # Test point position creation using Observable directly
+        position = Observable(Point2f(0, 0))
         @test position isa Observable{Point2f}
         @test position[] == Point2f(0, 0)
 

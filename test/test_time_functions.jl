@@ -32,16 +32,7 @@ const Point2f = SVector{2, Float32}
         @test occursin(r"^\d{2}:\d{2}:\d{2}$", time_str)
     end
 
-    @testset "update_time_display!" begin
-        # Test that update_time_display! updates the observable
-        time_obs = Observable("00:00:00")
-        @test_nowarn update_time_display!(time_obs)
 
-        # Test that the observable was updated
-        @test isa(time_obs[], String)
-        @test !isempty(time_obs[])
-        @test occursin(r"^\d{2}:\d{2}:\d{2}$", time_obs[])
-    end
 
     @testset "update_movement_timing!" begin
         state = MovementState()

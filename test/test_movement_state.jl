@@ -79,37 +79,33 @@ const Point2f = SVector{2, Float32}
     end
 
     @testset "Position Updates" begin
-        state = MovementState(movement_speed = 2.0)
-
-        # Create a mock position observable (we don't need actual Makie for this)
-        position = Observable(Point2f(0.0, 0.0))
+        state = MovementState(position = Point2f(0.0, 0.0), movement_speed = 2.0)
 
         # Test movement from origin with time-based movement
         add_key!(state, 'w')
-        state.elapsed_time = 0.5  # 0.5 seconds
-        apply_movement_to_position!(position, state)
-        @test position[] == Point2f(0.0, 1.0)  # 2.0 units/sec * 0.5 sec = 1.0 unit
+        new_state = apply_movement_to_position(state, 0.5)  # 0.5 seconds
+        @test new_state.position == Point2f(0.0, 1.0)  # 2.0 units/sec * 0.5 sec = 1.0 unit
 
         # Test diagonal movement
-        add_key!(state, 'd')
-        state.elapsed_time = 0.5  # 0.5 seconds
-        apply_movement_to_position!(position, state)
+        add_key!(new_state, 'd')
+        new_state2 = apply_movement_to_position(new_state, 0.5)  # 0.5 seconds
         # Should move diagonally with normalized speed
         # Previous position was (0, 1.0), new movement is 1.0 units in diagonal direction
         expected_x = 1.0/sqrt(2)  # 1.0 unit * cos(45°) = 1.0/sqrt(2)
         expected_y = 1.0 + 1.0/sqrt(2)  # Previous 1.0 + 1.0 unit * sin(45°)
-        @test abs(position[][1] - expected_x) < 1e-6
-        @test abs(position[][2] - expected_y) < 1e-6
+        @test abs(new_state2.position[1] - expected_x) < 1e-6
+        @test abs(new_state2.position[2] - expected_y) < 1e-6
 
         # Test boundary constraints
         # Move to boundary
+        boundary_state = new_state2
         for i in 1:100
-            apply_movement_to_position!(position, state)
+            boundary_state = apply_movement_to_position(boundary_state, 0.1)
         end
-        @test position[][1] <= 10.0
-        @test position[][2] <= 10.0
-        @test position[][1] >= -10.0
-        @test position[][2] >= -10.0
+        @test boundary_state.position[1] <= 10.0
+        @test boundary_state.position[2] <= 10.0
+        @test boundary_state.position[1] >= -10.0
+        @test boundary_state.position[2] >= -10.0
     end
 
     @testset "State Management" begin

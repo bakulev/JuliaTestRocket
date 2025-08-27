@@ -15,7 +15,7 @@ using PointController
 
         # Movement state functions
         @test :MovementState in exported_names
-        @test :apply_movement_to_position! in exported_names
+        @test :apply_movement_to_position in exported_names
         @test :calculate_movement_vector in exported_names
 
         # Input handler functions

@@ -104,7 +104,7 @@ function create_visualization()
     )
 
     # Create observable point position (initialized at origin)
-    point_position = create_point_position()
+    point_position = Observable(Point2f(0, 0))
 
     # Create observable for current time display
     current_time_obs = create_time_observable()

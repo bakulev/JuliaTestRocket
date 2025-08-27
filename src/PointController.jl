@@ -69,6 +69,7 @@ module PointController
 
 # Core dependencies
 using Logging
+using Observables: Observable
 
 # Conditional backend loading - users must activate a backend before using
 # This allows the module to be loaded in headless environments for testing
@@ -87,8 +88,8 @@ export handle_key_press,
     handle_key_release, is_movement_key, get_pressed_keys, setup_keyboard_events!
 # Export visualization functions
 export create_visualization,
-    create_point_position, get_current_position
-export apply_movement_to_position!, update_position_from_state!, setup_visualization_window
+    get_current_position
+export apply_movement_to_position, setup_visualization_window
 export update_coordinate_display!, create_time_observable
 
 # Export logging functions
@@ -257,7 +258,8 @@ function run_point_controller()
                 update_movement_timing!(movement_state, current_time)
 
                 # Update position based on current key states
-                apply_movement_to_position!(point_position, movement_state)
+                movement_state = apply_movement_to_position(movement_state, movement_state.elapsed_time)
+                point_position[] = movement_state.position
 
                 # Debug: log movement updates (occasionally)
                 if rand() < 0.01  # 1% chance to log

@@ -35,8 +35,8 @@ using PointController
 
         # Test movement affects position with time-based movement
         add_key!(state, 'w')
-        state.elapsed_time = 0.5  # 0.5 seconds
-        apply_movement_to_position!(point_position, state)
+        new_state = apply_movement_to_position(state, 0.5)  # 0.5 seconds
+        point_position[] = new_state.position
         @test point_position[] == Point2f(0, 1.0)  # 2.0 units/sec * 0.5 sec = 1.0 unit
 
         # Test coordinate text updates
@@ -44,9 +44,9 @@ using PointController
         @test occursin("1.0", coordinate_text[])  # Now 1.0 due to time-based movement
 
         # Test diagonal movement
-        add_key!(state, 'd')
-        state.elapsed_time = 0.5  # 0.5 seconds
-        apply_movement_to_position!(point_position, state)
+        add_key!(new_state, 'd')
+        new_state2 = apply_movement_to_position(new_state, 0.5)  # 0.5 seconds
+        point_position[] = new_state2.position
         # Previous position was (0, 1.0), new movement is 1.0 units in diagonal direction
         expected_x = 1.0/sqrt(2)  # 1.0 unit * cos(45°) = 1.0/sqrt(2)
         expected_y = 1.0 + 1.0/sqrt(2)  # Previous 1.0 + 1.0 unit * sin(45°)
@@ -101,8 +101,8 @@ using PointController
         # Test many position updates with time-based movement
         for i in 1:100
             add_key!(state, 'w')
-            state.elapsed_time = 0.1  # 0.1 seconds per update
-            apply_movement_to_position!(point_position, state)
+            state = apply_movement_to_position(state, 0.1)  # 0.1 seconds per update
+            point_position[] = state.position
             remove_key!(state, 'w')
         end
 
