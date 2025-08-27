@@ -4,6 +4,9 @@
 using Test
 using Observables: Observable
 using PointController
+
+# Define tolerance for floating-point comparisons
+const FLOAT_TOLERANCE = 1e-5
 using StaticArrays: SVector
 
 # Define Point2f to match our implementation
@@ -157,7 +160,7 @@ const Point2f = SVector{2, Float32}
         end
 
         # Check that we're close to the boundary (allowing for Float32 precision)
-        @test abs(position[][1] - 10.0) < 1e-5
+        @test abs(position[][1] - 10.0) < FLOAT_TOLERANCE
         @test position[][2] == 0.0
     end
 end

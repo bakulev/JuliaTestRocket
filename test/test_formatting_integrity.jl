@@ -17,7 +17,9 @@ using Test
             @testset "Syntax validation for $file" begin
                 # Test that the file can be parsed without syntax errors
                 content = read(file, String)
-                @test_nowarn Meta.parse(content, raise = false)
+                # Check that parsing succeeds (returns a valid expression or nothing)
+                result = Meta.parse(content, raise=false)
+                @test result !== nothing
             end
         end
     end

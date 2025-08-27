@@ -29,7 +29,13 @@ Pkg.add("CoverageTools")
 
 # Clean previous coverage files
 println("🧹 Cleaning previous coverage files...")
-run(`find . -name "*.cov" -delete`)
+for (root, _, files) in walkdir(".")
+    for file in files
+        if endswith(file, ".cov")
+            rm(joinpath(root, file))
+        end
+    end
+end
 
 # Run tests with coverage
 println("🧪 Running tests with coverage tracking...")
