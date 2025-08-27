@@ -18,6 +18,12 @@ Pkg.instantiate()
 # Load GLMakie and activate it with error handling
 @info "Loading GLMakie backend..."
 try
+    # Try to install GLMakie if not available
+    if !haskey(Pkg.project().dependencies, "GLMakie")
+        @info "GLMakie not in dependencies, adding it for local development..."
+        Pkg.add("GLMakie")
+    end
+    
     using GLMakie
     GLMakie.activate!()
     @info "GLMakie backend activated successfully!"
