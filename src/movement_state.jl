@@ -131,8 +131,6 @@ mutable struct MovementState
     end
 end
 
-
-
 """
     add_key!(state::MovementState, key::Char)
 
@@ -280,16 +278,6 @@ function reset_movement_state!(state::MovementState; position::Point2f = Point2f
 end
 
 """
-    request_quit!(state::MovementState)
-
-Request the application to quit.
-"""
-function request_quit!(state::MovementState)
-    state.should_quit = true
-    @info "Quit requested" context = "movement_state"
-end
-
-"""
     clear_all_keys_safely!(state::MovementState)
 
 Safely clear all pressed keys with error handling.
@@ -314,13 +302,3 @@ function update_movement_timing!(state::MovementState, current_time::Float64)
     state.last_update_time = current_time
     @debug "Timing updated: elapsed=$(state.elapsed_time)s" context = "movement_state"
 end
-
-"""
-    format_current_time()
-
-Format the current time as a string.
-"""
-function format_current_time()
-    return string(Dates.format(now(), "HH:MM:SS"))
-end
-

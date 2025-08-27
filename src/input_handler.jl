@@ -45,68 +45,114 @@ handle_key_release('w', state)  # Process 'w' key release
 using Logging
 
 """
-    handle_key_press(key::Char, state::MovementState)
+    KeyState
 
-Process a key press event and update the movement state with error handling.
+A struct to handle keyboard input state separately from movement state.
+This allows for clean separation between input handling and movement logic.
+"""
+mutable struct KeyState
+    pressed_keys::Set{Char}
+    should_quit::Bool
+    
+    function KeyState()
+        new(Set{Char}(), false)
+    end
+end
+
+"""
+    press_key!(key_state::KeyState, key::Char)
+
+Add a key to the pressed keys set.
+"""
+function press_key!(key_state::KeyState, key::Char)
+    push!(key_state.pressed_keys, key)
+    @debug "Key pressed: $key" context = "key_state"
+end
+
+"""
+    release_key!(key_state::KeyState, key::Char)
+
+Remove a key from the pressed keys set.
+"""
+function release_key!(key_state::KeyState, key::Char)
+    delete!(key_state.pressed_keys, key)
+    @debug "Key released: $key" context = "key_state"
+end
+
+"""
+    request_quit!(key_state::KeyState)
+
+Request the application to quit.
+"""
+function request_quit!(key_state::KeyState)
+    key_state.should_quit = true
+    @info "Quit requested" context = "key_state"
+end
+
+"""
+    reset_quit!(key_state::KeyState)
+
+Reset the quit flag (useful for restarting the application).
+"""
+function reset_quit!(key_state::KeyState)
+    key_state.should_quit = false
+end
+
+"""
+    handle_key_press(key::Char, key_state::KeyState)
+
+Process a key press event and update the key state with error handling.
 Adds the key to the pressed keys set if it's a valid WASD key.
 Handles quit request if 'q' key is pressed.
 Gracefully handles invalid key inputs.
 """
-function handle_key_press(key::Char, state::MovementState)
+function handle_key_press(key::Char, key_state::KeyState)
     try
         # Handle quit key
         if lowercase(key) == 'q'
             log_user_action("Quit requested", "q key pressed")
-            request_quit!(state)
-            return state
+            request_quit!(key_state)
+            return
         end
 
         # Only process WASD keys for movement
         if haskey(KEY_MAPPINGS, key)
-            add_key!(state, key)
+            press_key!(key_state, key)
             log_user_action("Key pressed", string(key))
-            @debug "Key pressed: $key, pressed keys: $(state.pressed_keys)" context = "key_press"
+            @debug "Key pressed: $key, pressed keys: $(key_state.pressed_keys)" context = "key_press"
         else
             # Silently ignore non-movement keys (don't spam console)
             # This handles invalid key inputs gracefully
             @debug "Ignored key: $key" context = "key_press"
         end
 
-        return state
-
     catch e
         @warn "Error processing key press" exception=string(e) context="key_press"
-        # Return state unchanged on error
-        return state
     end
 end
 
 """
-    handle_key_release(key::Char, state::MovementState)
+    handle_key_release(key::Char, key_state::KeyState)
 
-Process a key release event and update the movement state with error handling.
+Process a key release event and update the key state with error handling.
 Removes the key from the pressed keys set if it's a valid WASD key.
 Gracefully handles invalid key inputs.
 """
-function handle_key_release(key::Char, state::MovementState)
+function handle_key_release(key::Char, key_state::KeyState)
     try
         # Only process WASD keys for movement
         if haskey(KEY_MAPPINGS, key)
-            remove_key!(state, key)
+            release_key!(key_state, key)
             log_user_action("Key released", string(key))
-            @debug "Key released: $key, pressed keys: $(state.pressed_keys)" context = "key_release"
+            @debug "Key released: $key, pressed keys: $(key_state.pressed_keys)" context = "key_release"
         else
             # Silently ignore non-movement keys (don't spam console)
             # This handles invalid key inputs gracefully
             @debug "Ignored key release: $key" context = "key_release"
         end
 
-        return state
-
     catch e
         @warn "Error processing key release" exception=string(e) context="key_release"
-        # Return state unchanged on error
-        return state
     end
 end
 
@@ -121,20 +167,20 @@ function is_movement_key(key::Char)
 end
 
 """
-    get_pressed_keys(state::MovementState)
+    get_pressed_keys(key_state::KeyState)
 
 Get a copy of the currently pressed keys.
 Returns a Set{Char} containing all currently pressed movement keys.
 """
-function get_pressed_keys(state::MovementState)
-    return copy(state.pressed_keys)
+function get_pressed_keys(key_state::KeyState)
+    return copy(key_state.pressed_keys)
 end
 
 """
-    setup_keyboard_events!(fig, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
+    setup_keyboard_events!(fig, key_state::KeyState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
 
 Set up keyboard event handlers for the Makie figure with comprehensive error handling.
-Connects key press and release events to the movement state management system.
+Connects key press and release events to the key state management system.
 Includes performance optimizations and robust error recovery.
 
 Note: This function requires a Makie backend to be activated and will only work
@@ -142,7 +188,7 @@ when called from a context where Makie types are available.
 """
 function setup_keyboard_events!(
     fig,
-    state::MovementState,
+    key_state::KeyState,
     position::Observable{Point2f},
     time_obs::Union{Observable{String}, Nothing} = nothing,
 )
@@ -156,9 +202,9 @@ function setup_keyboard_events!(
                 key_char = first(key_string)
 
                 if event.action == Main.Keyboard.press
-                    handle_key_press(key_char, state)
+                    handle_key_press(key_char, key_state)
                 elseif event.action == Main.Keyboard.release
-                    handle_key_release(key_char, state)
+                    handle_key_release(key_char, key_state)
                 end
             catch event_error
                 @warn "Error in keyboard event handler" exception=string(event_error) context="keyboard_events"

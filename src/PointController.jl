@@ -77,7 +77,7 @@ const BACKEND_LOADED = Ref(false)
 const BACKEND_NAME = Ref{Union{Nothing, String}}(nothing)
 
 # Export public API - functions and types that users and tests need
-export run_point_controller, MovementState, KEY_MAPPINGS
+export run_point_controller, KEY_MAPPINGS
 # Export movement state functions
 export add_key!,
     remove_key!, calculate_movement_vector, reset_movement_state!, request_quit!
@@ -203,18 +203,36 @@ function run_point_controller()
         log_component_initialization("visualization")
         fig, ax, point_position, coordinate_text, time_obs = create_visualization_safely()
 
-        # Create movement state
+        # Create movement state and key state
         log_component_initialization("movement state")
         # Movement speed in units per second
         movement_state = MovementState(movement_speed = 1.5)
+        
+        # Create key state for handling keyboard input
+        key_state = KeyState()
 
         # Set up Makie window with proper configuration and error handling
         log_component_initialization("window")
-        setup_visualization_window_safely(fig)
+        try
+            setup_visualization_window(fig)
+            return fig
+        catch e
+            log_error_with_context("Failed to display window", "window_setup", e)
+            @error "This may indicate window system compatibility issues"
+            rethrow(e)
+        end
 
         # Connect all event handlers with error handling
         log_component_initialization("keyboard event handlers")
-        setup_keyboard_events_safely!(fig, movement_state, point_position, time_obs)
+        try
+            setup_keyboard_events!(fig, key_state, position, time_obs)
+            return fig
+        catch e
+            log_error_with_context("Failed to set up keyboard events", "keyboard_setup", e)
+            @warn "Keyboard input may not work properly"
+            # Don't rethrow - application can still run without keyboard events
+            return fig
+        end
 
         # Movement updates are now handled in the main loop for better responsiveness
         log_component_initialization("update timer")
@@ -245,14 +263,17 @@ function run_point_controller()
         last_update_time = time()
         update_interval = 1/60  # 60 FPS
 
-        while Main.events(fig).window_open[] && !movement_state.should_quit
+        while Main.events(fig).window_open[] && !key_state.should_quit
             current_time = time()
 
             # Update movement and time display at 60 FPS
             if current_time - last_update_time >= update_interval
 
                 # Update time display
-                time_obs[] = format_current_time()
+                time_obs[] = format_current_time(current_time)
+
+                # Copy key state to movement state at the beginning of each cycle
+                copy_key_state_to_movement_state!(movement_state, key_state)
 
                 # Update timing
                 update_movement_timing!(movement_state, current_time)
@@ -269,16 +290,30 @@ function run_point_controller()
                 last_update_time = current_time
             end
 
-            sleep(0.1)  # Very small sleep to prevent busy waiting but allow responsive updates
+            # Check if quit was requested and break immediately
+            if key_state.should_quit
+                @info "Quit detected in main loop, breaking..."
+                break
+            end
+            
+            # Debug: occasionally log the quit state
+            if rand() < 0.001  # Very rare logging to avoid spam
+                @debug "Main loop quit state: $(key_state.should_quit)" context = "main_loop"
+            end
+
+            sleep(0.01)  # Small sleep to prevent busy waiting but allow responsive updates
         end
 
         # Handle quit request
-        if movement_state.should_quit
+        @info "Main loop ended. Checking quit state: $(key_state.should_quit)"
+        if key_state.should_quit
             @info "Exiting application..."
             # Close the window if quit was requested via 'q' key
             cleanup_application_safely(movement_state)
             # Close all windows (backend-agnostic)
             close_all_windows()
+        else
+            @info "Application ended without quit request"
         end
 
     catch e
@@ -362,41 +397,20 @@ function create_visualization_safely()
 end
 
 """
-    setup_visualization_window_safely(fig)
+    copy_key_state_to_movement_state!(movement_state::MovementState, key_state::KeyState)
 
-Set up visualization window with error handling.
+Copy the key state information from KeyState to MovementState.
+This is called at the beginning of each main loop cycle to sync the states.
 """
-function setup_visualization_window_safely(fig)
-    try
-        setup_visualization_window(fig)
-        return fig
-    catch e
-        log_error_with_context("Failed to display window", "window_setup", e)
-        @error "This may indicate window system compatibility issues"
-        rethrow(e)
-    end
-end
-
-"""
-    setup_keyboard_events_safely!(fig, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
-
-Set up keyboard events with comprehensive error handling.
-"""
-function setup_keyboard_events_safely!(
-    fig,
-    state::MovementState,
-    position::Observable{Point2f},
-    time_obs::Union{Observable{String}, Nothing} = nothing,
-)
-    try
-        setup_keyboard_events!(fig, state, position, time_obs)
-        return fig
-    catch e
-        log_error_with_context("Failed to set up keyboard events", "keyboard_setup", e)
-        @warn "Keyboard input may not work properly"
-        # Don't rethrow - application can still run without keyboard events
-        return fig
-    end
+function copy_key_state_to_movement_state!(movement_state::MovementState, key_state::KeyState)
+    # Copy pressed keys
+    empty!(movement_state.pressed_keys)
+    union!(movement_state.pressed_keys, key_state.pressed_keys)
+    
+    # Copy quit state
+    movement_state.should_quit = key_state.should_quit
+    
+    @debug "Copied key state to movement state: keys=$(key_state.pressed_keys), quit=$(key_state.should_quit)" context = "state_sync"
 end
 
 """
@@ -541,6 +555,54 @@ function update_backend_detection()
         BACKEND_NAME[] = nothing
         return false
     end
+end
+
+"""
+    format_current_time(timestamp::Float64 = time())
+
+Format the given timestamp as a string in HH:MM:SS format.
+Returns a string representation of the time.
+
+# Arguments
+- `timestamp::Float64`: Unix timestamp to format (default: current time)
+
+# Returns
+- `String`: Time in HH:MM:SS format
+
+# Examples
+```julia
+time_str = format_current_time()  # Current time
+time_str = format_current_time(1234567890.0)  # Specific timestamp
+```
+"""
+function format_current_time(timestamp::Float64 = time())
+    try
+        # Convert Unix timestamp to DateTime and format it
+        current_datetime = Dates.unix2datetime(timestamp)
+        return Dates.format(current_datetime, "HH:MM:SS")
+    catch e
+        @warn "Error formatting timestamp" exception = string(e) context = "time_formatting"
+        return "00:00:00"  # Fallback time
+    end
+end
+
+"""
+    create_time_observable()
+
+Create an Observable that contains the current time as a formatted string.
+Returns an Observable{String} that can be updated with current time.
+
+# Returns
+- `Observable{String}`: Observable containing current time in HH:MM:SS format
+
+# Examples
+```julia
+time_obs = create_time_observable()
+time_obs[] = format_current_time()  # Update with current time
+```
+"""
+function create_time_observable()
+    return Observable(format_current_time())
 end
 
 end # module PointController
