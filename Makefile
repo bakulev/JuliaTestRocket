@@ -1,6 +1,12 @@
 # Makefile for JuliaTestRocket
 # Provides convenient commands for development and release management
 
+# Use a configurable Julia binary to simulate different versions locally.
+# Override like:
+#   JULIA_BIN=/Applications/Julia-1.10.app/Contents/Resources/julia/bin/julia make ci-local
+# Defaults to the `julia` on PATH.
+JULIA_BIN ?= julia
+
 .PHONY: help test test-fast prepush coverage coverage-clean quality-ci docs-build smoke-glmakie security ci-local version-current version-validate bump-patch bump-minor bump-major prepare-release clean setup release-patch release-minor release-major
 
 # Default target
@@ -14,6 +20,7 @@ help:
 	@echo "  prepush           Run CI-style checks before pushing (format, Aqua, tests)"
 	@echo "  clean             Clean build artifacts"
 	@echo "  setup             Set up development environment"
+	@echo "  (Tip) Override JULIA_BIN to simulate Julia 1.10/1.11 locally"
 	@echo ""
 	@echo "Application:"
 	@echo "  run-interactive   Start interactive session"
@@ -52,57 +59,57 @@ help:
 # Testing targets
 test:
 	@echo "Running full test suite..."
-	julia --project=. -e "using Pkg; Pkg.test()"
+	$(JULIA_BIN) --project=. -e "using Pkg; Pkg.test()"
 
 test-fast:
 	@echo "Running basic tests..."
-	julia --project=. test/runtests.jl
+	$(JULIA_BIN) --project=. test/runtests.jl
 
 # CI-style pre-push checklist target
 prepush:
 	@echo "Checking formatting (CI-style)..."
-	julia -e 'using JuliaFormatter; ok = format(".", verbose=true, overwrite=false); if !ok; exit(1); end; println("Formatting check ✓")'
+	$(JULIA_BIN) scripts/format_ci.jl
 	@echo "\nRunning Aqua quality suite in a clean environment (CI-style)..."
-	julia scripts/quality_ci.jl
+	$(JULIA_BIN) scripts/quality_ci.jl
 	@echo "\nRunning full test suite..."
-	julia --project=. -e 'using Pkg; Pkg.test()'
+	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.test()'
 
 # Application targets
 run-interactive:
 	@echo "Starting interactive session..."
-	julia --project=. -i start_interactive.jl
+	$(JULIA_BIN) --project=. -i start_interactive.jl
 
 run-glmakie:
 	@echo "Running with GLMakie..."
-	julia run_glmakie.jl
+	$(JULIA_BIN) run_glmakie.jl
 
 run-cairomakie:
 	@echo "Running with CairoMakie..."
-	julia run_cairomakie.jl
+	$(JULIA_BIN) run_cairomakie.jl
 
 # Coverage helpers
 coverage:
 	@echo "Running coverage script..."
-	julia scripts/run_coverage.jl
+	$(JULIA_BIN) scripts/run_coverage.jl
 
 coverage-clean:
 	@echo "Cleaning coverage files..."
-	julia scripts/clean_coverage.jl
+	$(JULIA_BIN) scripts/clean_coverage.jl
 
 # Quality (CI-style) matches .github/workflows/CI.yml quality job
 quality-ci:
 	@echo "Running Aqua in CI mode (ambiguities=false, stale_deps=false) with CairoMakie..."
-	julia --project=test scripts/quality_ci.jl
+	$(JULIA_BIN) --project=test scripts/quality_ci.jl
 
 # Docs build mirrors Documentation.yml
 docs-build:
 	@echo "Building documentation..."
-	julia --project=docs scripts/docs_build.jl
+	$(JULIA_BIN) --project=docs scripts/docs_build.jl
 
 # GLMakie smoke test (optional)
 smoke-glmakie:
 	@echo "Running GLMakie smoke test (requires GLMakie and a working GL/display)..."
-	julia --project=. -e 'using Pkg; try Pkg.add("GLMakie"); catch; end; using GLMakie; GLMakie.activate!(); include("test/test_glmakie_smoke.jl")'
+	$(JULIA_BIN) --project=. -e 'using Pkg; try Pkg.add("GLMakie"); catch; end; using GLMakie; GLMakie.activate!(); include("test/test_glmakie_smoke.jl")'
 
 # Security scan (optional; requires trivy)
 security:
@@ -115,49 +122,49 @@ ci-local: prepush quality-ci coverage docs-build
 
 # Version management targets
 version-current:
-	@julia scripts/version_management.jl current
+	@$(JULIA_BIN) scripts/version_management.jl current
 
 version-validate:
-	@julia scripts/version_management.jl validate
+	@$(JULIA_BIN) scripts/version_management.jl validate
 
 bump-patch:
 	@echo "Bumping patch version..."
-	@julia scripts/version_management.jl bump patch
+	@$(JULIA_BIN) scripts/version_management.jl bump patch
 
 bump-minor:
 	@echo "Bumping minor version..."
-	@julia scripts/version_management.jl bump minor
+	@$(JULIA_BIN) scripts/version_management.jl bump minor
 
 bump-major:
 	@echo "Bumping major version..."
-	@julia scripts/version_management.jl bump major
+	@$(JULIA_BIN) scripts/version_management.jl bump major
 
 prepare-release:
-	@julia scripts/version_management.jl prepare
+	@$(JULIA_BIN) scripts/version_management.jl prepare
 
 # Dependency management
 deps-status:
 	@echo "Checking dependency status..."
-	@julia --project=. -e "using Pkg; Pkg.status()"
+	@$(JULIA_BIN) --project=. -e "using Pkg; Pkg.status()"
 
 deps-outdated:
 	@echo "Checking for outdated dependencies..."
-	@julia --project=. -e "using Pkg; Pkg.status(outdated=true)"
+	@$(JULIA_BIN) --project=. -e "using Pkg; Pkg.status(outdated=true)"
 
 deps-update:
 	@echo "⚠️  Updating all dependencies (use with caution)..."
-	@julia --project=. -e "using Pkg; Pkg.update()"
+	@$(JULIA_BIN) --project=. -e "using Pkg; Pkg.update()"
 
 # Cleanup
 clean:
 	@echo "Cleaning build artifacts..."
 	@rm -rf Manifest.toml
-	@julia --project=. -e "using Pkg; Pkg.instantiate()"
+	@$(JULIA_BIN) --project=. -e "using Pkg; Pkg.instantiate()"
 
 # Development setup
 setup:
 	@echo "Setting up development environment..."
-	@julia --project=. -e "using Pkg; Pkg.instantiate()"
+	@$(JULIA_BIN) --project=. -e "using Pkg; Pkg.instantiate()"
 	@echo "✓ Development environment ready!"
 	@echo ""
 	@echo "To start development:"
