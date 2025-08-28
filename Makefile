@@ -1,7 +1,7 @@
 # Makefile for JuliaTestRocket
 # Provides convenient commands for development and release management
 
-.PHONY: help test test-fast version-current version-validate bump-patch bump-minor bump-major prepare-release clean setup release-patch release-minor release-major
+.PHONY: help test test-fast prepush coverage coverage-clean quality-ci docs-build smoke-glmakie security ci-local version-current version-validate bump-patch bump-minor bump-major prepare-release clean setup release-patch release-minor release-major
 
 # Default target
 help:
@@ -11,6 +11,7 @@ help:
 	@echo "Development:"
 	@echo "  test              Run full test suite"
 	@echo "  test-fast         Run basic tests only"
+	@echo "  prepush           Run CI-style checks before pushing (format, Aqua, tests)"
 	@echo "  clean             Clean build artifacts"
 	@echo "  setup             Set up development environment"
 	@echo ""
@@ -18,6 +19,21 @@ help:
 	@echo "  run-interactive   Start interactive session"
 	@echo "  run-glmakie       Run with GLMakie (interactive)"
 	@echo "  run-cairomakie    Run with CairoMakie (headless)"
+	@echo ""
+	@echo "Coverage:"
+	@echo "  coverage          Run tests with coverage and produce lcov.info"
+	@echo "  coverage-clean    Remove generated .cov files"
+	@echo ""
+	@echo "Quality & Docs:"
+	@echo "  quality-ci        Run Aqua in CI mode (mirrors workflow)"
+	@echo "  docs-build        Build documentation locally (mirrors workflow)"
+	@echo ""
+	@echo "GL Smoke & Security:"
+	@echo "  smoke-glmakie     Run GLMakie smoke test (optional; requires GLMakie & display)"
+	@echo "  security          Run Trivy scan if installed (optional)"
+	@echo ""
+	@echo "All-in-one:"
+	@echo "  ci-local          Run local mirror of all green-gating CI jobs (format, quality, tests+coverage, docs)"
 	@echo ""
 	@echo "Version Management:"
 	@echo "  version-current   Show current version"
@@ -42,6 +58,15 @@ test-fast:
 	@echo "Running basic tests..."
 	julia --project=. test/runtests.jl
 
+# CI-style pre-push checklist target
+prepush:
+	@echo "Checking formatting (CI-style)..."
+	julia -e 'using JuliaFormatter; ok = format(".", verbose=true, overwrite=false); if !ok; exit(1); end; println("Formatting check ✓")'
+	@echo "\nRunning Aqua quality suite in a clean environment (CI-style)..."
+	julia scripts/quality_ci.jl
+	@echo "\nRunning full test suite..."
+	julia --project=. -e 'using Pkg; Pkg.test()'
+
 # Application targets
 run-interactive:
 	@echo "Starting interactive session..."
@@ -54,6 +79,39 @@ run-glmakie:
 run-cairomakie:
 	@echo "Running with CairoMakie..."
 	julia run_cairomakie.jl
+
+# Coverage helpers
+coverage:
+	@echo "Running coverage script..."
+	julia scripts/run_coverage.jl
+
+coverage-clean:
+	@echo "Cleaning coverage files..."
+	julia scripts/clean_coverage.jl
+
+# Quality (CI-style) matches .github/workflows/CI.yml quality job
+quality-ci:
+	@echo "Running Aqua in CI mode (ambiguities=false, stale_deps=false) with CairoMakie..."
+	julia --project=test scripts/quality_ci.jl
+
+# Docs build mirrors Documentation.yml
+docs-build:
+	@echo "Building documentation..."
+	julia --project=docs scripts/docs_build.jl
+
+# GLMakie smoke test (optional)
+smoke-glmakie:
+	@echo "Running GLMakie smoke test (requires GLMakie and a working GL/display)..."
+	julia --project=. -e 'using Pkg; try Pkg.add("GLMakie"); catch; end; using GLMakie; GLMakie.activate!(); include("test/test_glmakie_smoke.jl")'
+
+# Security scan (optional; requires trivy)
+security:
+	@echo "Running Trivy filesystem scan (if trivy is installed)..."
+	@command -v trivy >/dev/null 2>&1 && trivy fs . || echo "trivy not found; install from https://aquasecurity.github.io/trivy/ to run locally."
+
+# One command to mirror all green-gating CI jobs
+ci-local: prepush quality-ci coverage docs-build
+	@echo "\n✓ Local CI mirror finished. If all steps above passed, CI should be green."
 
 # Version management targets
 version-current:

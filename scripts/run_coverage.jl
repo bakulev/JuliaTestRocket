@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-"""
+#=
 Run test coverage analysis locally.
 
 This script runs the test suite with coverage tracking and generates a detailed
@@ -8,7 +8,7 @@ coverage report. It's useful for developers to check coverage before committing.
 
 Usage:
     julia scripts/run_coverage.jl
-"""
+=#
 
 using Pkg
 
@@ -19,13 +19,14 @@ if !isfile("Project.toml")
     error("Please run this script from the project root directory")
 end
 
-# Activate the project
-Pkg.activate(".")
-
-# Install dependencies for coverage testing
-println("📦 Installing dependencies for coverage testing...")
+# Activate a temporary environment, develop the package into it, and add
+# coverage dependencies there to avoid mutating the main Project.toml.
+println("📦 Preparing temporary environment for coverage...")
+Pkg.activate(; temp = true)
+Pkg.develop(path = ".")
 Pkg.add("CairoMakie")
 Pkg.add("CoverageTools")
+Pkg.instantiate()
 
 # Clean previous coverage files
 println("🧹 Cleaning previous coverage files...")
@@ -37,13 +38,20 @@ for (root, _, files) in walkdir(".")
     end
 end
 
-# Run tests with coverage
+# Run tests with coverage in the same temporary environment via Pkg.test
 println("🧪 Running tests with coverage tracking...")
-run(`julia --project=. --code-coverage=user -e "
-    using CairoMakie
-    CairoMakie.activate!()
-    include(\"test/runtests.jl\")
-"`)
+const ACTIVE_PROJECT = Base.active_project()  # path to the temp Project.toml
+const ACTIVE_ENV_DIR = dirname(ACTIVE_PROJECT) # pass directory to --project
+run(
+    Cmd([
+        "julia",
+        "--project=" * ACTIVE_ENV_DIR,
+        "--code-coverage=user",
+        "-e",
+        # Test the developed package by name; this tests the package at `path="."` we just `Pkg.develop`ed
+        "using Pkg; Pkg.test(\"PointController\"; coverage=true)",
+    ]),
+)
 
 # Process coverage
 println("📊 Processing coverage data...")

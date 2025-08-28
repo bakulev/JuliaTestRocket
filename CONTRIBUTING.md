@@ -61,6 +61,53 @@ julia --project=. test/test_movement_state.jl
 - Ensure good test coverage
 - Use appropriate backends for tests (CairoMakie for most tests, GLMakie for smoke tests)
 
+### Pre-push CI checklist
+
+Before pushing a branch or opening a PR, run these commands locally to mirror CI and ensure green checks:
+
+1) Verify formatting (non-destructive check):
+```bash
+julia -e 'using JuliaFormatter; ok = format(".", verbose=true, overwrite=false); if !ok; exit(1); end; println("Formatting check ✓")'
+```
+
+2) Run Aqua quality suite in a clean temp environment (stale deps, compat, piracy, etc.):
+```bash
+julia -e 'using Pkg; Pkg.activate(; temp=true); Pkg.add("Aqua"); Pkg.develop(path="."); using Aqua, PointController; Aqua.test_all(PointController)'
+```
+
+3) Run the full test suite:
+```bash
+julia --project=. -e 'using Pkg; Pkg.test()'
+```
+
+Optional (interactive backend smoke): if you want to quickly exercise GLMakie locally:
+```bash
+julia run_glmakie.jl
+```
+
+Notes:
+- CI’s format job runs JuliaFormatter in check mode (no file changes). Step 1 mirrors that.
+- Tests are backend-agnostic by default; GLMakie smoke tests are skipped if GLMakie isn’t installed.
+- Recommended Julia: 1.10.x (project supports ≥1.10). 1.11 works locally but format behavior should match CI.
+
+### Coverage (optional, to mirror Codecov CI)
+
+Generate a local coverage report and an lcov.info file (used by Codecov):
+
+```bash
+# One-shot script (does cleanup, runs tests with coverage, prints summary, writes lcov.info)
+julia scripts/run_coverage.jl
+
+# Or via Makefile shortcuts
+make coverage         # run coverage
+make coverage-clean   # remove .cov files if needed
+```
+
+Details:
+- The coverage script activates CairoMakie and runs `test/runtests.jl` with `--code-coverage=user`.
+- It computes per-file and overall coverage and writes lcov.info at the repo root.
+- A minimal threshold (11%) is enforced; adjust in `scripts/run_coverage.jl` if policy changes.
+
 ### Documentation
 
 **Build documentation locally**:
