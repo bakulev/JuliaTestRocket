@@ -54,10 +54,8 @@ update_coordinate_display!(position)
 # Users must activate a backend before using this module
 using Logging
 using Observables: Observable
-using StaticArrays: SVector
-
-# Define Point2f as an alias for SVector{2, Float32}
-const Point2f = SVector{2, Float32}
+using Dates
+# Point2f alias is defined in movement_state.jl and available within the module
 
 # Note: Makie types (Figure, Axis, etc.) are not imported here
 # They will be available when a backend is activated by the user
