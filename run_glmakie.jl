@@ -11,25 +11,20 @@ global_logger(ConsoleLogger(stderr, Logging.Info))
 
 @info "Starting Point Controller with GLMakie..."
 
-# Activate project
+# Activate project so we can load the local package
 Pkg.activate(@__DIR__)
 Pkg.instantiate()
 
 # Load GLMakie and activate it with error handling
 @info "Loading GLMakie backend..."
 try
-    # Try to install GLMakie if not available
-    if !haskey(Pkg.project().dependencies, "GLMakie")
-        @info "GLMakie not in dependencies, adding it for local development..."
-        Pkg.add("GLMakie")
-    end
-    
     using GLMakie
     GLMakie.activate!()
     @info "GLMakie backend activated successfully!"
 catch e
     @error "Failed to load GLMakie backend" exception=(e, catch_backtrace())
-    @error "Please ensure GLMakie is installed and your graphics drivers are up to date"
+    @error "Please install GLMakie locally and ensure your graphics drivers are up to date"
+    @error "Hint: julia --project=. -e 'using Pkg; Pkg.add(\"GLMakie\")'"
     exit(1)
 end
 
