@@ -87,6 +87,20 @@ WGLMakie.activate!()
 
 ### Recommended Usage Methods
 
+#### Alternative: Auto-Selecting Launcher (tries GL, falls back to Cairo)
+
+Run the app with automatic backend selection. Optionally force a backend via environment variable `JTR_BACKEND` (`gl`, `cairo`, or `wgl`).
+
+```bash
+# Auto-select (tries GLMakie, falls back to CairoMakie)
+julia run_app.jl
+
+# Force a specific backend
+JTR_BACKEND=gl julia run_app.jl
+JTR_BACKEND=cairo julia run_app.jl
+JTR_BACKEND=wgl julia run_app.jl
+```
+
 #### 1. Interactive Mode (Recommended for Development)
 
 Start an interactive Julia session with the project loaded:
@@ -170,6 +184,7 @@ JuliaTestRocket/
 ├── README.md                             # This documentation file
 ├── LICENSE                               # MIT license file
 ├── start_interactive.jl                  # Interactive startup script
+├── run_app.jl                            # Auto-selecting launcher (GL → Cairo fallback)
 ├── run_glmakie.jl                        # GLMakie execution script
 ├── run_cairomakie.jl                     # CairoMakie execution script
 ├── docs/                                # Documentation and assets

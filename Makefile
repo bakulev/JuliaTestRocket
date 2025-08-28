@@ -9,7 +9,7 @@ JULIA_BIN ?= julia
 # Match CI default threads unless overridden by environment
 export JULIA_NUM_THREADS ?= 2
 
-.PHONY: help test test-fast prepush coverage coverage-clean quality-ci docs-build smoke-glmakie security ci-local version-current version-validate bump-patch bump-minor bump-major prepare-release clean setup release-patch release-minor release-major
+.PHONY: help test test-fast prepush format format-check coverage coverage-clean quality-ci docs-build smoke-glmakie security ci-local version-current version-validate bump-patch bump-minor bump-major prepare-release clean setup release-patch release-minor release-major
 
 # Default target
 help:
@@ -19,6 +19,8 @@ help:
 	@echo "Development:"
 	@echo "  test              Run full test suite"
 	@echo "  test-fast         Run basic tests only"
+	@echo "  format            Format code with JuliaFormatter (writes changes)"
+	@echo "  format-check      Check formatting without writing (CI-style)"
 	@echo "  prepush           Run CI-style checks before pushing (format, Aqua, tests)"
 	@echo "  clean             Clean build artifacts"
 	@echo "  setup             Set up development environment"
@@ -28,6 +30,7 @@ help:
 	@echo "  run-interactive   Start interactive session"
 	@echo "  run-glmakie       Run with GLMakie (interactive)"
 	@echo "  run-cairomakie    Run with CairoMakie (headless)"
+	@echo "  run-app           Run auto-selecting launcher (env JTR_BACKEND=gl|cairo|wgl)"
 	@echo ""
 	@echo "Coverage:"
 	@echo "  coverage          Run tests with coverage and produce lcov.info"
@@ -71,6 +74,15 @@ test-fast:
 prepush:
 	@echo "Checking formatting (CI-style)..."
 	$(JULIA_BIN) scripts/format_ci.jl
+# Formatting targets
+format:
+	@echo "Running JuliaFormatter (writes changes)..."
+	@$(JULIA_BIN) -e 'using Pkg; Pkg.activate(; temp=true); Pkg.add("JuliaFormatter"); using JuliaFormatter; format(".", verbose=true, overwrite=true)'
+
+format-check:
+	@echo "Checking formatting (no changes)..."
+	@$(JULIA_BIN) -e 'using Pkg; Pkg.activate(; temp=true); Pkg.add("JuliaFormatter"); using JuliaFormatter; ok = format(".", verbose=true, overwrite=false); if !ok; println("Formatting check failed. Run: make format"); exit(1); end; println("Formatting check ✓")'
+
 	@echo "\nRunning Aqua quality suite in a clean environment (CI-style)..."
 	$(JULIA_BIN) scripts/quality_ci.jl
 	@echo "\nInstalling dependencies (Pkg.instantiate) to mirror CI..."
@@ -90,6 +102,10 @@ run-glmakie:
 run-cairomakie:
 	@echo "Running with CairoMakie..."
 	$(JULIA_BIN) run_cairomakie.jl
+
+run-app:
+	@echo "Running auto-selecting launcher... (set JTR_BACKEND=gl|cairo|wgl to force)"
+	$(JULIA_BIN) run_app.jl
 
 # Coverage helpers
 coverage:

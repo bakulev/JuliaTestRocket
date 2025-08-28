@@ -111,9 +111,9 @@ Main.on(Main.events(fig).keyboardbutton) do event
     key_char = first(key_string)
     
     if event.action == Main.Keyboard.press
-        handle_key_press(key_char, state)
+        handle_key_press(key_char, key_state)
     elseif event.action == Main.Keyboard.release
-        handle_key_release(key_char, state)
+        handle_key_release(key_char, key_state)
     end
 end
 ```
@@ -126,16 +126,16 @@ end
 #### Layer 2: Event Processing (Input Handler)
 
 ```julia
-function handle_key_press(key::Char, state::MovementState)
+function handle_key_press(key::Char, key_state::KeyState)
     # Handle quit key
     if lowercase(key) == 'q'
-        request_quit!(state)
-        return state
+    request_quit!(key_state)
+    return
     end
 
     # Only process WASD keys for movement
     if haskey(KEY_MAPPINGS, key)
-        add_key!(state, key)
+    press_key!(key_state, key)
         log_user_action("Key pressed", string(key))
     else
         # Silently ignore non-movement keys
@@ -147,7 +147,7 @@ end
 **Responsibilities:**
 - Validate and filter keyboard input
 - Handle special keys (quit, movement keys)
-- Update movement state
+- Update input state (KeyState)
 - Log user actions for debugging
 - Gracefully handle invalid inputs
 
@@ -202,23 +202,23 @@ end
 
 ```julia
 # Main application loop at 60 FPS
-while Main.events(fig).window_open[] && !movement_state.should_quit
+while Main.events(fig).window_open[] && !key_state.should_quit
     current_time = time()
     
     if current_time - last_update_time >= update_interval  # 60 FPS
         # Update time display
-        time_obs[] = format_current_time()
+    time_obs[] = format_current_time(current_time)
         
-        # Update timing
-        update_movement_timing!(movement_state, current_time)
-        
-        # Update position based on current key states
-        apply_movement_to_position!(point_position, movement_state)
-        
-        @debug "Main loop update: position = $(point_position[]), keys = $(movement_state.pressed_keys)"
+    # Sync input -> movement state and timing
+    copy_key_state_to_movement_state!(movement_state, key_state)
+    update_movement_timing!(movement_state, current_time)
+
+    # Compute new position and update observable
+    movement_state = apply_movement_to_position(movement_state, movement_state.elapsed_time)
+    point_position[] = movement_state.position
     end
     
-    sleep(0.1)  # Small sleep to prevent busy waiting
+    sleep(0.01)  # Small sleep to prevent busy waiting
 end
 ```
 
@@ -293,8 +293,8 @@ User presses 'W' key
         ↓
 ┌─────────────────────────────────────┐
 │ 2. Input Handler                    │ ← Event validation & processing
-│    handle_key_press('w', state)     │
-│    → add_key!(state, 'w')           │
+│    handle_key_press('w', key_state) │
+│    → press_key!(key_state, 'w')     │
 └─────────────────────────────────────┘
         ↓
 ┌─────────────────────────────────────┐
@@ -306,8 +306,8 @@ User presses 'W' key
         ↓
 ┌─────────────────────────────────────┐
 │ 4. Main Loop (60 FPS)              │ ← Application loop
-│    apply_movement_to_position!()    │
-│    → point_position[] = new_pos     │
+│    apply_movement_to_position()     │
+│    → update movement_state.position │
 └─────────────────────────────────────┘
         ↓
 ┌─────────────────────────────────────┐
@@ -355,11 +355,11 @@ User presses 'W' key
 #### 1. Input Layer Errors
 
 ```julia
-function handle_key_press(key::Char, state::MovementState)
+function handle_key_press(key::Char, key_state::KeyState)
     try
         # Process key press
         if haskey(KEY_MAPPINGS, key)
-            add_key!(state, key)
+            press_key!(key_state, key)
         end
     catch e
         @warn "Error processing key press" exception=string(e)
@@ -371,13 +371,13 @@ end
 #### 2. State Management Errors
 
 ```julia
-function apply_movement_to_position!(position::Observable{Point2f}, state::MovementState)
+function apply_movement_to_position(state::MovementState, elapsed_time)
     try
-        # Calculate and apply movement
-        position[] = new_position
+        # Calculate and return a new state with updated position
+        return PointController.apply_movement_to_position(state, elapsed_time)
     catch e
         @error "Error applying movement" exception=string(e)
-        # Position remains unchanged
+        return state
     end
 end
 ```

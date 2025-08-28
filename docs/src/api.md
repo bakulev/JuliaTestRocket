@@ -15,7 +15,6 @@ PointController
 
 ```@docs
 setup_visualization_window
-setup_keyboard_events!
 setup_logging
 log_application_start
 log_application_stop
@@ -35,18 +34,20 @@ add_key!
 remove_key!
 calculate_movement_vector
 reset_movement_state!
-request_quit!
-get_pressed_keys
+clear_all_keys_safely!
 update_movement_timing!
 ```
 
 ## Input Handling
 
 ```@docs
+KeyState
 handle_key_press
 handle_key_release
 is_movement_key
-clear_all_keys_safely!
+get_pressed_keys
+request_quit!
+setup_keyboard_events!
 ```
 
 ## Visualization

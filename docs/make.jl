@@ -13,6 +13,7 @@ makedocs(;
     format = Documenter.HTML(;
         prettyurls = get(ENV, "CI", "false") == "true",
         canonical = "https://bakulev.github.io/JuliaTestRocket",
+        repolink = "https://github.com/bakulev/JuliaTestRocket",
         edit_link = "main",
         assets = String[],
         sidebar_sitename = false,

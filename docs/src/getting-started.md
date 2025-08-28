@@ -67,7 +67,6 @@ GLMakie.activate!()
 GLMakie.activate!(
     title = "My Point Controller",
     vsync = true,
-    framerate = 60.0,
     fxaa = true
 )
 
