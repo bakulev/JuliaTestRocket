@@ -193,6 +193,46 @@ test(visualization): add comprehensive CairoMakie tests
 
 5. **Respond to review feedback** promptly
 
+#### Create a PR from the command line
+
+You can open a Pull Request entirely from the terminal. The recommended path uses the GitHub CLI. A plain Git-only flow is also shown.
+
+Prereqs:
+- Fork this repo on GitHub (your fork will be `origin`; this upstream repo is `upstream`).
+- Install GitHub CLI: https://cli.github.com/ and run `gh auth login`.
+
+1) Ensure remotes are set (fork clone):
+```bash
+git remote -v                 # shows origin (your fork)
+git remote add upstream https://github.com/bakulev/JuliaTestRocket.git  # once
+```
+
+2) Create a branch, commit, and push to your fork:
+```bash
+git checkout -b feature/your-feature
+git add -A
+git commit -m "feat: add your feature"
+git push -u origin feature/your-feature
+```
+
+3) Open the PR:
+- Using GitHub CLI (recommended):
+```bash
+# Create a PR from your fork/branch into upstream main
+gh pr create --fill --base bakulev:main --head <your-github-username>:feature/your-feature
+```
+
+- Without GitHub CLI (open compare URL):
+```bash
+# macOS (opens browser)
+open "https://github.com/bakulev/JuliaTestRocket/compare/main...<your-github-username>:feature/your-feature?expand=1"
+```
+
+Notes:
+- Run local checks before opening/marking ready: `make ci-local`.
+- Use `--draft` with `gh pr create` to open as a draft.
+- For updates, push new commits to the same branch; the PR updates automatically.
+
 ### Code Review
 
 All contributions require code review. We look for:

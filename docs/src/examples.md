@@ -59,10 +59,7 @@ using GLMakie
 GLMakie.activate!(
     title = "High Performance Point Controller",
     vsync = false,           # Disable vsync for maximum FPS
-    framerate = 120.0,       # Target 120 FPS
-    fxaa = true,            # Enable anti-aliasing
-    ssao = false,           # Disable ambient occlusion for performance
-    render_on_demand = false # Continuous rendering
+    fxaa = true              # Enable anti-aliasing
 )
 
 using PointController
@@ -73,11 +70,7 @@ run_point_controller()
 
 ```julia
 using GLMakie
-GLMakie.activate!(
-    debugging = true,        # Enable debugging
-    visible = true,         # Ensure window is visible
-    vsync = false          # Disable for faster testing
-)
+GLMakie.activate!(debugging = true)
 
 using PointController
 

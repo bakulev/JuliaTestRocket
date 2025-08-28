@@ -72,9 +72,9 @@ run_point_controller()
   ```
 
 **High CPU usage**
-- Enable render-on-demand mode:
+- Reduce frame pacing (e.g., disable vsync) or window size:
   ```julia
-  GLMakie.activate!(render_on_demand = true)
+  GLMakie.activate!(vsync = false)
   ```
 
 ## Error Messages
@@ -169,11 +169,7 @@ GLMakie.activate!(scalefactor = 2.0)
 ### GLMakie Issues
 ```julia
 # Try different GLMakie settings
-GLMakie.activate!(
-    debugging = true,
-    vsync = false,
-    render_on_demand = true
-)
+GLMakie.activate!(debugging = true, vsync = false)
 ```
 
 ### CairoMakie Issues
