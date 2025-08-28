@@ -220,7 +220,7 @@ GLMakie.activate!()
 When contributing, keep in mind the backend-agnostic architecture:
 
 1. **Core Logic**: Keep core functionality independent of specific backends
-2. **Backend Detection**: Use `PointController.check_backend_loaded()` and `PointController.get_backend_name()`
+2. **Backend Activation**: Tests/users are responsible for calling `CairoMakie.activate!()` or `GLMakie.activate!()` before using PointController; avoid internal backend detection logic
 3. **Dynamic Access**: Access Makie types via `Main.` prefix when needed
 4. **Conditional Dependencies**: Keep backend-specific code in `[extras]` section of Project.toml
 

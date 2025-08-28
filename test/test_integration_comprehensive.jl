@@ -93,11 +93,7 @@ using PointController: create_visualization, MovementState, KeyState,
         @test key_state.should_quit == true
     end
 
-    @testset "Backend Detection" begin
-        # Test backend detection (should work with CairoMakie)
-        @test PointController.check_backend_loaded()
-        @test PointController.get_backend_name() == "CairoMakie"
-    end
+    # Backend detection helpers removed from public API; no longer tested
 
     @testset "Performance and Memory" begin
         # Test that repeated operations don't cause issues
