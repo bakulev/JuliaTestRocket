@@ -4,13 +4,13 @@
 
 using Test
 using CairoMakie
-using PointController
 
 # Activate CairoMakie for testing
 CairoMakie.activate!()
 
-# Update backend detection after loading CairoMakie
-PointController.update_backend_detection()
+# Import the functions we need to test
+using PointController: create_visualization, create_time_observable,
+    setup_visualization_window, update_coordinate_display!, format_current_time
 
 @testset "Visualization Tests" begin
     @testset "Basic Visualization Creation" begin
@@ -30,8 +30,8 @@ PointController.update_backend_detection()
     end
 
     @testset "Point Position Management" begin
-        # Test point position creation
-        position = create_point_position()
+        # Test point position creation using Observable directly
+        position = Observable(Point2f(0, 0))
         @test position isa Observable{Point2f}
         @test position[] == Point2f(0, 0)
 

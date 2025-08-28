@@ -104,10 +104,10 @@ function create_visualization()
     )
 
     # Create observable point position (initialized at origin)
-    point_position = create_point_position()
+    point_position = Observable(Point2f(0, 0))
 
     # Create observable for current time display
-    current_time_obs = create_time_observable()
+    current_time_obs = Observable(string("  "))
 
     # Implement optimized point rendering using scatter plot
     Main.scatter!(ax, point_position,
@@ -195,18 +195,6 @@ function setup_visualization_window(fig)
         @error "Failed to set up visualization window" exception = string(e) context = "window_setup"
         rethrow(e)
     end
-end
-
-"""
-    create_time_observable()
-
-Create an observable that displays the current time.
-Returns an Observable containing a formatted time string.
-Note: Time updates are handled by the main application loop.
-"""
-function create_time_observable()
-    # Create observable with initial time
-    return Observable(format_current_time())
 end
 
 """

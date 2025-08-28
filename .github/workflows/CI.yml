@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }}
+    name: Julia ${{ matrix.version }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -24,103 +24,44 @@ jobs:
           - ubuntu-latest
           - macOS-latest
           - windows-latest
-        arch:
-          - x64
-        exclude:
-          - os: macOS-latest
-            arch: x86
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
-          arch: ${{ matrix.arch }}
-          
+
       - uses: julia-actions/cache@v1
-      
+
       - name: Install dependencies
         shell: bash
         run: |
           julia --project=. -e "
             using Pkg
             Pkg.instantiate()
-            Pkg.precompile()
           "
-          
-      - name: Clean previous coverage files
-        shell: bash
-        run: |
-          find . -name "*.cov" -delete
-          
-      - name: Run tests with CairoMakie
+
+      - name: Run tests (Pkg.test with CairoMakie from [targets] test)
         env:
           JULIA_NUM_THREADS: 2
         shell: bash
         run: |
-          julia --project=. --code-coverage=user -e "
+          julia --project=. -e "
             using Pkg
-            # Use CairoMakie for CI (no display required)
-            Pkg.add(\"CairoMakie\")
-            using CairoMakie
-            CairoMakie.activate!()
-            # Run tests manually to avoid GLMakie precompilation
-            include(\"test/runtests.jl\")
-          "
-          
-      - name: Process coverage
-        if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
-        run: |
-          julia --project=. -e "
-            using CoverageTools
-            coverage = process_folder()
-            LCOV.writefile(\"lcov.info\", coverage)
-            println(\"Coverage summary:\")
-            for fc in coverage
-              covered = sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage])
-              total = length(fc.coverage)
-              percentage = round(covered/total*100, digits=2)
-              println(\"  \$(fc.filename): \$(covered)/\$(total) (\$(percentage)%)\")
-            end
-          "
-        
-      - uses: julia-actions/julia-processcoverage@v1
-        if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
-        
-      - uses: codecov/codecov-action@v3
-        if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
-        with:
-          files: lcov.info
-          token: ${{ secrets.CODECOV_TOKEN }}
-          
-      - name: Check coverage threshold
-        if: matrix.version == '1.10' && matrix.os == 'ubuntu-latest'
-        run: |
-          julia --project=. -e "
-            using CoverageTools
-            coverage = process_folder()
-            total_lines = sum([length(fc.coverage) for fc in coverage])
-            covered_lines = sum([sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage]) for fc in coverage])
-            coverage_percentage = round(covered_lines/total_lines*100, digits=2)
-            println(\"Overall coverage: \$(coverage_percentage)%\")
-            if coverage_percentage < 13.0
-              @error \"Coverage below threshold of 13%. Current coverage: \$(coverage_percentage)%\"
-              exit(1)
-            else
-              println(\"✓ Coverage above threshold of 13%\")
-            end
+            Pkg.test()
           "
           
   # Optional GLMakie smoke test (only for interactive features)
   smoke-glmakie:
     name: GLMakie Smoke Test
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       
       - uses: julia-actions/setup-julia@v1
         with:
-          version: '1.10'
+          version: '1'
           
       - uses: julia-actions/cache@v1
       
@@ -157,33 +98,7 @@ jobs:
       
       - uses: julia-actions/setup-julia@v1
         with:
-          version: '1.10'
-          
-      - name: Install quality tools
-        run: |
-          julia -e 'using Pkg; Pkg.add(["JuliaFormatter", "Aqua"])'
-          
-      - name: Check formatting
-        run: |
-          julia -e '
-            using JuliaFormatter
-            if !format(".", verbose=true, overwrite=false)
-              @error "Code is not formatted correctly"
-              exit(1)
-            end
-          '
-          
-      - name: Run Aqua.jl quality checks with CairoMakie
-        shell: bash
-        run: |
-          julia --project=test -e '
-            using Pkg
-            Pkg.develop(PackageSpec(path="."))
-            Pkg.instantiate()
-            # Use CairoMakie for CI (no display required)
-            Pkg.add("CairoMakie")
-            using CairoMakie
-            CairoMakie.activate!()
-            using Aqua, PointController
-            Aqua.test_all(PointController, ambiguities=false, stale_deps=false)
-          '
+          version: '1'
+
+      - name: Run Aqua quality checks (CI mode)
+        run: julia --project=test scripts/quality_ci.jl

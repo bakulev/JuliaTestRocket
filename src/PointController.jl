@@ -69,26 +69,23 @@ module PointController
 
 # Core dependencies
 using Logging
-
-# Conditional backend loading - users must activate a backend before using
-# This allows the module to be loaded in headless environments for testing
-const BACKEND_LOADED = Ref(false)
-const BACKEND_NAME = Ref{Union{Nothing, String}}(nothing)
+using Observables: Observable
 
 # Export public API - functions and types that users and tests need
-export run_point_controller, MovementState, KEY_MAPPINGS
-# Export movement state functions
-export add_key!,
+export run_point_controller, KEY_MAPPINGS
+# Export movement state types and functions
+export MovementState,
+    add_key!,
     remove_key!, calculate_movement_vector, reset_movement_state!, request_quit!
 export clear_all_keys_safely!, update_movement_timing!
-export update_time_display!, format_current_time
+export format_current_time
 # Export input handler functions  
 export handle_key_press,
     handle_key_release, is_movement_key, get_pressed_keys, setup_keyboard_events!
 # Export visualization functions
 export create_visualization,
-    create_point_position, get_current_position
-export apply_movement_to_position!, update_position_from_state!, setup_visualization_window
+    get_current_position
+export apply_movement_to_position, setup_visualization_window
 export update_coordinate_display!, create_time_observable
 
 # Export logging functions
@@ -96,8 +93,7 @@ export setup_logging, get_current_log_level
 export log_application_start, log_application_stop, log_glmakie_activation
 export log_component_initialization, log_user_action
 export log_error_with_context, log_warning_with_context
-# Export backend management functions
-export check_backend_loaded, get_backend_name
+# Backend detection helpers are no longer part of the public API
 
 # Include component modules
 # Each module handles a specific aspect of the application
@@ -105,42 +101,6 @@ include("logging_config.jl")    # Logging configuration and utilities
 include("movement_state.jl")    # Point position and movement state management
 include("input_handler.jl")     # Keyboard event processing and validation  
 include("visualization.jl")     # Makie visualization setup and rendering
-
-"""
-    check_backend_loaded()
-
-Check if a Makie backend has been loaded and activated.
-Returns true if a backend is ready to use, false otherwise.
-"""
-function check_backend_loaded()
-    # First check our cached state
-    if BACKEND_LOADED[]
-        return true
-    end
-
-    # If not cached, try to detect at runtime
-    return update_backend_detection()
-end
-
-"""
-    get_backend_name()
-
-Get the name of the currently loaded backend.
-Returns the backend name as a string, or nothing if no backend is loaded.
-"""
-function get_backend_name()
-    # First check our cached state
-    if BACKEND_LOADED[] && BACKEND_NAME[] !== nothing
-        return BACKEND_NAME[]
-    end
-
-    # If not cached, try to detect at runtime
-    if update_backend_detection()
-        return BACKEND_NAME[]
-    else
-        return nothing
-    end
-end
 
 """
     run_point_controller()
@@ -172,15 +132,6 @@ run_point_controller()
 - Modern Makie integration following best practices
 """
 function run_point_controller()
-    # Update backend detection and check if backend is loaded
-    update_backend_detection()
-    if !check_backend_loaded()
-        error(
-            "No Makie backend detected. Please activate a backend before using PointController:\n" *
-            "  using GLMakie; GLMakie.activate!()  # for interactive use\n" *
-            "  using CairoMakie; CairoMakie.activate!()  # for headless use",
-        )
-    end
 
     # Initialize logging system
     setup_logging(Logging.Info)
@@ -202,18 +153,35 @@ function run_point_controller()
         log_component_initialization("visualization")
         fig, ax, point_position, coordinate_text, time_obs = create_visualization_safely()
 
-        # Create movement state
+        # Create movement state and key state
         log_component_initialization("movement state")
         # Movement speed in units per second
         movement_state = MovementState(movement_speed = 1.5)
 
+        # Create key state for handling keyboard input
+        key_state = KeyState()
+
         # Set up Makie window with proper configuration and error handling
         log_component_initialization("window")
-        setup_visualization_window_safely(fig)
+        try
+            setup_visualization_window(fig)
+        catch e
+            log_error_with_context("Failed to display window", "window_setup", e)
+            @error "This may indicate window system compatibility issues"
+            rethrow(e)
+        end
 
         # Connect all event handlers with error handling
         log_component_initialization("keyboard event handlers")
-        setup_keyboard_events_safely!(fig, movement_state, point_position, time_obs)
+        try
+            @info "Setting up keyboard events..."
+            setup_keyboard_events!(fig, key_state, point_position, time_obs)
+            @info "Keyboard events set up successfully"
+        catch e
+            log_error_with_context("Failed to set up keyboard events", "keyboard_setup", e)
+            @warn "Keyboard input may not work properly"
+            # Don't rethrow - application can still run without keyboard events
+        end
 
         # Movement updates are now handled in the main loop for better responsiveness
         log_component_initialization("update timer")
@@ -244,20 +212,25 @@ function run_point_controller()
         last_update_time = time()
         update_interval = 1/60  # 60 FPS
 
-        while Main.events(fig).window_open[] && !movement_state.should_quit
+        while Main.events(fig).window_open[] && !key_state.should_quit
             current_time = time()
 
             # Update movement and time display at 60 FPS
             if current_time - last_update_time >= update_interval
 
                 # Update time display
-                time_obs[] = format_current_time()
+                time_obs[] = format_current_time(current_time)
+
+                # Copy key state to movement state at the beginning of each cycle
+                copy_key_state_to_movement_state!(movement_state, key_state)
 
                 # Update timing
                 update_movement_timing!(movement_state, current_time)
 
                 # Update position based on current key states
-                apply_movement_to_position!(point_position, movement_state)
+                movement_state =
+                    apply_movement_to_position(movement_state, movement_state.elapsed_time)
+                point_position[] = movement_state.position
 
                 # Debug: log movement updates (occasionally)
                 if rand() < 0.01  # 1% chance to log
@@ -267,16 +240,30 @@ function run_point_controller()
                 last_update_time = current_time
             end
 
-            sleep(0.1)  # Very small sleep to prevent busy waiting but allow responsive updates
+            # Check if quit was requested and break immediately
+            if key_state.should_quit
+                @info "Quit detected in main loop, breaking..."
+                break
+            end
+
+            # Debug: occasionally log the quit state
+            if rand() < 0.001  # Very rare logging to avoid spam
+                @debug "Main loop quit state: $(key_state.should_quit)" context = "main_loop"
+            end
+
+            sleep(0.01)  # Small sleep to prevent busy waiting but allow responsive updates
         end
 
         # Handle quit request
-        if movement_state.should_quit
+        @info "Main loop ended. Checking quit state: $(key_state.should_quit)"
+        if key_state.should_quit
             @info "Exiting application..."
             # Close the window if quit was requested via 'q' key
             cleanup_application_safely(movement_state)
             # Close all windows (backend-agnostic)
             close_all_windows()
+        else
+            @info "Application ended without quit request"
         end
 
     catch e
@@ -304,7 +291,7 @@ function initialize_backend_safely()
         test_fig = Main.Figure(size = (100, 100))
         # Note: Figures don't need explicit closing in modern Makie
 
-        @info "Makie backend ($(get_backend_name())) is ready and functional"
+        @info "Makie backend is ready and functional"
         return true
 
     catch e
@@ -360,41 +347,23 @@ function create_visualization_safely()
 end
 
 """
-    setup_visualization_window_safely(fig)
+    copy_key_state_to_movement_state!(movement_state::MovementState, key_state::KeyState)
 
-Set up visualization window with error handling.
+Copy the key state information from KeyState to MovementState.
+This is called at the beginning of each main loop cycle to sync the states.
 """
-function setup_visualization_window_safely(fig)
-    try
-        setup_visualization_window(fig)
-        return fig
-    catch e
-        log_error_with_context("Failed to display window", "window_setup", e)
-        @error "This may indicate window system compatibility issues"
-        rethrow(e)
-    end
-end
-
-"""
-    setup_keyboard_events_safely!(fig, state::MovementState, position::Observable{Point2f}, time_obs::Union{Observable{String}, Nothing} = nothing)
-
-Set up keyboard events with comprehensive error handling.
-"""
-function setup_keyboard_events_safely!(
-    fig,
-    state::MovementState,
-    position::Observable{Point2f},
-    time_obs::Union{Observable{String}, Nothing} = nothing,
+function copy_key_state_to_movement_state!(
+    movement_state::MovementState,
+    key_state::KeyState,
 )
-    try
-        setup_keyboard_events!(fig, state, position, time_obs)
-        return fig
-    catch e
-        log_error_with_context("Failed to set up keyboard events", "keyboard_setup", e)
-        @warn "Keyboard input may not work properly"
-        # Don't rethrow - application can still run without keyboard events
-        return fig
-    end
+    # Copy pressed keys
+    empty!(movement_state.pressed_keys)
+    union!(movement_state.pressed_keys, key_state.pressed_keys)
+
+    # Copy quit state
+    movement_state.should_quit = key_state.should_quit
+
+    @debug "Copied key state to movement state: keys=$(key_state.pressed_keys), quit=$(key_state.should_quit)" context = "state_sync"
 end
 
 """
@@ -479,66 +448,63 @@ Close all Makie windows in a backend-agnostic way.
 """
 function close_all_windows()
     try
-        # Try GLMakie.closeall() if available
-        if get_backend_name() == "GLMakie"
-            # This will be available if GLMakie is loaded
+        # Try GLMakie.closeall() if GLMakie is loaded; otherwise rely on figure close events
+        try
             eval(Meta.parse("GLMakie.closeall()"))
-        else
-            # For other backends, just close the current figure
-            # This is handled by the window close event
+        catch
+            # Ignore if GLMakie is not available; other backends manage window lifecycle themselves
         end
     catch e
         @warn "Could not close windows: $e"
     end
 end
 
-# Backend detection and loading
-function __init__()
-    # Check which backend is currently active
+"""
+    format_current_time(timestamp::Float64 = time())
+
+Format the given timestamp as a string in HH:MM:SS format.
+Returns a string representation of the time.
+
+# Arguments
+- `timestamp::Float64`: Unix timestamp to format (default: current time)
+
+# Returns
+- `String`: Time in HH:MM:SS format
+
+# Examples
+```julia
+time_str = format_current_time()  # Current time
+time_str = format_current_time(1234567890.0)  # Specific timestamp
+```
+"""
+function format_current_time(timestamp::Float64 = time())
     try
-        # Try to detect GLMakie
-        if isdefined(Main, :GLMakie) && isdefined(Main.GLMakie, :activate!)
-            BACKEND_LOADED[] = true
-            BACKEND_NAME[] = "GLMakie"
-            @info "GLMakie backend detected and loaded"
-        elseif isdefined(Main, :CairoMakie) && isdefined(Main.CairoMakie, :activate!)
-            BACKEND_LOADED[] = true
-            BACKEND_NAME[] = "CairoMakie"
-            @info "CairoMakie backend detected and loaded"
-        else
-            BACKEND_LOADED[] = false
-            BACKEND_NAME[] = nothing
-            @info "No Makie backend detected - users must activate one before use"
-        end
+        # Convert Unix timestamp to DateTime and format it
+        current_datetime = Dates.unix2datetime(timestamp)
+        return Dates.format(current_datetime, "HH:MM:SS")
     catch e
-        BACKEND_LOADED[] = false
-        BACKEND_NAME[] = nothing
-        @warn "Could not detect Makie backend: $e"
+        @warn "Error formatting timestamp" exception = string(e) context = "time_formatting"
+        return "00:00:00"  # Fallback time
     end
 end
 
-# Function to update backend detection at runtime
-function update_backend_detection()
-    try
-        # Try to detect GLMakie
-        if isdefined(Main, :GLMakie) && isdefined(Main.GLMakie, :activate!)
-            BACKEND_LOADED[] = true
-            BACKEND_NAME[] = "GLMakie"
-            return true
-        elseif isdefined(Main, :CairoMakie) && isdefined(Main.CairoMakie, :activate!)
-            BACKEND_LOADED[] = true
-            BACKEND_NAME[] = "CairoMakie"
-            return true
-        else
-            BACKEND_LOADED[] = false
-            BACKEND_NAME[] = nothing
-            return false
-        end
-    catch e
-        BACKEND_LOADED[] = false
-        BACKEND_NAME[] = nothing
-        return false
-    end
+"""
+    create_time_observable()
+
+Create an Observable that contains the current time as a formatted string.
+Returns an Observable{String} that can be updated with current time.
+
+# Returns
+- `Observable{String}`: Observable containing current time in HH:MM:SS format
+
+# Examples
+```julia
+time_obs = create_time_observable()
+time_obs[] = format_current_time()  # Update with current time
+```
+"""
+function create_time_observable()
+    return Observable(format_current_time())
 end
 
 end # module PointController

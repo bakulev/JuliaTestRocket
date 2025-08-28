@@ -1,88 +1,67 @@
+# PointController Module Tests
+# Backend-agnostic tests for the PointController module
+# These tests don't require any Makie backend
+
 using Test
-using PointController
 
 @testset "PointController Module Tests" begin
     @testset "Module Structure and Exports" begin
+        # Test that the module is loaded
         @test PointController isa Module
 
-        # Test that the module exports all expected functions
+        # Test that key functions are exported
         exported_names = names(PointController)
-
-        # Core module functions
         @test :run_point_controller in exported_names
-        @test :check_backend_loaded in exported_names
-        @test :get_backend_name in exported_names
-
-        # Movement state functions
         @test :MovementState in exported_names
-        @test :apply_movement_to_position! in exported_names
+        @test :add_key! in exported_names
+        @test :remove_key! in exported_names
         @test :calculate_movement_vector in exported_names
-
-        # Input handler functions
+        @test :apply_movement_to_position in exported_names
         @test :handle_key_press in exported_names
         @test :handle_key_release in exported_names
-        @test :setup_keyboard_events! in exported_names
-
-        # Visualization functions
-        @test :create_visualization in exported_names
-        @test :setup_visualization_window in exported_names
-        @test :update_coordinate_display! in exported_names
-
-        # Logging functions
+        @test :is_movement_key in exported_names
+        @test :get_pressed_keys in exported_names
         @test :setup_logging in exported_names
-        @test :get_current_log_level in exported_names
+        @test :format_current_time in exported_names
+        @test :create_time_observable in exported_names
+        # Backend detection helpers are no longer exported
     end
 
-    @testset "Backend Detection Functions" begin
-        # Test backend checking functions
-        @test hasmethod(PointController.check_backend_loaded, ())
-        @test hasmethod(PointController.get_backend_name, ())
-
-        # Test that these functions return expected types
-        @test isa(PointController.check_backend_loaded(), Bool)
-        backend_name = PointController.get_backend_name()
-        @test isa(backend_name, Union{String, Nothing})
-    end
+    # Backend detection tests removed
 
     @testset "Module Constants and Types" begin
-        # Test that MovementState type is defined
-        @test isdefined(PointController, :MovementState)
+        # Test that KEY_MAPPINGS is exported and accessible
+        @test haskey(PointController.KEY_MAPPINGS, 'w')
+        @test haskey(PointController.KEY_MAPPINGS, 'a')
+        @test haskey(PointController.KEY_MAPPINGS, 's')
+        @test haskey(PointController.KEY_MAPPINGS, 'd')
+
+        # Test that MovementState is accessible
         @test PointController.MovementState isa Type
-
-        # Test that we can create a MovementState instance
-        @test_nowarn PointController.MovementState()
-    end
-
-    @testset "Function Signatures" begin
-        # Test critical function signatures are correct
-        @test hasmethod(
-            PointController.handle_key_press,
-            (Char, PointController.MovementState),
-        )
-        @test hasmethod(
-            PointController.handle_key_release,
-            (Char, PointController.MovementState),
-        )
-        @test hasmethod(PointController.setup_logging, ())
-        @test hasmethod(PointController.setup_logging, (Base.CoreLogging.LogLevel,))
+        @test PointController.KeyState isa Type
     end
 
     @testset "Module Functionality" begin
-        # Test that key functions work correctly
-        @test PointController.is_movement_key('w')
-        @test PointController.is_movement_key('a')
-        @test PointController.is_movement_key('s')
-        @test PointController.is_movement_key('d')
-        @test !PointController.is_movement_key('x')
+        # Test basic functionality without backend
+        movement_state = PointController.MovementState()
+        key_state = PointController.KeyState()
 
-        # Test movement state creation
-        state = PointController.MovementState()
-        @test isa(state, PointController.MovementState)
+        # Test movement state operations
+        @test isempty(movement_state.pressed_keys)
+        PointController.add_key!(movement_state, 'w')
+        @test 'w' in movement_state.pressed_keys
 
-        # Test that we can add and remove keys
-        @test_nowarn PointController.add_key!(state, 'w')
-        @test 'w' in PointController.get_pressed_keys(state)
-        @test_nowarn PointController.remove_key!(state, 'w')
-        @test !('w' in PointController.get_pressed_keys(state))
+        # Test key state operations
+        @test isempty(key_state.pressed_keys)
+        PointController.handle_key_press('w', key_state)
+        @test 'w' in key_state.pressed_keys
+
+        # Test that states work independently
+        @test 'w' in movement_state.pressed_keys
+        @test 'w' in key_state.pressed_keys
+
+        # Test state copying
+        PointController.copy_key_state_to_movement_state!(movement_state, key_state)
+        @test 'w' in movement_state.pressed_keys
     end
 end

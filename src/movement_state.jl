@@ -7,7 +7,7 @@ with performance optimizations and error handling.
 
 ## Key Features
 
-- **Position Management**: Tracks point coordinates using Makie's Observable system
+- **Position Management**: Tracks point coordinates within the MovementState
 - **Movement Calculations**: Computes movement vectors based on key states
 - **State Tracking**: Maintains pressed keys and movement timing
 - **Performance Optimization**: Efficient state updates and calculations
@@ -18,27 +18,27 @@ with performance optimizations and error handling.
 - **WASD Controls**: Standard directional movement with smooth acceleration
 - **Diagonal Movement**: Normalized diagonal movement for consistent speed
 - **Boundary Handling**: Prevents point from moving outside display bounds
-- **Main Loop Integration**: Movement updates integrated into main application loop
+- **Time-based Updates**: Movement calculations based on elapsed time
 
 ## State Management
 
 - **Key State Tracking**: Maintains which keys are currently pressed
-- **Movement Speed Control**: Configurable movement speed per frame
+- **Movement Speed Control**: Configurable movement speed per second
 - **Quit Request Handling**: Graceful application termination
 - **State Reset**: Complete state reset functionality
 
 ## Performance Features
 
-- **Observable Integration**: Reactive position updates using Makie's Observable system
+- **Pure Function Design**: Movement updates return new state without side effects
 - **Efficient Calculations**: Optimized movement vector computations
 - **Memory Management**: Minimal memory allocation during updates
-- **Main Loop Optimization**: Efficient movement updates in main application loop
+- **Time-based Movement**: Consistent movement speed regardless of frame rate
 
 ## Usage
 
 ```julia
 # Create movement state
-state = MovementState(movement_speed = 0.1)
+state = MovementState(position = Point2f(0, 0), movement_speed = 2.0)
 
 # Add/remove keys
 add_key!(state, 'w')
@@ -47,22 +47,23 @@ remove_key!(state, 'w')
 # Calculate movement
 movement = calculate_movement_vector(state)
 
-# Update position
-update_position_from_state!(position, state)
+# Apply movement for elapsed time
+new_state = apply_movement_to_position(state, 0.1)
+
+# Get current position
+position = get_current_position(state)
 ```
 
 ## Technical Details
 
-- Uses Makie's Observable system for reactive position updates
+- Pure functional approach with immutable state updates
 - Implements normalized movement vectors for consistent speed
 - Supports boundary checking and collision detection
 - Provides comprehensive error handling and logging
 """
 
-# Backend-agnostic Makie imports
-# Users must activate a backend before using this module
+# Backend-agnostic imports
 using Logging
-using Observables: Observable
 using Dates
 using StaticArrays: SVector
 
@@ -110,6 +111,7 @@ Represents the current state of movement and input for the Point Controller.
 ## Fields
 
 - `pressed_keys::Set{Char}`: Set of currently pressed keys
+- `position::Point2f`: Current position coordinates
 - `movement_speed::Float64`: Movement speed in units per second
 - `should_quit::Bool`: Flag indicating if the application should quit
 - `last_update_time::Float64`: Timestamp of the last movement update
@@ -118,24 +120,18 @@ Represents the current state of movement and input for the Point Controller.
 """
 mutable struct MovementState
     pressed_keys::Set{Char}
+    position::Point2f
     movement_speed::Float64
     should_quit::Bool
     last_update_time::Float64
     elapsed_time::Float64
 
-    function MovementState(; movement_speed::Float64 = 2.0)
-        return new(Set{Char}(), movement_speed, false, time(), 0.0)
+    function MovementState(;
+        position::Point2f = Point2f(0, 0),
+        movement_speed::Float64 = 2.0,
+    )
+        return new(Set{Char}(), position, movement_speed, false, time(), 0.0)
     end
-end
-
-"""
-    create_point_position()
-
-Create an observable point position using Makie's Observable type.
-Returns an Observable containing a Point2f at the origin (0, 0).
-"""
-function create_point_position()
-    return Observable(Point2f(0, 0))
 end
 
 """
@@ -195,19 +191,35 @@ function calculate_movement_vector(state::MovementState)
 end
 
 """
-    apply_movement_to_position!(position::Observable{Point2f}, state::MovementState)
+    apply_movement_to_position(state::MovementState, elapsed_time::Float64)
 
-Apply movement to the current position based on the movement state.
-Updates the position observable with the new coordinates.
+Apply movement to the current position based on the movement state and elapsed time.
+Returns a new MovementState with updated position coordinates.
+
+## Arguments
+
+- `state::MovementState`: Current movement state
+- `elapsed_time::Float64`: Time elapsed since last update in seconds
+
+## Returns
+
+- `MovementState`: New movement state with updated position
+
+## Example
+
+```julia
+# Apply movement for 0.1 seconds
+new_state = apply_movement_to_position(current_state, 0.1)
+```
 """
-function apply_movement_to_position!(position::Observable{Point2f}, state::MovementState)
+function apply_movement_to_position(state::MovementState, elapsed_time::Float64)
     try
-        current_pos = position[]
+        current_pos = state.position
         movement_vector = calculate_movement_vector(state)
 
         # Calculate new position using time-based movement
         # movement_speed is in units per second, elapsed_time is in seconds
-        distance = state.movement_speed * state.elapsed_time
+        distance = state.movement_speed * elapsed_time
         new_x = current_pos[1] + movement_vector[1] * distance
         new_y = current_pos[2] + movement_vector[2] * distance
 
@@ -215,56 +227,57 @@ function apply_movement_to_position!(position::Observable{Point2f}, state::Movem
         new_x = clamp(new_x, -10.0, 10.0)
         new_y = clamp(new_y, -10.0, 10.0)
 
-        # Update position observable
-        position[] = Point2f(new_x, new_y)
+        # Create new state with updated position
+        new_state = MovementState(
+            position = Point2f(new_x, new_y),
+            movement_speed = state.movement_speed,
+        )
 
-        @debug "Position updated: ($new_x, $new_y), elapsed: $(state.elapsed_time)s, distance: $distance" context = "movement_state"
+        # Copy other fields
+        new_state.pressed_keys = copy(state.pressed_keys)
+        new_state.should_quit = state.should_quit
+        new_state.last_update_time = state.last_update_time
+        new_state.elapsed_time = elapsed_time
+
+        @debug "Position updated: ($new_x, $new_y), elapsed: $(elapsed_time)s, distance: $distance" context = "movement_state"
+
+        return new_state
 
     catch e
         @error "Error applying movement to position" exception = string(e) context = "movement_state"
+        # Return original state on error
+        return state
     end
 end
 
 """
-    update_position_from_state!(position::Observable{Point2f}, state::MovementState)
+    get_current_position(state::MovementState)
 
-Update position from movement state (alias for apply_movement_to_position!).
+Get the current position as a tuple of coordinates from the movement state.
 """
-function update_position_from_state!(position::Observable{Point2f}, state::MovementState)
-    return apply_movement_to_position!(position, state)
-end
-
-"""
-    get_current_position(position::Observable{Point2f})
-
-Get the current position as a tuple of coordinates.
-"""
-function get_current_position(position::Observable{Point2f})
-    pos = position[]
+function get_current_position(state::MovementState)
+    pos = state.position
     return (pos[1], pos[2])
 end
 
 """
-    reset_movement_state!(state::MovementState)
+    reset_movement_state!(state::MovementState; position::Point2f = Point2f(0, 0))
 
 Reset the movement state to initial values.
+Optionally specify a new position to reset to.
+
+## Arguments
+
+- `state::MovementState`: The movement state to reset
+- `position::Point2f`: New position to reset to (default: origin)
 """
-function reset_movement_state!(state::MovementState)
+function reset_movement_state!(state::MovementState; position::Point2f = Point2f(0, 0))
     empty!(state.pressed_keys)
+    state.position = position
     state.should_quit = false
     state.last_update_time = time()
     state.elapsed_time = 0.0
-    @debug "Movement state reset" context = "movement_state"
-end
-
-"""
-    request_quit!(state::MovementState)
-
-Request the application to quit.
-"""
-function request_quit!(state::MovementState)
-    state.should_quit = true
-    @info "Quit requested" context = "movement_state"
+    @debug "Movement state reset to position: $position" context = "movement_state"
 end
 
 """
@@ -291,22 +304,4 @@ function update_movement_timing!(state::MovementState, current_time::Float64)
     state.elapsed_time = current_time - state.last_update_time
     state.last_update_time = current_time
     @debug "Timing updated: elapsed=$(state.elapsed_time)s" context = "movement_state"
-end
-
-"""
-    format_current_time()
-
-Format the current time as a string.
-"""
-function format_current_time()
-    return string(Dates.format(now(), "HH:MM:SS"))
-end
-
-"""
-    update_time_display!(time_obs::Observable{String})
-
-Update the time display observable.
-"""
-function update_time_display!(time_obs::Observable{String})
-    return time_obs[] = format_current_time()
 end

@@ -6,4 +6,5 @@ PointController = "eae52b99-c8d7-4aa0-bde8-6d33da01be07"
 
 [compat]
 Documenter = "1"
-CairoMakie = "0.10, 0.11"
+# Align with root Project.toml to ensure consistent CairoMakie across docs and tests
+CairoMakie = "0.10, 0.15"

@@ -12,19 +12,7 @@ jobs:
       
       - uses: julia-actions/setup-julia@v1
         with:
-          version: '1.10'
-          
-      - name: Install JuliaFormatter
-        run: julia -e 'using Pkg; Pkg.add("JuliaFormatter")'
-        
-      - name: Check formatting
-        run: |
-          julia -e '
-            using JuliaFormatter
-            if !format(".", verbose=true, overwrite=false)
-              @error "Code formatting check failed. Please run JuliaFormatter.format(\".\")"
-              exit(1)
-            else
-              @info "Code formatting is correct ✓"
-            end
-          '
+          version: '1'
+
+      - name: Check formatting (temp env)
+        run: julia scripts/format_ci.jl

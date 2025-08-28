@@ -3,35 +3,55 @@
 # Point Controller with GLMakie Backend
 # This script runs the application with interactive graphics
 
-using Pkg: Pkg
+using Pkg
 using Logging
 
-# Set up logging
+# Set up logging with more detailed output
 global_logger(ConsoleLogger(stderr, Logging.Info))
 
 @info "Starting Point Controller with GLMakie..."
 
-# Activate project
+# Activate project so we can load the local package
 Pkg.activate(@__DIR__)
 Pkg.instantiate()
 
-# Load GLMakie and activate it
+# Load GLMakie and activate it with error handling
 @info "Loading GLMakie backend..."
-using GLMakie
-GLMakie.activate!()
+try
+    using GLMakie
+    GLMakie.activate!()
+    @info "GLMakie backend activated successfully!"
+catch e
+    @error "Failed to load GLMakie backend" exception=(e, catch_backtrace())
+    @error "Please install GLMakie locally and ensure your graphics drivers are up to date"
+    @error "Hint: julia --project=. -e 'using Pkg; Pkg.add(\"GLMakie\")'"
+    exit(1)
+end
 
 # Load the application module
 @info "Loading Point Controller..."
-using PointController
-
-# Verify backend is loaded
-if PointController.check_backend_loaded()
-    @info "GLMakie backend activated successfully!"
-    @info "Starting Point Controller application..."
-
-    # Run the application
-    run_point_controller()
-else
-    @error "Failed to load GLMakie backend"
+try
+    using PointController
+    @info "Point Controller module loaded successfully!"
+catch e
+    @error "Failed to load PointController module" exception=(e, catch_backtrace())
     exit(1)
+end
+
+# Run the application with error handling
+try
+    @info "Starting Point Controller application..."
+    @info "Use WASD keys to move the point. Press 'q' to quit."
+    PointController.run_point_controller()
+    @info "Application completed successfully!"
+catch e
+    if isa(e, InterruptException)
+        @info "Application interrupted by user (Ctrl+C)"
+    else
+        @error "Application encountered an error" exception=(e, catch_backtrace())
+        @error "If this is a graphics-related error, try:"
+        @error "  - Updating your graphics drivers"
+        @error "  - Restarting your system"
+        @error "  - Using a different Makie backend (CairoMakie for headless)"
+    end
 end

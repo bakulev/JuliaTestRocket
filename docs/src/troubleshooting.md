@@ -225,7 +225,5 @@ If you encounter issues not covered here:
    # For graphics information (Linux)
    run(`glxinfo | grep "OpenGL"`)
    
-   # Check which backend is active
-   using PointController
-   PointController.get_backend_name()
+  # Note which backend you activated (e.g., GLMakie or CairoMakie)
    ```

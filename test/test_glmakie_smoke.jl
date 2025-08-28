@@ -15,15 +15,8 @@ else
         using PointController
         using StaticArrays: SVector
 
-        # Update backend detection after loading GLMakie
-        PointController.update_backend_detection()
-
         @testset "GLMakie Smoke Test" begin
             @testset "Basic GLMakie Functionality" begin
-                # Test that GLMakie backend is detected
-                @test PointController.check_backend_loaded()
-                @test PointController.get_backend_name() == "GLMakie"
-
                 # Test basic figure creation (minimal test)
                 fig = Figure(size = (100, 100))
                 @test fig isa Figure

@@ -53,12 +53,8 @@ clear_all_keys_safely!
 
 ```@docs
 create_visualization
-create_point_position
 get_current_position
-update_position_from_state!
-apply_movement_to_position!
 update_coordinate_display!
-update_time_display!
 create_time_observable
 format_current_time
 ```
