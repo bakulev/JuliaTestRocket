@@ -24,7 +24,7 @@ using Test
         @test :setup_logging in exported_names
         @test :format_current_time in exported_names
         @test :create_time_observable in exported_names
-    # Backend detection helpers are no longer exported
+        # Backend detection helpers are no longer exported
     end
 
     # Backend detection tests removed
