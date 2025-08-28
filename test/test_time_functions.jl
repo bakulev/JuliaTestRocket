@@ -66,7 +66,9 @@ using Observables: Observable
         PointController.add_key!(state, 'w')
 
         # Update timing
-        current_time = time()
+    # Ensure the clock advances on platforms with coarser timer resolution (e.g., Windows CI)
+    sleep(0.02)
+    current_time = time()
         PointController.update_movement_timing!(state, current_time)
 
         # Apply movement with timing
