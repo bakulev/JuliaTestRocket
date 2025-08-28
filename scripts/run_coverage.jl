@@ -42,16 +42,13 @@ end
 println("🧪 Running tests with coverage tracking...")
 const ACTIVE_PROJECT = Base.active_project()  # path to the temp Project.toml
 const ACTIVE_ENV_DIR = dirname(ACTIVE_PROJECT) # pass directory to --project
-run(
-    Cmd([
-        "julia",
-        "--project=" * ACTIVE_ENV_DIR,
-        "--code-coverage=user",
-        "-e",
-        # Test the developed package by name; this tests the package at `path="."` we just `Pkg.develop`ed
-        "using Pkg; Pkg.test(\"PointController\"; coverage=true)",
-    ]),
-)
+
+# Use the same Julia executable that is running this script to respect JULIA_BIN/juliaup
+let julia_cmd = Base.julia_cmd()
+    run(
+        `$julia_cmd --project=$(ACTIVE_ENV_DIR) --code-coverage=user -e "using Pkg; Pkg.test(\"PointController\"; coverage=true)"`,
+    )
+end
 
 # Process coverage
 println("📊 Processing coverage data...")

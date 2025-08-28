@@ -6,6 +6,8 @@
 #   JULIA_BIN=/Applications/Julia-1.10.app/Contents/Resources/julia/bin/julia make ci-local
 # Defaults to the `julia` on PATH.
 JULIA_BIN ?= julia
+# Match CI default threads unless overridden by environment
+export JULIA_NUM_THREADS ?= 2
 
 .PHONY: help test test-fast prepush coverage coverage-clean quality-ci docs-build smoke-glmakie security ci-local version-current version-validate bump-patch bump-minor bump-major prepare-release clean setup release-patch release-minor release-major
 
@@ -71,7 +73,9 @@ prepush:
 	$(JULIA_BIN) scripts/format_ci.jl
 	@echo "\nRunning Aqua quality suite in a clean environment (CI-style)..."
 	$(JULIA_BIN) scripts/quality_ci.jl
-	@echo "\nRunning full test suite..."
+	@echo "\nInstalling dependencies (Pkg.instantiate) to mirror CI..."
+	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.instantiate()'
+	@echo "\nRunning full test suite (Pkg.test)..."
 	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.test()'
 
 # Application targets
@@ -117,7 +121,7 @@ security:
 	@command -v trivy >/dev/null 2>&1 && trivy fs . || echo "trivy not found; install from https://aquasecurity.github.io/trivy/ to run locally."
 
 # One command to mirror all green-gating CI jobs
-ci-local: prepush quality-ci coverage docs-build
+ci-local: prepush coverage docs-build
 	@echo "\n✓ Local CI mirror finished. If all steps above passed, CI should be green."
 
 # Version management targets
