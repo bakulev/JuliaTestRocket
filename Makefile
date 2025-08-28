@@ -74,6 +74,12 @@ test-fast:
 prepush:
 	@echo "Checking formatting (CI-style)..."
 	$(JULIA_BIN) scripts/format_ci.jl
+	@echo "\nRunning Aqua quality suite in a clean environment (CI-style)..."
+	$(JULIA_BIN) scripts/quality_ci.jl
+	@echo "\nInstalling dependencies (Pkg.instantiate) to mirror CI..."
+	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.instantiate()'
+	@echo "\nRunning full test suite (Pkg.test)..."
+	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.test()'
 # Formatting targets
 format:
 	@echo "Running JuliaFormatter (writes changes)..."
@@ -82,13 +88,6 @@ format:
 format-check:
 	@echo "Checking formatting (no changes)..."
 	@$(JULIA_BIN) -e 'using Pkg; Pkg.activate(; temp=true); Pkg.add("JuliaFormatter"); using JuliaFormatter; ok = format(".", verbose=true, overwrite=false); if !ok; println("Formatting check failed. Run: make format"); exit(1); end; println("Formatting check ✓")'
-
-	@echo "\nRunning Aqua quality suite in a clean environment (CI-style)..."
-	$(JULIA_BIN) scripts/quality_ci.jl
-	@echo "\nInstalling dependencies (Pkg.instantiate) to mirror CI..."
-	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.instantiate()'
-	@echo "\nRunning full test suite (Pkg.test)..."
-	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.test()'
 
 # Application targets
 run-interactive:
