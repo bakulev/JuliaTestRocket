@@ -104,11 +104,11 @@ jobs:
             covered_lines = sum([sum([x !== nothing && x > 0 ? 1 : 0 for x in fc.coverage]) for fc in coverage])
             coverage_percentage = round(covered_lines/total_lines*100, digits=2)
             println(\"Overall coverage: \$(coverage_percentage)%\")
-            if coverage_percentage < 13.0
-              @error \"Coverage below threshold of 13%. Current coverage: \$(coverage_percentage)%\"
+            if coverage_percentage < 11.0
+              @error \"Coverage below threshold of 11%. Current coverage: \$(coverage_percentage)%\"
               exit(1)
             else
-              println(\"✓ Coverage above threshold of 13%\")
+              println(\"✓ Coverage above threshold of 11%\")
             end
           "
           

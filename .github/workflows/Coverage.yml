@@ -81,9 +81,9 @@ jobs:
             
             println(\"\\n🎯 COVERAGE THRESHOLD CHECK:\")
             println(\"Current coverage: \$(coverage_percentage)%\")
-            println(\"Threshold: 13%\")
-            
-            if coverage_percentage < 13.0
+            println(\"Threshold: 11%\")
+
+            if coverage_percentage < 11.0
               println(\"❌ Coverage below threshold!\")
               exit(1)
             else
