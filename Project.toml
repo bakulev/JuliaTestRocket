@@ -19,7 +19,7 @@ Observables = "510215fc-4207-5dde-b226-833fc4488ee2"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
-CairoMakie = "0.10"
+CairoMakie = "0.10, 0.15"
 Coverage = "1.6.1"
 CoverageTools = "1.3.2"
 Dates = "1"

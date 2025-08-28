@@ -3,7 +3,7 @@
 # Point Controller with CairoMakie Backend
 # This script runs the application with headless graphics (for CI/headless environments)
 
-using Pkg: Pkg
+using Pkg
 using Logging
 
 # Set up logging
@@ -24,14 +24,7 @@ CairoMakie.activate!()
 @info "Loading Point Controller..."
 using PointController
 
-# Verify backend is loaded
-if PointController.check_backend_loaded()
-    @info "CairoMakie backend activated successfully!"
-    @info "Starting Point Controller application (headless mode)..."
+@info "Starting Point Controller application (headless mode)..."
 
-    # Run the application
-    run_point_controller()
-else
-    @error "Failed to load CairoMakie backend"
-    exit(1)
-end
+# Run the application
+run_point_controller()

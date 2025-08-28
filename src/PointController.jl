@@ -71,11 +71,6 @@ module PointController
 using Logging
 using Observables: Observable
 
-# Conditional backend loading - users must activate a backend before using
-# This allows the module to be loaded in headless environments for testing
-const BACKEND_LOADED = Ref(false)
-const BACKEND_NAME = Ref{Union{Nothing, String}}(nothing)
-
 # Export public API - functions and types that users and tests need
 export run_point_controller, KEY_MAPPINGS
 # Export movement state types and functions
@@ -109,42 +104,6 @@ include("input_handler.jl")     # Keyboard event processing and validation
 include("visualization.jl")     # Makie visualization setup and rendering
 
 """
-    check_backend_loaded()
-
-Check if a Makie backend has been loaded and activated.
-Returns true if a backend is ready to use, false otherwise.
-"""
-function check_backend_loaded()
-    # First check our cached state
-    if BACKEND_LOADED[]
-        return true
-    end
-
-    # If not cached, try to detect at runtime
-    return update_backend_detection()
-end
-
-"""
-    get_backend_name()
-
-Get the name of the currently loaded backend.
-Returns the backend name as a string, or nothing if no backend is loaded.
-"""
-function get_backend_name()
-    # First check our cached state
-    if BACKEND_LOADED[] && BACKEND_NAME[] !== nothing
-        return BACKEND_NAME[]
-    end
-
-    # If not cached, try to detect at runtime
-    if update_backend_detection()
-        return BACKEND_NAME[]
-    else
-        return nothing
-    end
-end
-
-"""
     run_point_controller()
 
 Main entry point for the Point Controller application.
@@ -174,15 +133,6 @@ run_point_controller()
 - Modern Makie integration following best practices
 """
 function run_point_controller()
-    # Update backend detection and check if backend is loaded
-    update_backend_detection()
-    if !check_backend_loaded()
-        error(
-            "No Makie backend detected. Please activate a backend before using PointController:\n" *
-            "  using GLMakie; GLMakie.activate!()  # for interactive use\n" *
-            "  using CairoMakie; CairoMakie.activate!()  # for headless use",
-        )
-    end
 
     # Initialize logging system
     setup_logging(Logging.Info)
@@ -342,7 +292,7 @@ function initialize_backend_safely()
         test_fig = Main.Figure(size = (100, 100))
         # Note: Figures don't need explicit closing in modern Makie
 
-        @info "Makie backend ($(get_backend_name())) is ready and functional"
+        @info "Makie backend is ready and functional"
         return true
 
     catch e
@@ -509,55 +459,6 @@ function close_all_windows()
         end
     catch e
         @warn "Could not close windows: $e"
-    end
-end
-
-# Backend detection and loading
-function __init__()
-    # Check which backend is currently active
-    try
-        # Try to detect GLMakie
-        if isdefined(Main, :GLMakie) && isdefined(Main.GLMakie, :activate!)
-            BACKEND_LOADED[] = true
-            BACKEND_NAME[] = "GLMakie"
-            @info "GLMakie backend detected and loaded"
-        elseif isdefined(Main, :CairoMakie) && isdefined(Main.CairoMakie, :activate!)
-            BACKEND_LOADED[] = true
-            BACKEND_NAME[] = "CairoMakie"
-            @info "CairoMakie backend detected and loaded"
-        else
-            BACKEND_LOADED[] = false
-            BACKEND_NAME[] = nothing
-            @info "No Makie backend detected - users must activate one before use"
-        end
-    catch e
-        BACKEND_LOADED[] = false
-        BACKEND_NAME[] = nothing
-        @warn "Could not detect Makie backend: $e"
-    end
-end
-
-# Function to update backend detection at runtime
-function update_backend_detection()
-    try
-        # Try to detect GLMakie
-        if isdefined(Main, :GLMakie) && isdefined(Main.GLMakie, :activate!)
-            BACKEND_LOADED[] = true
-            BACKEND_NAME[] = "GLMakie"
-            return true
-        elseif isdefined(Main, :CairoMakie) && isdefined(Main.CairoMakie, :activate!)
-            BACKEND_LOADED[] = true
-            BACKEND_NAME[] = "CairoMakie"
-            return true
-        else
-            BACKEND_LOADED[] = false
-            BACKEND_NAME[] = nothing
-            return false
-        end
-    catch e
-        BACKEND_LOADED[] = false
-        BACKEND_NAME[] = nothing
-        return false
     end
 end
 

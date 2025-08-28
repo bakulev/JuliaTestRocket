@@ -20,19 +20,4 @@ using PointController
 
 @info "Point Controller loaded successfully!"
 
-# Check for backends and provide guidance
-if !PointController.check_backend_loaded()
-    @info "No Makie backend detected."
-    @info "For interactive graphics, run:"
-    @info "  using GLMakie; GLMakie.activate!()"
-    @info "  run_point_controller()"
-    @info ""
-    @info "For headless operation, run:"
-    @info "  using CairoMakie; CairoMakie.activate!()"
-    @info "  run_point_controller()"
-else
-    @info "Makie backend detected: $(PointController.get_backend_name())"
-    @info "Ready to start! Run: run_point_controller()"
-end
-
 @info "Interactive session ready. Type '?' for help."

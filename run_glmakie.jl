@@ -3,7 +3,7 @@
 # Point Controller with GLMakie Backend
 # This script runs the application with interactive graphics
 
-using Pkg: Pkg
+using Pkg
 using Logging
 
 # Set up logging with more detailed output
@@ -37,30 +37,21 @@ catch e
     @error "Failed to load PointController module" exception=(e, catch_backtrace())
     exit(1)
 end
-
-# Verify backend is loaded
-if PointController.check_backend_loaded()
-    @info "GLMakie backend verified and ready!"
+ 
+# Run the application with error handling
+try
     @info "Starting Point Controller application..."
     @info "Use WASD keys to move the point. Press 'q' to quit."
-
-    # Run the application with error handling
-    try
-        PointController.run_point_controller()
-        @info "Application completed successfully!"
-    catch e
-        if isa(e, InterruptException)
-            @info "Application interrupted by user (Ctrl+C)"
-        else
-            @error "Application encountered an error" exception=(e, catch_backtrace())
-            @error "If this is a graphics-related error, try:"
-            @error "  - Updating your graphics drivers"
-            @error "  - Restarting your system"
-            @error "  - Using a different Makie backend (CairoMakie for headless)"
-        end
+    PointController.run_point_controller()
+    @info "Application completed successfully!"
+catch e
+    if isa(e, InterruptException)
+        @info "Application interrupted by user (Ctrl+C)"
+    else
+        @error "Application encountered an error" exception=(e, catch_backtrace())
+        @error "If this is a graphics-related error, try:"
+        @error "  - Updating your graphics drivers"
+        @error "  - Restarting your system"
+        @error "  - Using a different Makie backend (CairoMakie for headless)"
     end
-else
-    @error "Failed to verify GLMakie backend"
-    @error "This may indicate a graphics driver or compatibility issue"
-    exit(1)
 end
