@@ -7,7 +7,7 @@ using Test
 
         # Get the project root directory (parent of test directory)
         project_root = dirname(@__DIR__)
-        
+
         modified_files = [
             joinpath(project_root, "src", "PointController.jl"),
             joinpath(project_root, "src", "input_handler.jl"),
@@ -36,7 +36,7 @@ using Test
         # Test that files end with proper newlines after formatting changes
         # Get the project root directory (parent of test directory)
         project_root = dirname(@__DIR__)
-        
+
         modified_files = [
             joinpath(project_root, "src", "PointController.jl"),
             joinpath(project_root, "src", "input_handler.jl"),

@@ -36,8 +36,7 @@ end
     # Include time functions tests (backend-agnostic)
     include("test_time_functions.jl")
 
-    # Include backend detection tests (backend-agnostic)
-    include("test_backend_detection.jl")
+    # Backend detection tests removed (no longer part of public API)
 
     # Include extended movement state tests (backend-agnostic)
     include("test_movement_state_extended.jl")

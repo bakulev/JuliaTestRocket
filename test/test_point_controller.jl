@@ -24,27 +24,10 @@ using Test
         @test :setup_logging in exported_names
         @test :format_current_time in exported_names
         @test :create_time_observable in exported_names
-        @test :check_backend_loaded in exported_names
-        @test :get_backend_name in exported_names
+    # Backend detection helpers are no longer exported
     end
 
-    @testset "Backend Detection Functions" begin
-        # Test backend detection - may or may not have backend loaded
-        backend_loaded = PointController.check_backend_loaded()
-        backend_name = PointController.get_backend_name()
-
-        # Test that functions don't throw errors
-        @test_nowarn PointController.check_backend_loaded()
-        @test_nowarn PointController.get_backend_name()
-
-        # If backend is loaded, it should have a name
-        if backend_loaded
-            @test backend_name !== nothing
-            @test backend_name isa String
-        else
-            @test backend_name === nothing
-        end
-    end
+    # Backend detection tests removed
 
     @testset "Module Constants and Types" begin
         # Test that KEY_MAPPINGS is exported and accessible

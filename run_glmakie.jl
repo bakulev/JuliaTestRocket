@@ -37,7 +37,7 @@ catch e
     @error "Failed to load PointController module" exception=(e, catch_backtrace())
     exit(1)
 end
- 
+
 # Run the application with error handling
 try
     @info "Starting Point Controller application..."

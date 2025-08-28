@@ -93,8 +93,7 @@ export setup_logging, get_current_log_level
 export log_application_start, log_application_stop, log_glmakie_activation
 export log_component_initialization, log_user_action
 export log_error_with_context, log_warning_with_context
-# Export backend management functions
-export check_backend_loaded, get_backend_name
+# Backend detection helpers are no longer part of the public API
 
 # Include component modules
 # Each module handles a specific aspect of the application
@@ -449,13 +448,11 @@ Close all Makie windows in a backend-agnostic way.
 """
 function close_all_windows()
     try
-        # Try GLMakie.closeall() if available
-        if get_backend_name() == "GLMakie"
-            # This will be available if GLMakie is loaded
+        # Try GLMakie.closeall() if GLMakie is loaded; otherwise rely on figure close events
+        try
             eval(Meta.parse("GLMakie.closeall()"))
-        else
-            # For other backends, just close the current figure
-            # This is handled by the window close event
+        catch
+            # Ignore if GLMakie is not available; other backends manage window lifecycle themselves
         end
     catch e
         @warn "Could not close windows: $e"
