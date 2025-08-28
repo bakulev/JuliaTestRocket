@@ -32,11 +32,12 @@ events into application-specific actions with robust error handling.
 
 ```julia
 # Set up keyboard event handling
-setup_keyboard_events!(figure, movement_state, point_position)
+key_state = KeyState()
+setup_keyboard_events!(figure, key_state, point_position)
 
 # Manual event processing (for testing)
-handle_key_press('w', state)    # Process 'w' key press
-handle_key_release('w', state)  # Process 'w' key release
+handle_key_press('w', key_state)    # Process 'w' key press
+handle_key_release('w', key_state)  # Process 'w' key release
 ```
 """
 

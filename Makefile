@@ -80,6 +80,7 @@ prepush:
 	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.instantiate()'
 	@echo "\nRunning full test suite (Pkg.test)..."
 	$(JULIA_BIN) --project=. -e 'using Pkg; Pkg.test()'
+
 # Formatting targets
 format:
 	@echo "Running JuliaFormatter (writes changes)..."
