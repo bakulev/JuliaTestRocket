@@ -87,6 +87,7 @@ export create_visualization,
     get_current_position
 export apply_movement_to_position, setup_visualization_window
 export update_coordinate_display!, create_time_observable
+export close_all_windows
 
 # Export logging functions
 export setup_logging, get_current_log_level

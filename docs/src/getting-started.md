@@ -76,6 +76,18 @@ GLMakie.activate!(scalefactor = 2.0)
 
 ## First Run
 
+### Auto-Selecting Launcher (tries GL, falls back to Cairo)
+
+```bash
+# Auto-select (tries GLMakie, falls back to CairoMakie)
+julia run_app.jl
+
+# Force a specific backend
+JTR_BACKEND=gl julia run_app.jl
+JTR_BACKEND=cairo julia run_app.jl
+JTR_BACKEND=wgl julia run_app.jl
+```
+
 ### Interactive Mode (Recommended)
 ```bash
 # Start interactive session
